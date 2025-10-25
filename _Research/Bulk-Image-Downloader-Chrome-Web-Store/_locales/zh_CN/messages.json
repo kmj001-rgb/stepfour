@@ -1,0 +1,8 @@
+{
+  "name": {
+    "message": "Bulk Image Downloader"
+  },
+   "download_settings_save_confirm_key": {
+      "message": "下载前询问每个文件的保存位置"
+   }
+}

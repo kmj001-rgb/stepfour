@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="/css/options/options.css" rel="stylesheet">
+  <title>Extension Options</title>
+</head>
+<body>
+<header>
+  <h1>Media Downloader Settings</h1>
+</header>
+<main>
+
+  <form id="optionsForm">
+    <div class="theme">
+      <h2>Choose Theme</h2>
+      <div class="content">
+        <label>
+          <input name="theme" type="radio" value="light"> Light
+        </label>
+        <label>
+          <input name="theme" type="radio" value="dark"> Dark
+        </label>
+        <label>
+          <input name="theme" type="radio" value="system"> System
+        </label>
+      </div>
+    </div>
+
+    <div class="defaultAction">
+      <h2>Choose Default action</h2>
+      <div class="content">
+        <label>
+          <input name="defaultAction" type="radio" value="popup"> Open popup
+        </label>
+        <label>
+          <input name="defaultAction" type="radio" value="side-panel"> Open side panel
+        </label>
+      </div>
+    </div>
+
+    <button type="submit">Save</button>
+
+    <p id="status">Settings saved!</p>
+  </form>
+
+</main>
+<script src="/dist/theme.bundle.js"></script>
+<script src="/dist/options/main.bundle.js"></script>
+</body>
+</html>

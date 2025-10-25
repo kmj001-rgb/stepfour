@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Downloader Pro</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Image Downloader Pro</h1>
+      <div class="controls">
+        <button id="scanBtn" class="primary-btn">Scan Page</button>
+        <button id="downloadBtn" class="secondary-btn" disabled>Download Selected</button>
+        <button id="downloadAllBtn" class="primary-btn">Download All</button>
+      </div>
+    </header>
+
+    <div class="filters">
+      <div class="filter-group">
+        <label>Size (KB)</label>
+        <input type="number" id="minSize" placeholder="Min size">
+        <input type="number" id="maxSize" placeholder="Max size">
+      </div>
+      <div class="filter-group">
+        <label>Dimensions</label>
+        <input type="number" id="minWidth" placeholder="Min width">
+        <input type="number" id="minHeight" placeholder="Min height">
+      </div>
+      <div class="filter-group">
+        <label>File Types</label>
+        <select id="fileTypes" multiple>
+          <option value="jpg">JPG</option>
+          <option value="png">PNG</option>
+          <option value="gif">GIF</option>
+          <option value="webp">WebP</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Rename as</label>
+        <input type="text" id="renameBase" placeholder="image" value="image">
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="urlSearch" placeholder="Filter by URL...">
+    </div>
+
+    <div class="action-buttons">
+      <button id="selectAllBtn" class="secondary-btn">Select All</button>
+      <button id="unselectAllBtn" class="secondary-btn">Unselect All</button>
+    </div>
+
+    <div class="image-grid" id="imageGrid">
+      <!-- Images will be populated here -->
+    </div>
+
+    <div class="status-bar">
+      <span id="statusText">Ready to scan</span>
+      <span id="imageCount">0 images found</span>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,24 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "name": "Get Page Images",
+  "description": "Grabs all images on a page and allows you to download any you choose.",
+  "version": "1.2.0",
+  "author": {
+    "email": "CybershiftLabs@gmail.com"
+  },
+  "icons": {
+    "16": "images/GetPageImages-logo-16x16.png",
+    "32": "images/GetPageImages-logo-32x32.png",
+    "48": "images/GetPageImages-logo-48x48.png",
+    "128": "images/GetPageImages-logo-128x128.png"
+  },
+  "action": {
+    "default_icon": "images/GetPageImages-logo.png"
+  },
+  "permissions": ["activeTab", "scripting", "storage", "downloads"],
+  "background": {
+    "service_worker": "scripts/background.js"
+  }
+}

@@ -1,0 +1,107 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "default_locale": "en",
+  "name": "__MSG_manifest_ext_name__",
+  "short_name": "__MSG_manifest_short_name__",
+  "description": "__MSG_manifest_description__",
+  "version": "1.70.7",
+  "icons": {
+    "64": "images/icon.png",
+    "128": "images/icon128.png",
+    "512": "images/icon512.png"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "command_extract_images": {
+      "suggested_key": {
+        "default": "Alt+Shift+Y"
+      },
+      "description": "__MSG_manifest_extract_description__"
+    },
+    "command_multi_extract_images": {
+      "suggested_key": {
+        "default": "Alt+Shift+T"
+      },
+      "description": "__MSG_manifest_multi_extract_description__"
+    }
+  },
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "permissions": [
+    "tabs",
+    "scripting",
+    "webNavigation",
+    "webRequest",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "storage",
+    "downloads",
+    "notifications",
+    "contextMenus",
+    "fontSettings"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "libs/bootstrap/3.4.1/js/bootstrap.min.js",
+        "libs/bootstrap/3.4.1/css/bootstrap.min.css",
+        "libs/bootstrap/3.4.1/css/bootstrap-theme.min.css",
+        "libs/bootstrap/3.4.1/css/bootstrap.css.map",
+        "libs/bootstrap/3.4.1/css/bootstrap-theme.css.map",
+        "libs/bootstrap/3.4.1/fonts/glyphicons-halflings-regular.eot",
+        "libs/bootstrap/3.4.1/fonts/glyphicons-halflings-regular.svg",
+        "libs/bootstrap/3.4.1/fonts/glyphicons-halflings-regular.ttf",
+        "libs/bootstrap/3.4.1/fonts/glyphicons-halflings-regular.woff",
+        "libs/bootstrap/3.4.1/fonts/glyphicons-halflings-regular.woff2",
+        "libs/colorbox/1.6.4/colorbox.css",
+        "libs/colorbox/1.6.4/images/overlay.png",
+        "libs/colorbox/1.6.4/images/controls.png",
+        "libs/colorbox/1.6.4/images/border.png",
+        "libs/colorbox/1.6.4/images/loading_background.png",
+        "libs/colorbox/1.6.4/images/loading.gif",
+        "libs/colorbox/1.6.4/jquery.colorbox-min.js",
+        "libs/colorbox/1.6.4/i18n/jquery.colorbox-zh-CN.js",
+        "styles/style_forum.css",
+        "images/icon.png",
+        "images/overlay.png",
+        "libs/jquery/3.4.1/jquery-3.4.1.min.js",
+        "libs/jquery/3.4.1/jquery-3.4.1.min.map",
+        "libs/qrcode/dist/qrcode.js",
+        "libs/bootstrap-switch/3.3.4/bootstrap-switch.min.css",
+        "libs/bootstrap-switch/3.3.4/bootstrap-switch.min.js",
+        "scripts/function.js",
+        "scripts/mime.js",
+        "scripts/favorite.js",
+        "scripts/scriptForThirdPartPage.js",
+        "scripts/inspector.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "scripts/inspector.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}

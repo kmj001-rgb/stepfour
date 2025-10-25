@@ -1,0 +1,12 @@
+{
+  "name": "stepthree-gallery-scraper-demo",
+  "version": "2.0.0",
+  "description": "Demo website for StepThree Gallery Scraper Chrome Extension",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["chrome-extension", "gallery-scraper", "web-scraping"],
+  "author": "StepThree",
+  "license": "MIT"
+}

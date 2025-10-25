@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scrapy</title>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --primary-color: #4285f4;
+      --primary-hover: #3b76d8;
+      --accent-color: #4CAF50;
+      --accent-hover: #3d9140;
+      --danger-color: #f44336;
+      --danger-hover: #d32f2f;
+      --warning-color: #ff9800;
+      --text-color: #202124;
+      --text-secondary: #5f6368;
+      --bg-color: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --border-color: #dadce0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --shadow-hover: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.16);
+      --transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --border-radius: 8px;
+    }
+    
+    [data-theme="dark"] {
+      --primary-color: #8ab4f8;
+      --primary-hover: #6fa2f5;
+      --accent-color: #81c995;
+      --accent-hover: #6baf7d;
+      --danger-color: #f28b82;
+      --danger-hover: #dd776e;
+      --warning-color: #fdd663;
+      --text-color: #e8eaed;
+      --text-secondary: #9aa0a6;
+      --bg-color: #202124;
+      --bg-secondary: #303134;
+      --border-color: #5f6368;
+      --shadow: 0 1px 3px rgba(0,0,0,0.25);
+      --shadow-hover: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      width: 450px;
+      padding: 24px;
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: var(--transition);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    h2 {
+      margin: 0;
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+    }
+    
+    h3 {
+      margin: 10px 0 12px 0;
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+    }
+    
+    button:hover {
+      background-color: var(--primary-hover);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow);
+    }
+    
+    button:disabled {
+      background-color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      opacity: 0.7;
+    }
+    
+    #previewToggle {
+      background-color: var(--accent-color);
+    }
+    
+    #previewToggle:hover {
+      background-color: var(--accent-hover);
+    }
+    
+    #deleteButton {
+      background-color: var(--danger-color);
+    }
+    
+    #deleteButton:hover {
+      background-color: var(--danger-hover);
+    }
+    
+    input[type="text"], 
+    input[type="number"],
+    select, 
+    textarea {
+      padding: 10px 12px;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      color: var(--text-color);
+      width: 100%;
+      outline: none;
+      transition: var(--transition);
+      height: 38px;
+      font-size: 14px;
+    }
+    
+    textarea {
+      height: auto;
+      min-height: 80px;
+      resize: vertical;
+    }
+    
+    select {
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%235f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+      padding-right: 30px;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+    }
+    
+    .status {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      min-height: 40px;
+      padding: 8px;
+      border-radius: var(--border-radius);
+      background-color: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .form-inline {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .form-inline > * {
+      flex: 1;
+    }
+    
+    label {
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+    
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .theme-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 22px;
+      background-color: #ccc;
+      border-radius: 22px;
+      transition: var(--transition);
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: var(--transition);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--primary-color);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+    }
+    
+    .toggle-icon {
+      margin-right: 5px;
+      font-size: 16px;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    .action-buttons button {
+      flex: 1;
+    }
+    
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 10px 0;
+      width: 100%;
+    }
+    
+    #previewContainer {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .data-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .saved-sites {
+      margin-top: 15px;
+      width: 100%;
+    }
+    
+    .site-item {
+      padding: 12px;
+      border-radius: var(--border-radius);
+      background-color: var(--bg-secondary);
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    
+    .site-item:hover {
+      background-color: var(--bg-secondary);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+    
+    .site-title {
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+    
+    .site-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .small-icon-button {
+      background: none;
+      border: none;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      box-shadow: none;
+      transition: var(--transition);
+    }
+    
+    .small-icon-button:hover {
+      background-color: rgba(0, 0, 0, 0.08);
+      color: var(--text-color);
+      transform: none;
+    }
+    
+    [data-theme="dark"] .small-icon-button:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+    
+    .filter-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 12px;
+      margin-bottom: 10px;
+    }
+    
+    .filter-group {
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
+    
+    .filter-toggle {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .filter-toggle:last-child {
+      margin-bottom: 0;
+    }
+    
+    .filter-toggle input[type="checkbox"] {
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-color);
+      cursor: pointer;
+    }
+    
+    .advanced-button {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      font-size: 14px;
+      padding: 10px 16px;
+      text-decoration: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: none;
+      border-radius: var(--border-radius);
+      background-color: var(--bg-secondary);
+      width: 100%;
+    }
+    
+    .advanced-button:hover {
+      border-color: var(--primary-color);
+      background-color: var(--bg-secondary);
+      transform: none;
+    }
+    
+    .advanced-button:active {
+      opacity: 0.9;
+    }
+    
+    .advanced-options {
+      display: none;
+      margin-top: 8px;
+    }
+    
+    .advanced-options.open {
+      display: block;
+    }
+    
+    .arrow-icon {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      transition: transform 0.3s;
+      margin-left: 8px;
+    }
+    
+    .open .arrow-icon {
+      transform: rotate(180deg);
+    }
+    
+    #dataStats {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+    
+    .tab {
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+      transition: var(--transition);
+      color: var(--text-secondary);
+    }
+    
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .tab:hover:not(.active) {
+      border-bottom-color: var(--border-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .info-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      margin: 2px;
+      font-size: 12px;
+    }
+    
+    .chip .remove {
+      margin-left: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Scrapy</h2>
+      <label class="theme-toggle" title="Toggle dark/light mode">
+        <input type="checkbox" id="themeToggle">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    
+    <div class="tabs">
+      <div class="tab active" data-tab="basic">Basic</div>
+      <div class="tab" data-tab="advanced">Advanced</div>
+      <div class="tab" data-tab="schema">Schema</div>
+      <div class="tab" data-tab="export">Export & Templates</div>
+    </div>
+    
+    <!-- Basic Tab -->
+    <div class="tab-content active" id="basic-tab">
+      <div class="form-row">
+        <label for="format">Export Format:</label>
+        <select id="format">
+          <option value="json">JSON</option>
+          <option value="csv">CSV</option>
+          <option value="txt">TXT</option>
+          <option value="xml">XML</option>
+          <option value="sql">SQL</option>
+          <option value="markdown">Markdown</option>
+        </select>
+      </div>
+      
+      <button class="advanced-button" id="toggleFilters">
+        Data Filters
+        <span class="arrow-icon">▼</span>
+      </button>
+      
+      <div class="advanced-options filter-group" id="filterOptions">
+        <h3>Select Data to Scrape:</h3>
+        <div class="filter-options">
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterHeadings" checked>
+            Headings
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterParagraphs" checked>
+            Paragraphs
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterImages" checked>
+            Images
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterLinks" checked>
+            Links
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterTables" checked>
+            Tables
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterLists" checked>
+            Lists
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterForms" checked>
+            Forms
+          </label>
+          <label class="filter-toggle">
+            <input type="checkbox" id="filterMeta" checked>
+            Metadata
+          </label>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button id="scrapeButton">Scrape Data</button>
+        <button id="downloadButton" disabled>Download</button>
+      </div>
+    </div>
+    
+    <!-- Advanced Tab -->
+    <div class="tab-content" id="advanced-tab">
+      <!-- Custom Selector Section -->
+      <div class="form-row">
+        <label for="selectorType">Selector Type:</label>
+        <select id="selectorType">
+          <option value="css">CSS Selector</option>
+          <option value="xpath">XPath</option>
+        </select>
+      </div>
+      
+      <div class="form-row">
+        <label for="customSelector">Custom Selector:</label>
+        <input type="text" id="customSelector" placeholder="e.g., .product-card or //div[@class='product']">
+        <p class="info-text">Use custom selectors to target specific elements on the page</p>
+      </div>
+      
+      <hr>
+      
+      <!-- Data Cleaning Options -->
+      <h3>Data Cleaning Options</h3>
+      
+      <div class="form-row">
+        <label class="filter-toggle">
+          <input type="checkbox" id="cleanWhitespace" checked>
+          Remove excess whitespace
+        </label>
+        
+        <label class="filter-toggle">
+          <input type="checkbox" id="cleanHtml">
+          Strip HTML tags from text
+        </label>
+        
+        <label class="filter-toggle">
+          <input type="checkbox" id="normalizeText">
+          Normalize text (lowercase, remove accents)
+        </label>
+      </div>
+      
+      <hr>
+      
+      <!-- Pagination Support -->
+      <h3>Pagination Settings</h3>
+      
+      <div class="form-row">
+        <label class="filter-toggle">
+          <input type="checkbox" id="enablePagination">
+          Enable pagination scraping
+        </label>
+      </div>
+      
+      <div class="form-row">
+        <label for="paginationSelector">Pagination Link Selector:</label>
+        <input type="text" id="paginationSelector" placeholder="e.g., .pagination a.next" disabled>
+      </div>
+      
+      <div class="form-inline">
+        <div class="form-row">
+          <label for="maxPages">Max Pages:</label>
+          <input type="number" id="maxPages" value="5" min="1" max="100" disabled>
+        </div>
+        
+        <div class="form-row">
+          <label for="paginationDelay">Delay (ms):</label>
+          <input type="number" id="paginationDelay" value="1000" min="500" max="10000" step="100" disabled>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Schema Tab -->
+    <div class="tab-content" id="schema-tab">
+      <h3>Define Data Schema</h3>
+      <p class="info-text">Define the structure of your data and map selectors to fields</p>
+      
+      <div class="form-row">
+        <label for="schemaField">Add Field:</label>
+        <div class="form-inline">
+          <input type="text" id="schemaField" placeholder="Field name">
+          <select id="schemaType">
+            <option value="text">Text</option>
+            <option value="number">Number</option>
+            <option value="date">Date</option>
+            <option value="boolean">Boolean</option>
+            <option value="url">URL</option>
+            <option value="image">Image</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <label for="schemaSelector">Field Selector:</label>
+        <input type="text" id="schemaSelector" placeholder="CSS or XPath selector for this field">
+      </div>
+      
+      <button id="addSchemaField">Add Field</button>
+      
+      <hr>
+      
+      <h3>Schema Fields</h3>
+      <div id="schemaFields" class="chips-container">
+        <!-- Schema fields will be added here dynamically -->
+        <div class="info-text" id="noSchemaText">No schema fields defined yet</div>
+      </div>
+      
+      <hr>
+      
+      <div class="form-row">
+        <label for="schemaPreview">Schema Preview:</label>
+        <textarea id="schemaPreview" readonly>{}</textarea>
+      </div>
+    </div>
+    
+    <!-- Export & Templates Tab -->
+    <div class="tab-content" id="export-tab">
+      <!-- API Integration Section -->
+      <h3>API Integration</h3>
+      <p class="info-text">Send your scraped data directly to external services</p>
+      
+      <div class="form-row">
+        <label for="apiEndpoint">API Endpoint URL:</label>
+        <input type="text" id="apiEndpoint" placeholder="https://api.example.com/data">
+      </div>
+      
+      <div class="form-row">
+        <label for="apiMethod">Method:</label>
+        <select id="apiMethod">
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="PATCH">PATCH</option>
+        </select>
+      </div>
+      
+      <div class="form-row">
+        <label for="apiHeaders">Headers (JSON):</label>
+        <textarea id="apiHeaders" placeholder='{"Content-Type": "application/json", "Authorization": "Bearer your-token"}'></textarea>
+      </div>
+      
+      <div class="form-inline">
+        <button id="testApiButton">Test Connection</button>
+        <button id="sendToApiButton">Send Data to API</button>
+      </div>
+      
+      <hr>
+      
+      <!-- Scraping Templates Section -->
+      <h3>Scraping Templates</h3>
+      <p class="info-text">Save and reuse your scraping configurations</p>
+      
+      <div class="form-row">
+        <label for="templateName">Template Name:</label>
+        <input type="text" id="templateName" placeholder="e.g., Product Pages">
+      </div>
+      
+      <div class="form-row">
+        <label for="templateDescription">Description (optional):</label>
+        <input type="text" id="templateDescription" placeholder="Brief description of when to use this template">
+      </div>
+      
+      <div class="form-row">
+        <label class="filter-toggle">
+          <input type="checkbox" id="includeFilters" checked>
+          Include Basic Filters
+        </label>
+        
+        <label class="filter-toggle">
+          <input type="checkbox" id="includeAdvanced" checked>
+          Include Advanced Settings
+        </label>
+        
+        <label class="filter-toggle">
+          <input type="checkbox" id="includeSchema" checked>
+          Include Schema Definition
+        </label>
+      </div>
+      
+      <div class="form-inline">
+        <button id="saveTemplateButton">Save Template</button>
+        <button id="deleteTemplateButton" disabled>Delete Template</button>
+      </div>
+      
+      <hr>
+      
+      <div class="form-row">
+        <label for="loadTemplate">Load Template:</label>
+        <select id="loadTemplate">
+          <option value="">-- Select a template --</option>
+        </select>
+        <button id="loadTemplateButton" disabled>Load</button>
+      </div>
+    </div>
+    
+    <!-- Common UI Elements -->
+    <div class="data-controls">
+      <span id="dataStats"></span>
+      <button id="deleteButton" style="display: none;">Delete Data</button>
+    </div>
+    
+    <div id="previewContainer" style="display: none;">
+      <div id="dataPreview"></div>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div id="savedSites" class="saved-sites" style="display: none;">
+      <hr>
+      <h3>Saved Sites</h3>
+      <div id="sitesList"></div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 

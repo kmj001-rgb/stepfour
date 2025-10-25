@@ -1,0 +1,116 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+      width: 376px;
+    max-height: 583px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 15px;
+  margin: 0;
+}
+
+button {
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  color: #fff;
+  background-color: #4CAF50;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+.scrollToIcon {
+  cursor: pointer;
+  font-size: 18px;
+}
+button:hover {
+  background-color: #45a049;
+}
+
+#imageList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.imageItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  word-break: break-word;
+}
+
+.imageItem:hover {
+  background-color: #f1f1f1;
+}
+
+.altText {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+  word-break: break-word;
+}
+
+.downloadIcon {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.copyIcon {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#downloadAllButton {
+  display: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  min-height: 80px;
+}
+
+.imagePreview {
+  margin-right: 10px;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex: 0 0 60px; /* Width is set to 60px */
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  flex: 0 0 240px; /* Width is set to 240px */
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 60px; /* Width is set to 60px */
+}

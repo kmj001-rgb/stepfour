@@ -1,0 +1,25 @@
+{
+   "action": {
+      "default_icon": {
+         "48": "icon.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "contentScript.js" ],
+      "matches": [ "https://*/*", "http://*/*" ]
+   } ],
+   "description": "Extracts image names and allows copying image URLs.",
+   "icons": {
+      "48": "icon.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA99EYB1d2+xa/soqUr1wWVe0CiKa9y1h6XWY4W2i/nX3g5jgkc6xr5zfFQkXCIsGOtAyK1gTNYVUwJhDXuhobmzcKP31AH/h6IWKha5qc0DYZvacJAlYQvzNnM6iVy+ZcrupFZ2isTgBqgnOxwzX9GT369VUbBARarb52ZepxWCUYiOYASPAu2Ff39Z3AZpE6AqZGnbFL53ydfzxsB8auzFjEDTGudjXU8fnmqfXq8Htohh7gaiy0th+KAlzHnE9P4dIc+9C+WOeAQTpNyfGOC42ZzudezXmTxL72lIT1+xys1lHFl3ZPUYrpIQKzDoHYhdFNRjRA1gbfukNhKudL9QIDAQAB",
+   "manifest_version": 3,
+   "name": "Image Extractor",
+   "permissions": [ "activeTab" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.2"
+}

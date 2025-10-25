@@ -1,0 +1,40 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+    "manifest_version": 3,
+    "name": "Data Scraper - Easy Web Scraping",
+    "author": "Software Innovation Lab, LLC",
+    "short_name": "Data Scraper",
+    "version": "5.8.98",
+    "description": "Data Scraper extracts data out of HTML web pages and imports it into Microsoft Excel spreadsheets",
+    "icons": {
+        "16": "/dist/assets/img/mining16.png",
+        "19": "/dist/assets/img/mining19.png",
+        "24": "/dist/assets/img/mining24.png",
+        "32": "/dist/assets/img/mining32.png",
+        "36": "/dist/assets/img/mining36.png",
+        "38": "/dist/assets/img/mining38.png",
+        "48": "/dist/assets/img/mining48.png",
+        "64": "/dist/assets/img/mining64.png",
+        "96": "/dist/assets/img/mining96.png",
+        "128": "/dist/assets/img/mining128.png"
+    },
+    "background": {
+        "service_worker": "bg_script_dm.js"
+    },
+    "action": {
+        "default_icon": {
+            "16": "/dist/assets/img/mining16.png",
+            "32": "/dist/assets/img/mining32.png",
+            "48": "/dist/assets/img/mining48.png"
+        },
+        "default_title": "Data Miner",
+        "default_popup": "/dist/index.html#/popup"
+    },
+    "permissions": ["activeTab", "contextMenus", "storage", "scripting", "unlimitedStorage"],
+    "optional_permissions": ["tabs", "notifications", "downloads", "clipboardWrite", "pageCapture"],
+    "optional_host_permissions": ["http://*/", "https://*/", "file://*/*"],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'; img-src * data:; "
+    }
+}

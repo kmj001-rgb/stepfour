@@ -1,0 +1,32 @@
+﻿urls,fileTypes,folderName,downloadTime,zipDownload,buildCheckbox,sortableList,sequenceStart,downloadIfEnabled,downloadIfKeywords,downloadIfLogic,Convert Enabled,Convert Format,Convert Quality,watermark,status
+http://example.com/image1.jpg;http://example.com/image2.png,jpg;png,My Images,2024-12-01T12:00,TRUE,TRUE,filename,,TRUE,contains: example.com;not-contains: ad,and,TRUE,webp,100,TRUE,pending
+http://example.com/image3.gif,all,GIF Images,2024-12-01T14:30,FALSE,FALSE,,,FALSE,,,FALSE,,45,TRUE,pending
+http://example.com/image1.jpg,jpg,JPG Images,2024-12-01T12:00,TRUE,TRUE,sequence,1,FALSE,,,TRUE,jpeg,100,TRUE,pending
+http://example.com/image2.jpg,png,PNG Images,2024-12-01T14:30,FALSE,FALSE,,,FALSE,,,TRUE,png,50,TRUE,pending
+http://example.com/image3.jpg;http://example.com/image4.png,jpg;png,Mixed Images,2024-12-02T10:00,TRUE,TRUE,urlfragments,,TRUE,contains: example,,FALSE,,100,TRUE,pending
+http://example.com/image1.jpg;http://example.com/image2.png,jpg;png,My Images,2024-12-01T12:00,TRUE,TRUE,_,,TRUE,contains: example.com;not-contains: ad,or,TRUE,png,90,TRUE,pending
+http://example.com/image3.gif,all,GIF Images,2024-12-01T14:30,FALSE,FALSE,,,FALSE,,,FALSE,,60,TRUE,pending
+http://example.com/image1.jpg,jpg,JPG Images,2024-12-01T12:00,TRUE,TRUE,uuid,,FALSE,,,FALSE,,100,TRUE,pending
+http://example.com/image2.jpg,png,PNG Images,2024-12-01T14:30,FALSE,TRUE,Test,,FALSE,,,TRUE,png,75,TRUE,pending
+http://example.com/image3.jpg;http://example.com/image4.png,jpg;png,Mixed Images,2024-12-02T10:00,TRUE,TRUE,filename;-;timestamp;_;sequence,1002,TRUE,contains: example,,TRUE,jpeg,80,TRUE,pending
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+REMOVE EVERYTHING BELOW INCLUDING THIS LINE. THIS IS A TEMPLATE. THEN MODIFY THE DATA ABOVE TO YOUR LIKING.,,,,,,,,,,,,,,,
+"*IF YOU ARE NOT SURE, CREATE A TASK AND THEN CLICK THE EXPORT TASKS TO GET A  TEMPLATE OF YOUR OWN WHICH YOU UNDERSTAND",,,,,,,,,,,,,,,
+Explanations:,,,,,,,,,,,,,,,
+,"Separate URLs, filetypes, sortableList and downloadIfKeywords with a semicolon if you have multiple options of the mentioned columns",,,,,,,,,,,,,,
+,"sortableList can be empty if you don't want to construct the filename. Just leave empty or just supply ""filename"". Both cases default to the filename",,,,,,,,,,,,,,
+,If buildCheckbox is FALSE then you don't need a value in the sortableList column,,,,,,,,,,,,,,
+,Required columns are in bold. If you specify an option in the sortableList then buildCheckbox column must be TRUE,,,,,,,,,,,,,,
+,You can only specify a sequence in the sequence column f you have specified the sequence option in the sortableList column,,,,,,,,,,,,,,
+,"You can only use either ""and"" OR ""or"" in the downloadLogic column if you have both the contains and not-contains options",,,,,,,,,,,,,,
+,"You cannot specify the ""all"" option in the filetype and still have other filetypes. It's either ""all"" OR any individual filetypes or a combination of any of the individual filetypes",,,,,,,,,,,,,,
+,If you plan to use the Queue Download option then you don't have to worry about the downloadTime column because that option disables scheduling and enables queued downloads,,,,,,,,,,,,,,
+,G11 contains a combination of the filename construction which you can imitate,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+Sidenote,"This might sound complex but it's not. If you need our assistance, head over to www.bulkimagedownloaderurllist.com/contact and tell us ",,,,,,,,,,,,,,
+,"We dedicate to make this a good tool that has been missing. If it helps and you want to buy the premium option, that will be kind of you and will help us continue building more for you",,,,,,,,,,,,,,
+,"And so you know why we have some cost, because you're also getting the new browser based solution too with everything you can imagine. You get both the extension and the browser download with no extra payment!",,,,,,,,,,,,,,
+,We never intended to charge for anything but development is time consuming so a little coffee will keep us awake :). Thank you!,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,Dan,,,,,,,,,,,,,,

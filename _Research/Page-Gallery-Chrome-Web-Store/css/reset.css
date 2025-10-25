@@ -1,0 +1,38 @@
+html {
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+    font-family: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+a {
+    color: inherit;
+}
+
+li {
+    display: block;
+}
+
+img, video, iframe {
+    display: block;
+}
+
+button, label, input[type=checkbox] {
+    cursor: pointer;
+}
+
+iframe {
+    border: 0;
+}
+
+fieldset {
+    border: 0;
+}

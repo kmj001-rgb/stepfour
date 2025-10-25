@@ -1,0 +1,63 @@
+{
+    "appName": {
+        "message": "Image downloader - Imageye"
+    },
+    "appDesc": {
+        "message": "Find and download all images on a web page with Image downloader."
+    },
+    "searchingImagesLabel":{
+        "message":"Searching images..."
+    },
+    "foundLabel":{
+        "message":"Found %n images",
+        "translation_note":"leave the '%n', it will be replaces with the number of images found, ie 'Found 22 images'"
+    },
+    "heightLabel":{
+        "message":"height",
+        "translation_note":"the height is intended as the pixel 'height' of the image"
+    },
+    "widthLabel":{
+        "message":"width",
+        "translation_note":"the width is intended as the pixel 'width' of the image"
+    },
+    "filterbyurlinputplaceholder":{
+        "message":"Filter by url or name"
+    },
+    "manyfilesnum":{
+        "message":"Download %n img",
+        "translation_note":"leave the '%n', it will be replaces with the number of download images , ie 'Download 22 images'"
+    },
+    "makesurechrome":{
+        "message":"Make sure you don't have selected the 'Ask where to save each file before downloading' checkbox in <a id='saveaslink' href='#' target='_blank'>Chrome Settings --> Advanced --> Download section.</a>"
+    },
+    "otherwisechrome":{
+        "message": "Otherwise Chrome by design will popup the Save as... dialog for each file :-("
+    },
+    "makesurefirefox":{
+        "message":"Make sure you don't have selected the 'Always ask where to save files' checkbox in Firefox Settings --> Files and Applications section."
+    },
+    "otherwisefirefox":{
+        "message":"Otherwise Firefox by design will popup the Save as... dialog for each file :-("
+    },
+    "donotshowdialogagain":{
+        "message":"Do not show this dialog again"
+    },
+    "download":{
+        "message":"Download"
+    },
+    "cancel":{
+        "message":"Cancel"
+    },
+    "deselectall":{
+        "message":"Deselect all"
+    },
+    "selectall":{
+        "message":"Select all"
+    },
+    "openinnewtab":{
+        "message":"Open in new tab"
+    },
+    "searchsimilarimgs":{
+        "message":"Reverse Image Search by Google"
+    }
+}

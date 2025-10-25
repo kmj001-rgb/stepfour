@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html style=''>
+<head>	
+
+
+
+
+	<style type="text/css">
+		.apikey{
+		    height: 30px;
+		    width: 375px;
+		    margin-left: 0;
+		    background-color: #eee;
+		    border: 1px solid rgba(174,173,173,0.5);
+		    color: #676a6b;
+		    padding: 6px 10px;
+		    -webkit-border-radius: 3px;
+		    -moz-border-radius: 3px;
+		    -ms-border-radius: 3px;
+		    -o-border-radius: 3px;
+		    border-radius: 3px;
+		    -webkit-box-shadow: 0 0 4px rgba(147,147,147,0.25) inset,0 1px 0 rgba(255,255,255,0.75);
+		    -moz-box-shadow: 0 0 4px rgba(147,147,147,0.25) inset,0 1px 0 rgba(255,255,255,0.75);
+		    box-shadow: 0 0 4px rgba(147,147,147,0.25) inset,0 1px 0 rgba(255,255,255,0.75);
+		    text-shadow: 0 1px 0 rgba(255,255,255,0.65);
+		}
+
+		textarea{
+		    height: 100px;
+		    width: 375px;
+		    margin-left: 0;
+		    background-color: #eee;
+		    border: 1px solid rgba(174,173,173,0.5);
+		    color: #676a6b;
+		    padding: 6px 10px;
+		    -webkit-border-radius: 3px;
+		    -moz-border-radius: 3px;
+		    -ms-border-radius: 3px;
+		    -o-border-radius: 3px;
+		    border-radius: 3px;
+		    -webkit-box-shadow: 0 0 4px rgba(147,147,147,0.25) inset,0 1px 0 rgba(255,255,255,0.75);
+		    -moz-box-shadow: 0 0 4px rgba(147,147,147,0.25) inset,0 1px 0 rgba(255,255,255,0.75);
+		    box-shadow: 0 0 4px rgba(147,147,147,0.25) inset,0 1px 0 rgba(255,255,255,0.75);
+		    text-shadow: 0 1px 0 rgba(255,255,255,0.65);
+		}
+
+
+		.by{
+
+			margin-top: 15px;
+		}
+
+		.button {
+
+    float: right;
+
+    display: inline-block;
+font-weight: 400;
+text-align: center;
+white-space: nowrap;
+vertical-align: middle;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+border: 1px solid transparent;
+padding: .375rem .75rem;
+font-size: 1rem;
+line-height: 1.5;
+border-radius: .25rem;
+transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+margin-top: 3px;
+}
+
+.wn{
+		margin-top: 30px;
+		}
+
+		.website{
+			color: green;
+
+		}
+
+		.website:hover{
+			color: silver;
+			
+		}
+.pro{
+	margin-bottom: 15px;
+}
+
+
+.error{
+	color: red;
+}
+
+.success{
+	color: green;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+	</style>
+	<link rel="stylesheet" href="font-awesome-4.6.3/css/font-awesome.min.css"/>
+
+</head>
+<body style="width:400px; padding:20px;">
+<h2 class="title">Extract image links from webpage.</h2>		
+<hr>
+
+<div id="pro" style="display: none;">
+	<a target="_blank" href="https://www.mediafreeware.com/image-link-grabber/get-key.html">Please buy API Key</a>
+	<input id="apikey" class="apikey" wrap="off">
+	<input type="button"  id="activate" class="button btn-success" value="Activate"/>
+
+</div>
+
+<div id='message'>Working....</div>
+
+<h3 class="wn"><i class="fa fa-list-ol" aria-hidden="true"></i> With numbering:</h3>
+
+<div class="row">
+	<div class="col-md-12">
+		<textarea id="output" wrap="off" readonly></textarea>
+	</div>
+</div>
+
+<input type="button" data-clipboard-demo="" data-clipboard-target="#output" class="button btn-primary" value="Copy"/>
+
+<h3 class="wn"><i class="fa fa-bars" aria-hidden="true"></i> Without numbering:</h3>
+<div class="row">
+	<div class="col-md-12">
+		<textarea id="output_2" wrap="off" readonly></textarea>
+	</div>
+</div>
+
+<input type="button" data-clipboard-demo="" data-clipboard-target="#output_2" class="button btn-primary" value="Copy"/>
+<div class="by"></div>
+	<script src="clipboard.min.js"></script>
+	<script src='popup.js'></script>
+</body>
+</html>

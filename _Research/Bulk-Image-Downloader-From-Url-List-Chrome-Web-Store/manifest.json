@@ -1,0 +1,60 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "name": "Bulk Image Downloader From Url List",
+  "version": "3.0",
+  "description": "A Chrome extension to bulk download images from a list of image URLs. Schedule downloads, filter by image type, save in folder, etc.",
+  "permissions": [
+    "downloads",
+    "storage",
+    "alarms",
+    "cookies",
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://bulkimagedownloaderurllist.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": {
+      "128": "images/icon.jpg"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "icons": {
+    "128": "images/icon.jpg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["sidepanel.js"]
+    }
+  ],
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "redirection/redirect-checker.html",
+        "redirection/redirect-checker.js",
+        "sidepanel.html",
+        "sidepanel.js",
+        "dist/jszip.min.js",
+        "dist/image-conversion.js",
+        "dist/jquery.watermark.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}

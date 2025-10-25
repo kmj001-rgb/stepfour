@@ -1,0 +1,36 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "images/icon.jpg"
+      }
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "sidepanel.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+   },
+   "description": "A Chrome extension to bulk download images from a list of image URLs. Schedule downloads, filter by image type, save in folder, etc.",
+   "host_permissions": [ "https://bulkimagedownloaderurllist.com/*" ],
+   "icons": {
+      "128": "images/icon.jpg"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw63IIqO6+sq+9MkKW11t03cfJ+dS8COIdHh7TrrLPkkLQMMqHTYQys7PL/oVD4R7VKDgD/H82qjierpbAObK2iqLqY8mCbTIrkx9BrOqrlan6wjgVIW3qUAtUQcTb3+20aVYymlR18hcE+dXdvUmDrBY/uPSBEaTtqXv0F3kLL5E/Xa6GqEPrOM8NBJX5DpVHRfHd0xGucfcZMiBLTCfBg9+Aox+2Uv/F5lcHPyjgWStIk4wBeNlx5ZemtlAZJV+UQeWEu8xJ1jhzqRmg66b/sJBeTWhFp5O3voFQOI7yzL6c75h15QSHkFCjp0J98U/L+Tin+jgWfqYy1ZZfZVoGwIDAQAB",
+   "manifest_version": 3,
+   "name": "Bulk Image Downloader From Url List",
+   "options_page": "options.html",
+   "permissions": [ "downloads", "storage", "alarms", "cookies", "sidePanel", "activeTab", "scripting", "tabs", "webNavigation" ],
+   "side_panel": {
+      "default_path": "sidepanel.html"
+   },
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "3.0",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "redirection/redirect-checker.html", "redirection/redirect-checker.js", "sidepanel.html", "sidepanel.js", "dist/jszip.min.js", "dist/image-conversion.js", "dist/jquery.watermark.js" ]
+   } ]
+}

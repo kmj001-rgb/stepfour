@@ -1,0 +1,1324 @@
+@use '_variables' as *;
+
+@font-face {
+    font-family: logofont;
+    src: url(../fonts/AbadiMTStd-CondBold.otf) format('opentype');
+}
+
+html {
+    // NOTE: This makes 1 rem = 10 pixels
+    /////////////////////////////////////
+    font-size: 62.5%;
+}
+
+body {
+    background-color: $color-content-background; // #fff8f8; ffe9e9
+    font-family:
+        Helvetica,
+        Arial,
+        -apple-system,
+        'Segoe UI',
+        Roboto,
+        sans-serif,
+        'Apple Color Emoji',
+        'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    font-size: 1.3rem;
+}
+
+body a {
+    color: $color-clickable;
+    cursor: pointer;
+}
+
+//h2 1.5
+//h3 1.2
+
+.green {
+    color: $color-ok;
+}
+.red {
+    color: red;
+}
+.recipe-not-working {
+    color: $color-recipe-not-working !important;
+}
+
+.premium {
+    color: $color-premium;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+
+////////texts
+.text1 {
+    font-size: 2em; //2.8rem; //h1
+}
+.text2 {
+    font-size: 1.5em; //2.1rem; // h2
+}
+.text3 {
+    font-size: 1.2em; //1.7rem; // h3
+}
+.text4 {
+    font-size: 1em; //1.4rem; // h4 //normal text size
+}
+.text5 {
+    font-size: 0.7em; // h5 // smaller than normal text
+}
+
+.text1b {
+    font-size: 2em; //2.8rem; //2em; //2.8rem; //
+    font-weight: bold;
+}
+.text2b {
+    font-size: 1.5em; //2.1rem; //  1.5em; //h2 size
+    font-weight: bold;
+}
+.text3b {
+    font-size: 1.2em; //1.7rem; //1.2em;
+    font-weight: bold;
+}
+.text4b {
+    font-size: 1em; //1.4rem; //  1em;
+    font-weight: bold;
+}
+
+.fluidwidth {
+    flex: 1 1 auto;
+}
+.fullwidth {
+    width: 100%;
+}
+
+h1 {
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+}
+
+// .hr-fading {
+//     height: $one;
+//     background-color: #e5e5e5;
+//     border: none;
+//     margin-top: 1.5rem;
+// }
+
+.dm-blockable {
+    position: relative;
+
+    .dm-blocker {
+        position: absolute;
+        width: calc(100% + 1rem);
+        height: calc(100% + 1rem);
+        margin: 0px;
+        top: -0.5rem;
+        left: -0.5rem;
+        background-color: #f5f5f5;
+        z-index: 120;
+        opacity: 0.9;
+        padding-top: 1.5rem;
+        text-align: center;
+    }
+
+    .dm-blocked {
+        filter: blur($one);
+    }
+}
+
+.hoverhelp {
+    border-bottom: 2px dotted $color-clickable;
+    cursor: help;
+}
+
+.imagewrapper {
+    text-align: center;
+    img {
+        border: $one solid #c1c1c1;
+        box-shadow: 0.2rem 0.2rem 0.5rem #888;
+    }
+    .caption {
+        font-style: italic;
+        padding: 0.2rem;
+    }
+}
+
+.imagewrapper-flat {
+    text-align: center;
+    .caption {
+        font-style: italic;
+        padding: 0.2rem;
+    }
+}
+
+.sm-btn {
+    margin: 0 0.3rem;
+}
+
+.sm-btn.p-button.p-button-text-icon-left .p-button-text {
+    font-size: 0.86em; //1.2rem; //1.2rem
+    padding: 0.4rem 0.4rem 0.4rem 2.5rem;
+}
+
+.sm-btn.p-button.p-button-icon-only .p-button-text {
+    font-size: 0.86em; //1.2rem; //1.2rem
+    padding: 0.4rem;
+}
+
+.sm-btn.p-button.p-togglebutton {
+    font-size: 0.86em; //1.2rem; //1.2rem
+}
+
+.thin-button.p-button {
+    padding: 0.2rem 0.5rem;
+}
+
+.white-button.p-button {
+    background-color: white;
+}
+
+.icon-button.p-button {
+    padding: 0;
+    font-size: 1.3em !important; //1.8rem !important;
+    width: inherit;
+}
+
+.small-button {
+    color: $color-clickable;
+    font-size: 0.7em; // 1rem;
+    margin: 0 0.4rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.6rem;
+
+    border: $one solid #999;
+    box-shadow: $one $one 0.2rem #888;
+
+    white-space: nowrap;
+
+    strong {
+        padding: 0.2rem;
+    }
+
+    //active has to be defined after hover otherwise it's overridden
+    &:hover {
+        color: #333; // #0069d9;
+        cursor: pointer;
+    }
+
+    &:active {
+        color: black;
+        // transform-origin: center;
+        // transform: scale(1.2);
+    }
+
+    &--delete {
+        color: red;
+    }
+
+    &.disabled {
+        color: $color-disabled;
+
+        &:hover {
+            color: $color-disabled;
+            cursor: initial;
+        }
+    }
+}
+
+.name-value {
+    display: grid;
+    grid-template-columns: [results-left] auto [results-mid] 1fr [results-right];
+    grid-gap: 0.2rem;
+    align-items: flex-start;
+    white-space: nowrap;
+
+    &__rowtitle {
+        grid-column: results-left / results-mid;
+
+        padding: 0.8rem;
+        font-size: 1em;
+        font-weight: bolder;
+    }
+
+    &__rowvalue {
+        grid-column: results-mid / results-right;
+        background-color: transparent;
+
+        display: flex;
+        align-items: center;
+        align-self: normal;
+        // flex-wrap: wrap;
+        overflow: scroll;
+        @include scrollbar;
+
+        > * {
+            margin-right: 1rem;
+        }
+
+        &--padded {
+            background-color: $color-row-value;
+            padding: 0.8rem;
+        }
+    }
+}
+
+.invalid-feedback {
+    grid-column: results-left / results-right;
+    color: red;
+    margin: 1rem 0;
+}
+
+.readerErrorMessage {
+    max-height: 25.6rem;
+    max-width: auto;
+    overflow-y: scroll;
+    overflow-x: auto;
+    padding: 0.5rem;
+}
+
+// hr.hr-fading {
+//     height: 0.8rem;
+//     background-image: linear-gradient(90deg, #ddd, transparent);
+//     border: 0;
+//     height: 0.2rem;
+// }
+
+.tab-headline-big {
+    font-size: 1.8em;
+    // margin: 1em 0;
+
+    .small {
+        font-size: 0.6em;
+        margin-top: 1rem;
+    }
+    .medium {
+        font-size: 0.8em;
+        margin-top: 1rem;
+    }
+}
+
+.tab-headline {
+    font-size: 1.4em;
+    // margin: 1.3em 0;
+    .small {
+        font-size: 0.6em;
+        margin-top: 1rem;
+    }
+    .medium {
+        font-size: 0.8em;
+        margin-top: 1rem;
+    }
+}
+
+.viewer-page-wrapper {
+    padding: 1rem 1rem 0 1rem;
+    min-width: 77.8rem;
+}
+
+.card {
+    background: #ffffff;
+    padding: 1em;
+    box-shadow:
+        0 0.2rem $one $one rgb(0 0 0 / 20%),
+        0 $one $one 0 rgb(0 0 0 / 14%),
+        0 $one 0.3rem 0 rgb(0 0 0 / 12%);
+    border-radius: 0.4rem;
+    margin-bottom: 1em;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////PrimeNG overrides////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+///////global settings
+
+.p-toast {
+    margin-top: 3rem;
+    box-shadow: 0 0.3rem 0.6rem 0 rgba(0, 0, 0, 0.16);
+
+    .p-toast-message {
+        margin-bottom: 0;
+    }
+
+    .p-icon {
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+    .p-toast-message-icon {
+        width: 3rem;
+    }
+
+    .p-toast-summary {
+        font-size: 1.2em;
+    }
+
+    .p-toast-detail {
+        font-size: 1em;
+    }
+}
+
+.p-badge {
+    background-color: $color-clickable;
+}
+
+.p-inline-message {
+    background-color: red;
+    .p-inline-message {
+        font-size: 1em; //1.4rem;
+    }
+}
+
+.p-component {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+.wideTooltip.p-tooltip .p-tooltip-text {
+    width: 30rem;
+}
+
+.smallTooltip.ui-tooltip .ui-tooltip-text {
+    padding: 0.8rem 0.4rem;
+}
+
+.p-datatable {
+    .p-datatable-table-container {
+        @include scrollbar;
+    }
+
+    .p-datatable-thead,
+    .p-datatable-thead tr th {
+        // background-color: inherit;
+        text-align: left;
+        border: $one solid #dee2e6;
+        transition: box-shadow 0.15s;
+    }
+
+    .p-datatable-tbody > tr,
+    .p-datatable-tbody > tr:nth-child(even) {
+        background-color: white;
+
+        td {
+            text-align: left;
+            border: $one solid #dee2e6;
+            padding: 1.2rem;
+        }
+    }
+
+    .p-datatable-tbody {
+        .not-expanded-row {
+            width: 20rem;
+
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            // background-color: red;
+        }
+
+        .expanded-row {
+            // background-color: greenyellow;
+            width: 20rem;
+
+            overflow: hidden !important;
+            white-space: initial !important;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .p-paginator {
+        text-align: right;
+    }
+
+    .p-paginator-bottom {
+        background-color: #f5f5f5;
+    }
+
+    .p-paginator .p-paginator-element.p-disabled {
+        color: lightgray;
+    }
+
+    .p-select {
+        vertical-align: top;
+        width: unset;
+    }
+
+    .p-datatable-scrollable-body {
+        padding-bottom: 1.5rem;
+    }
+
+    .p-column-resizer {
+        background-color: gray;
+    }
+}
+
+.p-button {
+    .p-button-label {
+        white-space: nowrap;
+        font-weight: normal;
+    }
+
+    // &.p-button-primary {
+    //     background-color: $color-clickable;
+    //     color: white;
+    // }
+}
+
+// this needs to be outside of p-select since we're attaching them to the body to overflow outside of containers
+.p-select-overlay {
+    box-shadow: 0.2rem 0.2rem 0.5rem #888;
+
+    .p-select-list-container {
+        @include scrollbar;
+    }
+
+    .p-select-list {
+        gap: 0;
+        padding: 0;
+
+        .p-select-option {
+            // padding: 0.8rem;
+            border-bottom: $one solid lightgray;
+            background-color: #f5f5f5;
+            text-align: left;
+            text-wrap: wrap;
+            word-break: break-word;
+
+            &:hover {
+                background-color: #ddd !important;
+                color: black !important;
+            }
+
+            &.p-highlight {
+                background-color: #ccc;
+                color: black;
+            }
+        }
+    }
+
+    &.rc-cleanup-panel .p-select-list .p-select-option {
+        // rc-cleanup
+        display: block;
+        padding: 0.4rem 1rem;
+    }
+}
+
+// this is the dropdown selection list. it's set globally so anywhere we don't need 100% we have to override it
+.p-select {
+    width: 100%;
+}
+
+.p-accordion {
+    margin-bottom: 0.5rem;
+
+    .p-accordionpanel {
+        border: none;
+    }
+
+    .p-accordionheader {
+        border: 1px solid #dee2e6;
+        background: $color-section-header;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        color: $color-clickable;
+        font-size: 1.4rem;
+    }
+
+    // this is the p- tag
+    .p-accordioncontent {
+        padding-top: 1rem;
+        border: 1px solid #dee2e6;
+        background: #fff;
+        color: black;
+        border-top: 0;
+        border-radius: 0 0 4px 4px;
+        // overflow: visible; // need this for RC dialogs the go over the bottom
+    }
+
+    .p-accordioncontent-content {
+        padding-bottom: 2rem;
+    }
+}
+
+.p-dialog {
+    overflow: hidden;
+}
+
+.p-speeddial {
+    .p-speeddial-item {
+        background-color: #f5f5f5;
+    }
+}
+
+.p-message {
+    padding: 1rem;
+    display: flex;
+    margin: 1rem;
+
+    .p-message-content {
+        width: 100%;
+    }
+
+    .p-icon {
+        height: 2rem;
+        width: 2rem;
+    }
+    .p-message-icon {
+        width: 3rem;
+        height: auto;
+    }
+
+    // .p-toast-summary {
+    //     font-size: 1.2em;
+    // }
+
+    // sometimes it's text sometimes it's detail depending on 'escape' attribute. It's a primeng bug.
+    .p-message-text,
+    .p-message-detail {
+        font-size: 1em;
+    }
+}
+
+.p-tabs {
+    .p-tablist-tab-list {
+        padding: 0.8rem 0 0 1rem;
+        background-color: $color-content-background;
+        border-color: #888;
+
+        .p-tablist-active-bar {
+            background-color: $color-content-background;
+        }
+
+        flex-wrap: nowrap;
+    }
+    .p-tab {
+        flex: 0 0 auto;
+
+        background-color: #ddd;
+        border-bottom: $one solid #888;
+        margin-right: 0.3rem;
+        margin-left: 0.3rem;
+        height: 3.7rem;
+
+        border-top-left-radius: 0.8rem;
+        border-top-right-radius: 0.8rem;
+
+        font-weight: bold;
+        color: $color-clickable;
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        &.p-disabled {
+            background-color: #888;
+            color: #333 !important;
+        }
+
+        &.p-tab-active {
+            background-color: $color-content-background;
+            border: $one solid #888;
+            border-bottom-color: $color-content-background;
+            color: black; //
+            outline: none;
+            box-shadow: none;
+        }
+    }
+    .p-tabpanels {
+        // background-color: blue;
+        background-color: $color-content-background; //white;
+        border-top: $one solid #888;
+        margin-top: -$one;
+        // padding: 1rem 0.5rem 0.5rem 0.5rem;
+        padding: 0.5rem 2rem;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/////specific settings
+
+.review-launcher.p-button {
+    width: 3rem;
+}
+
+// .avatar-checked.p-avatar {
+//     background-color: $color-ok;
+//     border: 1px solid $color-ok;
+
+//     .p-avatar-text,
+//     .p-avatar-icon {
+//         color: white;
+//     }
+// }
+// .avatar-unchecked.p-avatar {
+//     background-color: white;
+//     border: 1px solid red;
+
+//     .p-avatar-text,
+//     .p-avatar-icon {
+//         color: red;
+//     }
+
+//     &.small {
+//         width: 1.5rem;
+//         height: 1.5rem;
+//     }
+// }
+// .avatar-number.p-avatar {
+//     background-color: transparent;
+//     border: 1px solid $color-clickable;
+
+//     .p-avatar-text,
+//     .p-avatar-icon {
+//         color: $color-clickable;
+//         text-align: center;
+//     }
+// }
+
+.rc-easytab {
+    .p-tabs {
+        .p-tablist-tab-list {
+            background-color: white;
+        }
+        .p-tab {
+            font-weight: normal;
+        }
+        // .p-tab-panels {
+        //     border: $one solid #dddddd;
+        //     border-top: none;
+        //     padding: 1rem;
+        // }
+    }
+}
+
+// // NOTE: see page and subpage variations below
+// .page-tab.p-tabs {
+//     .p-tabpanels {
+//         padding: 0.5rem 2rem;
+//         background-color: blue;
+//     }
+// }
+// .subpage-tab.p-tabs {
+//     .p-tabpanels {
+//         padding: 1rem;
+//         background-color: red;
+//     }
+// }
+
+////////topbar//////////
+.shell-menubar.p-menubar {
+    border: 0;
+    padding: 0;
+    margin-top: 1rem;
+    background-color: inherit;
+
+    //submenu container
+    .p-menubar-submenu {
+        background-color: $color-menu-background;
+        border: 0;
+        margin-top: 1rem;
+        // width: 101%;
+    }
+
+    //submenu item
+    .p-menubar-item.p-menubar-item-active > .p-menubar-item-link {
+        background: $color-menu-background;
+    }
+
+    .p-menubar-item {
+        width: 16rem;
+        height: 3rem;
+
+        // this is the <a> element
+        .p-menubar-item-link {
+            background-color: $color-menu-background;
+            display: flex;
+            align-items: center;
+            color: $color-menu-text;
+
+            .p-menubar-item-icon,
+            .p-menubar-item-label,
+            .p-menu-submenu-icon {
+                color: $color-menu-text !important;
+            }
+
+            &:hover,
+            &:focus {
+                background-color: $color-menu-background;
+                outline: none;
+                box-shadow: none;
+
+                .p-menubar-item-icon,
+                .p-menubar-item-label,
+                .p-menu-submenu-icon {
+                    color: $color-menu-text !important;
+                    font-weight: bold !important;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 96rem) {
+    .p-menubar .p-menubar-button {
+        color: white;
+    }
+    .p-menubar .p-menubar-button:hover {
+        color: yellow;
+    }
+    .p-menubar .p-menubar-root-list {
+        background: unset;
+        border: unset;
+        align-items: flex-end;
+    }
+    .p-menubar .p-menubar-root-list > .p-menubar-item > .p-menubar-item-link:not(.p-disabled):hover {
+        background: $color-menu-background; //#e9ecef;
+    }
+    .p-menubar
+        .p-menubar-root-list
+        > .p-menubar-item
+        > .p-menubar-item-link:not(.p-disabled):hover
+        .p-menubar-item-label {
+        color: $color-menu-hover-text;
+    }
+    .p-menubar
+        .p-menubar-root-list
+        > .p-menubar-item
+        > .p-menubar-item-link:not(.p-disabled):hover
+        .p-menubar-item-icon {
+        color: $color-menu-hover-text;
+    }
+    .p-menubar
+        .p-menubar-root-list
+        > .p-menubar-item
+        > .p-menubar-item-link:not(.p-disabled):hover
+        .p-menu-submenu-icon {
+        color: $color-menu-hover-text;
+    }
+}
+
+///////sidebar///////////
+.shell-menu.p-menu {
+    border: 0;
+    padding: 0;
+    width: $length-sidebar-menu;
+    //IMPORTANT: this changes the width of the content which we pass into contentWidth to some components
+    min-width: 10rem;
+
+    background-color: $color-menu-background;
+
+    // the <li> element
+    .p-menu-item {
+        // font-size: 1rem; //1.0 em; //1.4rem;
+        // background-color: red; // $color-menu-background;
+        &.p-focus {
+            // background-color: blue; // $color-menu-background;
+            font-weight: bold;
+        }
+    }
+
+    .p-menu-item-icon {
+        margin-left: 0.2rem;
+        margin-right: 0.5rem;
+        font-size: 1.3em; //1.6rem;
+    }
+
+    // heading section
+    .p-menu-submenu-label {
+        background-color: $color-menu-submenu-background;
+        color: $color-menu-submenu-text;
+        font-size: 1.1em; //1.6rem;
+        margin-top: 2rem;
+        padding-left: 0.86em; //1.2rem;
+    }
+
+    .p-menu-item-content {
+        background-color: unset; //otherwise it shows up as white background on keyboard up and down selections
+    }
+
+    // first heading
+    .p-menu-submenu-label:nth-child(1) {
+        background-color: $color-sidebar-background;
+    }
+
+    // the <a> element
+    .p-menu-item-link {
+        padding: 0.8rem 0.8rem;
+
+        .p-menu-item-icon,
+        .p-menu-item-label {
+            color: $color-menu-text !important;
+            font-size: 1.1em;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: $color-sidebar-background;
+
+            .p-menu-item-icon,
+            .p-menu-item-label {
+                color: $color-menu-text !important;
+                font-weight: bold !important;
+            }
+
+            outline: none;
+            box-shadow: none;
+        }
+
+        // this is the selected one
+        &.p-menu-item-link-active {
+            background-color: $color-menu-background-active;
+            .p-menu-item-icon,
+            .p-menu-item-label {
+                color: $color-menu-hover-text !important;
+                font-weight: bold !important;
+            }
+        }
+    }
+}
+
+.jobsettings.p-accordion {
+    .p-accordionheader-link {
+        color: $color-clickable;
+        font-size: 1em; //1.4rem;
+    }
+}
+
+///////// Collection //////////
+.collectionlist.p-select {
+    max-width: calc(100vw - 70px);
+
+    // NOTE: couldn't get this to work. The dropdown is not wide enough in the viewer but too if
+    // I change this it messes up RC so I'm leaving it out for now
+    // to limit the width of the dropdown
+    // .p-select-panel {
+    //     // max-width: calc(100vw - 70px);
+    //     width: 50rem;
+    //     // width: 100%;
+    // }
+
+    // dropdown options
+    .p-select-list .p-select-option {
+        padding: 1rem;
+    }
+
+    // selected item label in the dropdown
+    .p-select-label {
+        text-wrap: wrap;
+        margin-right: 15px;
+        // text-overflow: ellipsis; // didn't work
+    }
+}
+
+.column-list.p-select {
+    .p-select-panel {
+        max-width: calc(100vw - 70px);
+    }
+    .p-select-list .p-select-option {
+        padding: 1rem;
+    }
+}
+
+/////////// Recipe list /////////////
+.searchtype-selection.p-select {
+    .p-select-panel {
+        width: 65rem;
+    }
+}
+
+.popup-quicklist.p-dataview {
+    margin-top: 1.5rem;
+    border-bottom: $one solid #dddddd;
+
+    .p-dataview-emptymessage {
+        padding-top: 1.5rem;
+        padding-bottom: 4.5rem;
+        background-color: white;
+    }
+
+    .p-dataview-content {
+        > .p-grid > div {
+            border: none;
+            padding-top: 0.1rem;
+        }
+
+        background-color: white;
+        // background-color: #f5f5f5;
+        border-top: none;
+        border-right: $one #d4d4d4 solid;
+        border-left: $one #d4d4d4 solid;
+        border-bottom: $one #d4d4d4 solid;
+
+        padding: 0.5rem 0.5rem 0 0.5rem;
+
+        max-height: 19rem;
+        min-height: 15rem;
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+        > .p-grid {
+            margin-top: 0;
+        }
+
+        @include scrollbar;
+    }
+
+    .p-dataview-header {
+        background-color: inherit;
+        border: none;
+        padding: 0 0 0 0;
+    }
+}
+
+.joblist.p-dataview {
+    width: 45rem;
+
+    .p-dataview-emptymessage {
+        padding-top: 1.5rem;
+        padding-bottom: 4.5rem;
+        background-color: white;
+    }
+
+    .p-dataview-content {
+        > .p-grid > div {
+            border: none;
+            padding-top: 0.1rem;
+        }
+
+        background-color: white;
+        // background-color: #f5f5f5;
+        border-top: none;
+        border-right: $one #d4d4d4 solid;
+        border-left: $one #d4d4d4 solid;
+        border-bottom: $one #d4d4d4 solid;
+
+        padding: 0.5rem 0.5rem 0 0.5rem;
+
+        > .p-grid {
+            margin-top: 0;
+        }
+
+        // max-height: 19rem;
+        // min-height: 15rem;
+        max-height: calc(100vh - 445px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        @include scrollbar;
+    }
+
+    .p-dataview-header {
+        background-color: $color-section-header;
+        border-radius: 8px 8px 0 0;
+        border: 1px solid #dddddd;
+        // border: none;
+        // padding: 0 0 0 0;
+    }
+}
+
+.recipesearch.p-dataview {
+    .p-dataview-content {
+        background-color: white;
+        border-top: none;
+        border-right: $one $color-section-border solid;
+        border-left: $one $color-section-border solid;
+        border-bottom: $one $color-section-border solid;
+        padding: 0.5rem;
+        // padding-right: 0.5rem;
+    }
+
+    .p-dataview-header {
+        background-color: inherit;
+        border: none;
+        padding: 0;
+    }
+}
+
+.reader-menu.p-menu {
+    width: 25rem;
+}
+
+// .runtable.p-datatable {
+//     .p-datatable-scrollable-body {
+//         @include scrollbar;
+//     }
+// }
+
+// .collectiongrid.p-datatable {
+//     .p-datatable-table-container {
+//         @include scrollbar;
+//     }
+// }
+
+.popup-preview.p-datatable {
+    .p-datatable-tbody > tr,
+    .p-datatable-tbody > tr:nth-child(even) {
+        background-color: #fafafa;
+
+        td {
+            text-align: left;
+            border: $one solid #dee2e6;
+            padding: 0.5rem;
+        }
+    }
+}
+
+.download-options.p-popover {
+    background-color: #f8fcff;
+    border: $one solid $color-clickable;
+    box-shadow: 1px 9px 8px 4px grey;
+
+    &:before {
+        // border-color: #007ad900;
+        border-bottom-color: $color-clickable;
+    }
+    .p-popover-content {
+        width: 45rem;
+    }
+}
+
+.form-binder.p-card {
+    background-color: #eee;
+    margin: 1rem;
+
+    .p-card-header {
+        padding: 1rem;
+        // background-color: red;
+    }
+    .p-card-body {
+        padding: 0rem 1rem 1rem 1rem;
+        // background-color: green;
+    }
+}
+
+.formfill-card.p-card {
+    background-color: #e8e8f7;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////RC common stuff////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+//other RC UI common stuff
+.video-container {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+.teach-ico {
+    width: 13rem;
+}
+
+.word-break {
+    word-break: break-all;
+}
+
+.gray {
+    color: #bbb;
+}
+
+.row-center {
+    text-align: center;
+}
+
+.row-pull-apart {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.row-flex-center {
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.warn-color {
+    color: #bb7700;
+}
+
+.rc-settings.p-splitbutton {
+    .p-button {
+        // color: black;
+        // background: lightgray;
+        // border: inherit; //.1rem solid #607D8B;
+
+        // border: .1rem solid #dee2e6;
+        color: black;
+        background: white; // #efefef;
+    }
+
+    .p-button:enabled:hover {
+        background: rgba(33, 150, 243, 0.04);
+    }
+
+    .p-tieredmenu {
+        left: inherit !important;
+        right: 0px;
+        width: max-content;
+
+        .p-tieredmenu-item-icon,
+        .p-tieredmenu-item-label {
+            color: black;
+        }
+    }
+
+    .p-tieredmenu-mobile {
+        position: absolute;
+    }
+}
+
+// .rc-cleanup.p-select {
+//     background-color: red;
+//     width: 100%;
+
+//     //always show scrollbar
+//     .p-select-items-wrapper {
+//         @include scrollbar;
+//     }
+
+//     .p-select-label-container {
+//         width: 100%;
+//     }
+
+//     .p-select-panel .p-select-items .p-select-item {
+//         padding: 0.4rem 1rem;
+//     }
+// }
+
+.error-dialog.p-dialog {
+    .p-dialog-header {
+        justify-content: center;
+        background-color: #eee;
+    }
+}
+
+.shell-confirm-dialog.p-confirmdialog {
+    min-width: 60rem;
+    .p-dialog-header {
+        background-color: #eee;
+        span {
+            font-size: 1.2em;
+        }
+    }
+    .p-dialog-content {
+        padding: 1rem;
+        @include scrollbar;
+
+        .p-confirmdialog-message {
+            max-height: calc(100vh - 300px);
+        }
+    }
+}
+
+.review-dialog.p-dialog {
+    // border-radius: 4px;
+    box-shadow: none;
+    // border: 1px solid rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.show-data-dialog.p-dialog {
+    overflow: scroll;
+    max-height: 100%;
+    .p-dialog-header {
+        justify-content: space-between;
+        background-color: #eee;
+        span {
+            font-size: 1.2em;
+        }
+    }
+}
+
+.rc-easyselector.p-dialog {
+    background-color: white;
+    width: 95%;
+
+    .p-dialog-content {
+        background-color: white;
+        padding: 1rem;
+        // font-size: 1.3rem;
+        line-height: 1.6rem;
+
+        @include scrollbar;
+    }
+    .p-dialog-header {
+        padding: 0.5em;
+        background-color: $color-clickable;
+
+        .p-dialog-title {
+            // background-color: red;
+            font-size: 1.2em;
+            color: white;
+        }
+
+        .p-dialog-close-button {
+            font-size: 1.5em; //2.1rem;
+            color: white;
+            &:hover {
+                border-color: white;
+                background-color: transparent;
+            }
+        }
+    }
+
+    .p-dialog-footer {
+        background-color: #eee;
+        border-top: $one #bbb solid;
+        padding: 1rem;
+        flex-direction: column;
+
+        .footer-buttons {
+            display: flex;
+            justify-content: flex-end;
+            column-gap: inherit;
+        }
+    }
+}
+
+.rc-advanced-settings.p-fieldset {
+    margin-top: 3rem;
+    border: 1px solid var(--p-form-field-border-color);
+
+    // without this the collapsed container is not expanding to the full width
+    .p-fieldset-content-container {
+        height: auto;
+    }
+
+    .p-fieldset-legend {
+        position: relative;
+        top: -1.3rem;
+        border: 1px solid var(--p-form-field-border-color);
+        border-bottom: none;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        background: $color-section-header;
+
+        button {
+            color: $color-clickable;
+        }
+    }
+}
+
+.rc-scrape.p-accordion {
+    .p-accordionpanel {
+        margin-bottom: -1rem;
+    }
+}
+
+.rc-action {
+    padding: 1rem;
+
+    &__selector {
+        display: flex;
+        flex-grow: 1;
+        margin-right: 1rem;
+
+        input {
+            width: 100%;
+        }
+    }
+}

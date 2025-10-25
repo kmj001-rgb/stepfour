@@ -1,0 +1,42 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "name": "__MSG_name__",
+  "short_name": "__MSG_short_name__",
+  "description": "__MSG_description__",
+  "author": "__MSG_author__",
+  "version": "1.0",
+  "manifest_version": 3,
+  "default_locale": "en",
+  "permissions": ["storage", "tabs"],
+  "content_scripts": [
+    {
+      "run_at":"document_idle",
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["src/content-scripts.js"],
+      "css": ["src/snackBar.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html"
+  },
+  "icons": {
+    "16": "/images/default/icon_16.png",
+    "32": "/images/default/icon_32.png",
+    "48": "/images/default/icon_48.png",
+    "128": "/images/default/icon_128.png"
+  },
+  "options_page": "src/options/index.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["src/snackBar.css"],
+      "use_dynamic_url": true
+    }
+  ]
+}

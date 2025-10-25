@@ -1,0 +1,37 @@
+
+#tools > thead > tr > th.check, #tools > tbody > tr > td.check {
+    width: 50px;
+}
+
+#tools > thead > tr > th, #tools > tbody > tr > td {
+    max-width: 100px;
+}
+
+#tools > tbody > tr > td {
+    height: 40px;
+}
+
+#tools > thead > tr > th.url, #tools > tbody > tr > td.url {
+    max-width: 500px;
+}
+
+#tools > tbody > tr > td > img {
+    max-width: 40px;
+    max-height: 40px;
+}
+
+#dl-button {
+    display: flex;
+}
+
+#btn {
+    cursor: pointer;
+}
+
+input#filter {
+    cursor: text;
+    padding: 6px 12px;
+    margin-left: 6px;
+    margin-right: 6px;
+    flex: 2;
+}

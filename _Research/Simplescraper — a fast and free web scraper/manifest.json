@@ -1,0 +1,40 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "img/logo-128.png",
+         "32": "img/logo-32.png",
+         "48": "img/logo-48.png"
+      },
+      "default_popup": "popup.html",
+      "default_title": "Launch Simplescraper"
+   },
+   "author": "SimpleScraper",
+   "background": {
+      "service_worker": "js/background.js"
+   },
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+   },
+   "description": "A web scraper that's fast, free and simple to use. Scrape website data and table data in seconds",
+   "externally_connectable": {
+      "matches": [ "*://simplescraper.io/*" ]
+   },
+   "icons": {
+      "128": "img/logo-128.png",
+      "16": "img/logo-16.png",
+      "48": "img/logo-48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjnp9YEVojyoWEp3L0N+IzL9yjpTYe8S9xhtbBpyaJJqUJIGnzvcdyFxuYksXN6TJV8hLL+hvfVGNBVFagiCQCCWredrlwBRaTEj241Oqf8xriVe03pDHvvLgsV6WIm4lEkB6IujPDc/lTiE0MW8o2Je74r+ZCkHVAUpKJKhmW3Q+4Q18KC3nWHxU+f30qtT6tt14LiXTf1olINoxYoj5wau/zLLA4AmS1WeRt6q3GhQXfKZMDRv0IDRZba4qYsPx2+AiBJ8219uaTwq/vN5mHks9ayEbSoOltOSEw8v6EtZYrw62YC5meUcMZuRxeYsEdg8WAWUFb4iiaQQyE3tGpwIDAQAB",
+   "manifest_version": 3,
+   "name": "Simplescraper — a fast and free web scraper",
+   "optional_host_permissions": [ "http://*/*", "https://*/*" ],
+   "optional_permissions": [ "cookies" ],
+   "permissions": [ "storage", "activeTab", "scripting" ],
+   "short_name": "Simple scraper",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.24.0",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "js/*", "css/*", "fonts/*", "img/*" ]
+   } ]
+}

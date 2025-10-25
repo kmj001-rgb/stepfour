@@ -1,0 +1,26 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "icon-128.png",
+         "16": "icon-16.png",
+         "48": "icon-48.png"
+      },
+      "default_title": "Copy Highlighted Links"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "description": "Copy URLs from highlighted (selected) links",
+   "icons": {
+      "128": "icon-128.png",
+      "16": "icon-16.png",
+      "256": "icon-256.png",
+      "48": "icon-48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxTLSZPMBOcyXB5a1KudLK/dNXYRu6HIKRiwBGg/NjUEvnvKbeR0nMjuhOlfbrY9aFts0k1rv3oYqkFAnxmPlmTcD0XaF/4E1Y3eiyz2WzR9pxBF1fXKdyRjR/JeUDksdfBykxi5awS6xrD0IQdDDnx3uLU67zSEYJPWTOnuWImB4FvPe+1ZKsU841jmtXq2gTc30H0lTMDWw2w6/eC75CIM2Y5btNIZfN9FQPD+F+dsqol402DWeFTcvJqRJzJ+EczMBjRk61ROJuaAjV1inXbhHFi/1mKhvPzyAPakOTXI8/TemiGuCDr63Tls4TzpSKu8TtE0GHNl+GnWAZO93pwIDAQAB",
+   "manifest_version": 3,
+   "name": "Copy Highlighted Links",
+   "permissions": [ "activeTab", "clipboardWrite", "contextMenus", "scripting", "notifications" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}

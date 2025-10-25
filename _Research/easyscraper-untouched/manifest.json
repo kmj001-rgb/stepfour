@@ -1,0 +1,27 @@
+{
+   "action": {
+      "default_icon": "assets/icon-48.png",
+      "default_title": "Easy Scraper"
+   },
+   "background": {
+      "service_worker": "background.bundle.js"
+   },
+   "default_locale": "en",
+   "description": "A free web scraper for instant results. Scrape any website with one click. No coding required.",
+   "externally_connectable": {
+      "matches": [ "https://*.easyscraper.com/*" ]
+   },
+   "icons": {
+      "128": "assets/icon-128.png",
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5lsCGrUQ6sPijJlYV0IIIjckz73OoTckJfRkOK9TPNA4Bo2O3kdgzaO69hvZaTcRfAZyO+dlZJ3jEBTDG9tS4uIGhWaJPDFsj3+4I4Oi2KSAm0/wajQwc38rnoDrdoFLuSKmSdinZh7LTxlufZVAzNIw5S+EG3zQESZ0DJQtmbo8+z7FXz43r1gKjBnyOndkRAfNdPrSHIkHkeZjya0tNSxFlDPDFtfyxMTPqjlUevRV+m8YkVX0gFfP8VbEKvAZNqflYRRY8mndsAsO5StfmKbca1tT709VxkuXYLDdBFY6GHUdbWxUjMlrbC6wBUmGan5z8iYmIv/jNMoVIQvdvwIDAQAB",
+   "manifest_version": 3,
+   "name": "Easy Scraper - One-click web scraper",
+   "optional_host_permissions": [ "\u003Call_urls>" ],
+   "optional_permissions": [ "tabs" ],
+   "permissions": [ "storage", "activeTab", "scripting" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.3.6"
+}

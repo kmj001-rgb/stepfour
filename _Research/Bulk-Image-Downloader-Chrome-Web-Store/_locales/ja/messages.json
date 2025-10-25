@@ -1,0 +1,8 @@
+{
+  "name": {
+    "message": "Bulk Image Downloader"
+  },
+   "download_settings_save_confirm_key": {
+      "message": "ダウンロード前に各ファイルの保存場所を確認する"
+   }
+}

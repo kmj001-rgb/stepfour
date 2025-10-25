@@ -1,0 +1,27 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "icons/scrapy-128px.png",
+         "16": "icons/scrapy-16px.png",
+         "48": "icons/scrapy-48px.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "js": [ "content.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "description": "Filter and Save Data from Websites in JSON, CSV, and TXT formats. ",
+   "host_permissions": [ "\u003Call_urls>" ],
+   "icons": {
+      "128": "icons/scrapy-128px.png",
+      "16": "icons/scrapy-16px.png",
+      "48": "icons/scrapy-48px.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnVogOsn0LguvjaRyxpWmAUlJrl2KZTfL8vLwe/KMFCV2u3tr27a9cevLwGpAUphUe40vpR2XcS4n8TG9REUvxZsD/ZvvmZlLQinrNLd1DMajeCODWPLSI/LwobwGOAk/ORh2QPLzjw+aYMLapR8okBJuu/aD+aYQUQVJPis0Cgh2ZeD5UCkasWb0pzJfBB4kmsJ55m3Zik5rhYApMO8RzkvQoUpxNp66UwgLrVOoOly2Mb5M3Sk+8bTHlcu077vV9/iazUI5fJw+ULN8do22l7e7yeuq9U9Qg/jYzZ8uf0qMmSjASLz/DBttnUxOI0IMx+vcfp/WvuMDOEzdpNhakQIDAQAB",
+   "manifest_version": 3,
+   "name": "Scrapy",
+   "permissions": [ "activeTab", "storage", "downloads", "scripting" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}

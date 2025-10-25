@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>StepThree Export Worker - Offscreen Document</title>
+    <meta name="description" content="Secure offscreen document for heavy export operations">
+    <link rel="stylesheet" href="export-worker.css">
+    <!-- Strict CSP for security -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none'; base-uri 'self';">
+</head>
+<body>
+    <!-- Minimal HTML for offscreen document -->
+    <div id="export-worker-status">
+        Export Worker Ready
+    </div>
+    
+    <!-- Load required libraries for export operations -->
+    <script src="../lib/papaparse.min.js"></script>
+    <script src="../lib/xlsx.full.min.js"></script>
+    
+    <!-- Load the export worker script -->
+    <script src="export-worker.js"></script>
+</body>
+</html>

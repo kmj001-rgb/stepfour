@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "MasterScraper",
+  "version": "2.0.0",
+  "description": "Professional Chrome extension for scraping image galleries and photo agencies with authentication support, pagination, and reliable downloading.",
+  "action": {
+    "default_title": "MasterScraper - Click to open dashboard",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "downloads",
+    "storage",
+    "activeTab",
+    "scripting",
+    "webRequest",
+    "windows",
+    "notifications",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "dashboard.html", "dashboard.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "options_page": "dashboard.html"
+}

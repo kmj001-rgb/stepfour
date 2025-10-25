@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Scraper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .goldman-regular {
+            font-family: "Goldman", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            color: #6610f2;
+        }
+
+        .goldman-bold {
+            font-family: "Goldman", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+            color: #6610f2;
+        }
+        .dark-gray {
+            background-color: #FFFFFF;
+        }
+        .transparent-bg {
+            background-color: #FAF9F6;
+            padding: 20px;
+
+        }
+        .button:hover {
+            background-color: rgb(188, 160, 244);
+            color: #121212;
+        }
+        .scrollable-section {
+            width: 100%; /* Adjust width as needed */
+            overflow-x: auto; /* Enable horizontal scrolling */
+            white-space: nowrap; /* Prevent wrapping of content */
+            height: 82vh;
+            font-size: 15px;
+        }
+
+        .scrollable-section .content {
+            display: inline-block; /* Make content inline-block to keep items in a single line */
+        }
+
+        .scrollable-section .item {
+            max-width: 200px;
+            overflow: hidden;
+            padding: 1px;
+            text-overflow: ellipsis;
+        }
+
+        .is-bordered {
+            border: 0.5px solid #d3d3d3; /* Default Bulma border color */
+        }
+
+
+    </style>
+</head>
+<body>
+    <section class="hero dark-gray">
+        <div class="hero-head pt-2 mt-2 center goldman-bold is-italic is-size-4">
+            ScrapR
+        </div>
+        <div class="hero-body pl-0 pr-0 pt-2">
+            <div class="columns m-0 p-0" style="display: flex;">
+                <div class="column is-three-quarters has-text-centered is-bordered">
+                    <h2 class="subtitle has-text-weight-bold mt-2.5 mb-0 ml-3" id="titleholder">-</h2>
+                    <h3 class="has-text-grey has-text-weight-semibold ml-3" id="url">-</h3>
+                </div>
+                <div class="column has-text-centered is-bordered">
+                    <h3 class="has-text-grey has-text-weight-semibold">Pages</h3>
+                    <h2 class="subtitle has-text-weight-bold" id="pagecount">0</h2>
+                </div>
+                <div class="column has-text-centered is-bordered">
+                    <h3 class="has-text-grey has-text-weight-semibold">Items</h3>
+                    <h2 class="subtitle has-text-weight-bold" id="itemcount">0</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container dark-gray center pb-5">
+        <button id="createElementsButton" class="button center goldman-bold transparent-bg">Get Data</button>
+    </div>
+    <div class="container dark-gray center pb-5">
+        <label class="checkbox">
+            <input type="checkbox" id="nextCheck">
+        </label>
+        <span class="icon has-text-link">
+            <i class="fa-solid fa-circle-right" aria-hidden="true"></i>
+        </span>
+        <span class="has-text-link">Pagination</span>
+    </div>
+    <div class="container dark-gray center pb-5">
+        <a id="download-button" class="is-primary">
+            <span class="icon">
+              <i class="fas fa-download" aria-hidden="true"></i>
+            </span>
+            <span>Download</span>
+        </a>
+    </div>
+    <div id="web-data" class="scrollable-section content">
+        <table class="table is-striped is-bordered" id="table">
+            
+        </table>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

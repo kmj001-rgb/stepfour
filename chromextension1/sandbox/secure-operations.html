@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>StepThree Secure Operations - Sandbox</title>
+    <meta name="description" content="Secure sandbox for untrusted operations">
+    <link rel="stylesheet" href="secure-operations.css">
+    <!-- Strict sandbox CSP -->
+    <meta http-equiv="Content-Security-Policy" content="sandbox allow-scripts; script-src 'self';">
+</head>
+<body>
+    <!-- Minimal sandbox environment -->
+    <div id="sandbox-status">
+        Sandbox Ready
+    </div>
+    
+    <!-- Load the sandbox worker script -->
+    <script src="secure-operations.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+   "action": {
+      "default_icon": {
+         "16": "cope link.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "css": [ "styles.css" ],
+      "js": [ "content.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Mi8V1RKgLRo0DH5IGbAPNmuJfjIz3gBeMSAqCdjXf66SLb8HIY52xCEvObhfySotvVQ79REx1Pc1gtPRmW9KSYw75k31R8DZhB2nk67tk2E9cO4unQZY3f7Ng6lWIE20aij4kwGpTU+3qFhEHeXwkrDQcVriv1kG2/ZwqyKu/yYo0Rb310lSBpxZBltYvWj1Z5cn2hswV017tn+pbDdfoEae437lp55ufha4ozRH1qeBy6E2IWLEi6s+efVxJlsRd/tYmLbjV2j+nVx9sU5Zan26UTeuFnnyZ7TfeveNmBtc/qTt0HOLtSGr6eVfLobhy2xZAV2V1c7vmM3D2EsfQIDAQAB",
+   "manifest_version": 3,
+   "name": "Copy Image Link on Hover",
+   "permissions": [ "clipboardWrite" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}

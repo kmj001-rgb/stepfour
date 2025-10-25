@@ -1,0 +1,20 @@
+{
+   "author": "stefanXO",
+   "browser_action": {
+      "default_icon": {
+         "512": "images/sort.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "description": "Export all links and image links from the current page to Excel or JSON format.",
+   "icons": {
+      "512": "images/sort.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmOZ1zDSI/xnENXwileydwrCviv4ysfwFXioTBQhsH6O+5VsFvykZ6plQ7JGnp1gO/qwooCYLrDYWC1A7Qm20xoduzr7fE0Rm3tuX4WWY7XQMzIPWiF9k/CJEwJTYR2utkuptjmZ/6xQDjwTwi5YbdfRX6eMCGxN4xxdGRoVopJoh0AL2yd/Dy1kdAlUMMeG7jfhySj6DdofZe/7DfpFWXp7FgPBdrui6O1ZX9SEgog65cksPrUMUFQWs53IQRis/Ye42Oqj+/E8QBzSh+NBA1txnEmR2xn0eS+V50MOLYGkk1R2pC4iYWwGLHRsd8rtEE0XNbeEcvrailTcwhSR2OQIDAQAB",
+   "manifest_version": 2,
+   "name": "Copy all links and image links to CSV or JSON",
+   "permissions": [ "activeTab", "downloads" ],
+   "short_name": "Copy Links to CSV/JSON",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1"
+}

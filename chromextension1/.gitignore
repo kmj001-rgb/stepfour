@@ -1,0 +1,8 @@
+lib/pagination-detector-test.html
+lib/content-hasher-test.html
+lib/pagination-integration-examples.js
+lib/pagination-detector-phase3-test.html
+lib/pagination-test-suite.html
+
+# Research directory contains examples and should not be loaded with the extension
+_Research/

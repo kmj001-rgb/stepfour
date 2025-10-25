@@ -1,0 +1,32 @@
+{
+   "action": {
+      "default_icon": "images/icon19.png",
+      "default_popup": "popup.html",
+      "default_title": "__MSG_name__",
+      "name": "__MSG_name__"
+   },
+   "background": {
+      "service_worker": "/background.js"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "/hotkeys.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_description__",
+   "homepage_url": "https://tigerlovefish.com",
+   "host_permissions": [ "*://*/*" ],
+   "icons": {
+      "128": "images/icon128.png",
+      "32": "images/icon32.png",
+      "48": "images/icon48.png",
+      "64": "images/icon64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgmj4gfWOm4TCPA6oNhAEEA5/8yqxed6/h9EbioE9/nGxF7qLlbAL615zXWZcZwqg4BuTdPOZ5V/uEH3npu2cZGkZWJcvjIC3QhRBAeDAEjF1vCFODATk9EOPN/dkmTCa4ZnYa7SBNi96IQdYuPQunoHaeIrXEahDVio7ANytp6Q0RBkXhx2CFxv0LFa8eqx+xgnpCj9wtkqgqmhSe90ZOCrg9kYc/+jaFmbyAYdVHPEm9Ao3nTL6FoVX98wPmrG27IybPTwWdD8dCP6xrOE34WMfb0bVZbJ/2QPlqiYWvVEJvk9jaNLgZpd8R7TuM5V4XyzMI9PXAI6mqM79eAqDeQIDAQAB",
+   "manifest_version": 3,
+   "name": "__MSG_name__",
+   "permissions": [ "downloads", "storage", "contextMenus", "tabs", "scripting" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.5"
+}

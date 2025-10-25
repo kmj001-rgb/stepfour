@@ -1,0 +1,63 @@
+@import "thumbnail.css";
+
+body.light-theme {
+    --imageBorderColor: #b1b1b1;
+}
+
+body.dark-theme {
+    --imageBorderColor: #b1b1b1;
+}
+
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--imageSize));
+    grid-template-rows: auto;
+    gap: 10px;
+}
+
+.grid-item {
+    width: var(--imageSize);
+    height: var(--imageSize);
+    justify-self: center;
+    position: relative;
+    border: 4px solid var(--imageBorderColor);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        border-color: var(--activeColorHover);
+    }
+
+    &.checked {
+        border-color: var(--activeColor);
+    }
+}
+
+.grid-item .download_image_button {
+    width: 25px;
+    position: absolute;
+    top: 5px;
+    left: 7px;
+}
+
+.grid-item .item-details {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    color: #fff;
+    padding: 3px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    pointer-events: none;
+    user-select: none;
+}
+
+.grid-item :is(.item-details-ext, .item-details-dimensions) {
+    background-color: #a1a1a1;
+    padding: 3px;
+    border-radius: 4px;
+}

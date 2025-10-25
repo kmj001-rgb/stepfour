@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StepThree Gallery Scraper - Unified Panel</title>
+  <link rel="stylesheet" href="sidepanel-new.css">
+</head>
+<body>
+  <div class="unified-panel">
+    
+    <!-- Header (Persistent) -->
+    <header class="panel-header">
+      <div class="header-left">
+        <img src="../icons/32.png" alt="StepThree" class="header-icon">
+        <h1>Gallery Scraper</h1>
+      </div>
+      <div class="header-right">
+        <div class="connection-status" id="connectionStatus">
+          <div class="status-dot" id="statusDot"></div>
+          <span id="statusText">Connected</span>
+        </div>
+        <div class="page-info" id="pageInfo">Loading...</div>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Area -->
+    <main class="panel-content">
+
+      <!-- Permission Section (conditional, hidden by default) -->
+      <div id="permissionSection" class="permission-card hidden">
+        <div class="permission-icon">📥</div>
+        <h3>Downloads Permission Required</h3>
+        <p id="permissionReason">Downloads permission is needed to save files to your computer.</p>
+        <div class="permission-actions">
+          <button id="grantPermissionBtn" class="btn btn-primary">Grant Permission</button>
+          <button id="cancelPermissionBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Quick Stats (Collapsible Card) -->
+      <details class="card" id="quickStatsCard" open>
+        <summary class="card-header">
+          <span class="card-title">📊 Quick Stats</span>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="card-content">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="totalItems">0</div>
+              <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="progressPercent">0%</div>
+              <div class="stat-label">Progress</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Primary Actions (Always Visible Card) -->
+      <div class="card card-always-visible" id="primaryActionsCard">
+        <div class="card-header-simple">
+          <span class="card-title">🚀 Actions</span>
+        </div>
+        <div class="card-content">
+          <button id="scanPageBtn" class="action-btn primary">
+            <span class="btn-icon">🔍</span>
+            <span class="btn-text">Start Auto-Detect (Images & Tables)</span>
+          </button>
+          <div class="action-option">
+            <label class="checkbox-label">
+              <input type="checkbox" id="includeTableDataToggle">
+              <span>Include Table Data</span>
+            </label>
+          </div>
+          <details class="advanced-tools">
+            <summary class="advanced-tools-toggle">Advanced Tools ▼</summary>
+            <button id="manualSelectBtn" class="action-btn secondary">
+              <span class="btn-icon">🎯</span>
+              <span class="btn-text">Manual Selector Mode</span>
+            </button>
+          </details>
+        </div>
+      </div>
+
+      <!-- Pagination Options (Collapsible Card) -->
+      <details class="card" id="paginationOptionsCard" open>
+        <summary class="card-header">
+          <span class="card-title">📄 Pagination Options</span>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="card-content">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="setting-name">Auto-pagination</span>
+              <small>Automatically navigate through multiple pages (Next button / Load More / Numbered pages)</small>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="autoPaginationToggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="setting-name">Next button selector (optional)</span>
+              <small>CSS selector for the Next button/link (e.g., <code>a[rel="next"]</code>)</small>
+            </div>
+            <div class="input-with-action">
+              <input type="text" id="nextSelectorInput" class="input-control" placeholder="E.g. a[rel=next], .pagination .next, button[aria-label*=Next]">
+              <button id="pickNextSelectorBtn" class="btn btn-sm" title="Pick element on page">🎯 Pick</button>
+              <button id="cancelElementPickerBtn" class="btn btn-sm btn-secondary" title="Cancel element picker" style="display: none;">❌ Cancel</button>
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="setting-name">Maximum pages</span>
+              <small>Maximum number of pages to scrape (safety limit)</small>
+            </div>
+            <select id="maxPagesSelect" class="select-control">
+              <option value="1">1 page only</option>
+              <option value="3">3 pages</option>
+              <option value="5">5 pages</option>
+              <option value="10" selected>10 pages</option>
+              <option value="20">20 pages</option>
+              <option value="50">50 pages</option>
+              <option value="100">100 pages</option>
+              <option value="999">Unlimited</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="setting-name">Pagination delay</span>
+              <small>Wait time between pages (ms) - prevents server overload</small>
+            </div>
+            <input type="number" id="paginationDelayInput" class="input-control" value="2000" min="500" max="10000" step="500">
+          </div>
+          <div class="info-box">
+            <small><strong>How it works:</strong> The extension detects pagination by looking for "Next" buttons, numbered page links (1, 2, 3...), or "Load More" buttons. When enabled, it will automatically navigate pages and collect images until reaching the maximum or the last page.</small>
+          </div>
+        </div>
+      </details>
+
+      <!-- Progress & Control (Conditional Card, hidden by default) -->
+      <div class="card hidden" id="progressCard">
+        <div class="card-header-simple">
+          <span class="card-title">⏳ Progress</span>
+        </div>
+        <div class="card-content">
+          <div class="progress-bar-container">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Ready</div>
+          </div>
+          <div class="progress-controls">
+            <button id="pauseBtn" class="btn btn-warning" disabled>
+              <span>⏸️</span> Pause
+            </button>
+            <button id="stopBtn" class="btn btn-danger" disabled>
+              <span>⏹️</span> Stop
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Export Options (Collapsible Card, collapsed by default) -->
+      <details class="card" id="exportOptionsCard">
+        <summary class="card-header">
+          <span class="card-title">📤 Export Options</span>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="card-content">
+          
+          <!-- Export Presets -->
+          <div class="form-group">
+            <label>Quick Presets</label>
+            <div class="preset-buttons">
+              <button class="btn btn-sm" id="presetQuickBasic">Quick Basic</button>
+              <button class="btn btn-sm" id="presetCompleteDataset">Complete Dataset</button>
+              <button class="btn btn-sm" id="presetWebReport">Web Report</button>
+            </div>
+          </div>
+
+          <!-- Format Selection -->
+          <div class="form-group">
+            <label>Export Formats</label>
+            <div class="format-checkboxes">
+              <label class="checkbox-label">
+                <input type="checkbox" id="formatCSV" value="csv" checked>
+                <span>📊 CSV</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="formatXLSX" value="xlsx" checked>
+                <span>📈 Excel</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="formatJSON" value="json">
+                <span>📋 JSON</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="formatHTML" value="html">
+                <span>🌐 HTML</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Field Selection -->
+          <div class="form-group">
+            <label>Export Fields</label>
+            <div class="field-actions">
+              <button class="btn btn-xs" id="selectAllFields">Select All</button>
+              <button class="btn btn-xs" id="selectCommonFields">Common</button>
+              <button class="btn btn-xs" id="clearAllFields">Clear</button>
+            </div>
+            <div class="field-checkboxes" id="fieldCheckboxes">
+              <!-- Core Data Fields -->
+              <div class="field-group" id="coreFields">
+                <label class="checkbox-label"><input type="checkbox" value="filename" checked> Target Filename</label>
+                <label class="checkbox-label"><input type="checkbox" value="url" checked> Full Resolution Link</label>
+                <label class="checkbox-label"><input type="checkbox" value="thumbnailUrl"> Thumbnail Link</label>
+                <label class="checkbox-label"><input type="checkbox" value="width"> Dimensions (Width px)</label>
+                <label class="checkbox-label"><input type="checkbox" value="height"> Dimensions (Height px)</label>
+                <label class="checkbox-label"><input type="checkbox" value="altText"> Image Caption / Alt Text</label>
+                <label class="checkbox-label"><input type="checkbox" value="link"> Source Page Link</label>
+                <label class="checkbox-label"><input type="checkbox" value="timestamp"> Capture Timestamp</label>
+              </div>
+              <!-- Advanced Metadata Fields (hidden by default) -->
+              <div class="field-group" id="advancedFields" style="display: none;">
+                <label class="checkbox-label"><input type="checkbox" value="confidenceScore"> Extraction Quality (%)</label>
+                <label class="checkbox-label"><input type="checkbox" value="extractionMethod"> Discovery Method</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced Options -->
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="includeMetadata" checked>
+              <span>Include Advanced Metadata</span>
+            </label>
+            <small class="hint">Adds extraction method, confidence scores, and performance metrics</small>
+          </div>
+
+        </div>
+      </details>
+
+      <!-- Settings (Collapsible Card, collapsed by default) -->
+      <details class="card" id="settingsCard">
+        <summary class="card-header">
+          <span class="card-title">⚙️ Settings</span>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="card-content">
+
+          <!-- General Settings -->
+          <div class="settings-section">
+            <h4>General Settings</h4>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Auto-detect galleries</span>
+                <small>Automatically detect gallery pages and show indicators</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="autoDetectToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Download images</span>
+                <small>Automatically download found images</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="downloadImagesToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Keyboard shortcuts</span>
+                <small>Quick access keys: Ctrl+Shift+S to scan</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="keyboardShortcutsToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Context menu integration</span>
+                <small>Right-click actions for quick scraping</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="contextMenuToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Performance & Extraction Strategy (Collapsible) -->
+          <details class="settings-section">
+            <summary class="settings-section-header">
+              <h4>Performance & Extraction Strategy</h4>
+              <span class="chevron">▼</span>
+            </summary>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Max concurrent downloads</span>
+                <small>Number of simultaneous downloads</small>
+              </div>
+              <select id="maxDownloadsSelect" class="select-control">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="8">8</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Smart filtering</span>
+                <small>Use smart pattern recognition to improve results</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="smartFilterToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Advanced filtering</span>
+                <small>Enhanced content filtering with regex and dimensions</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="advancedFilteringToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Memory optimization</span>
+                <small>Enable memory optimization for large galleries</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="memoryOptToggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Dynamic content load wait</span>
+                <small>Time to wait after page loads (ms) - for JavaScript-heavy pages</small>
+              </div>
+              <input type="number" id="pageWaitInput" class="input-control" value="2000" min="500" max="30000">
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Scroll delay</span>
+                <small>Delay between scroll attempts (ms) - helps load lazy images</small>
+              </div>
+              <input type="number" id="scrollDelayInput" class="input-control" value="1000" min="100" max="10000">
+            </div>
+          </details>
+
+          <!-- Download Settings -->
+          <div class="settings-section">
+            <h4>Download Settings</h4>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Download folder</span>
+                <small>Custom folder name for downloads</small>
+              </div>
+              <input type="text" id="downloadFolderInput" class="input-control" value="StepThree" placeholder="Folder name">
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Filename mask</span>
+                <small>Pattern for naming downloaded files. Click on patterns below to insert them.</small>
+              </div>
+              <input type="text" id="filenameMaskInput" class="input-control" value="*name*.*ext*" placeholder="*name*.*ext*">
+              <div class="mask-patterns">
+                <div class="pattern-group">
+                  <h4>Basic Patterns</h4>
+                  <div class="pattern-tags">
+                    <span class="pattern-tag" data-pattern="*name*" title="The original filename without its extension (e.g., 'w' from w.jpg)">*name*</span>
+                    <span class="pattern-tag" data-pattern="*ext*" title="The file's extension (e.g., 'jpg')">*ext*</span>
+                    <span class="pattern-tag" data-pattern="*domain*" title="The website's main domain (e.g., 'imago-images.com')">*domain*</span>
+                    <span class="pattern-tag" data-pattern="*url*" title="The full domain, including subdomains (e.g., 'www.imago-images.com')">*url*</span>
+                    <span class="pattern-tag" data-pattern="*subdirs*" title="The entire directory path from the URL (e.g., 'bild/st/0479945706/')">*subdirs*</span>
+                  </div>
+                </div>
+                <div class="pattern-group">
+                  <h4>URL Segments</h4>
+                  <div class="pattern-tags">
+                    <span class="pattern-tag" data-pattern="*segment[1]*" title="Extracts the 1st part of the URL path, split by slashes (/)">*segment[1]*</span>
+                    <span class="pattern-tag" data-pattern="*segment[2]*" title="Extracts the 2nd part of the URL path, split by slashes (/)">*segment[2]*</span>
+                    <span class="pattern-tag" data-pattern="*segment[3]*" title="Extracts the 3rd part of the URL path, split by slashes (/)">*segment[3]*</span>
+                    <span class="pattern-tag" data-pattern="*segment[4]*" title="Extracts the 4th part of the URL path, split by slashes (/)">*segment[4]*</span>
+                  </div>
+                </div>
+                <div class="pattern-group">
+                  <h4>Numbering & Time</h4>
+                  <div class="pattern-tags">
+                    <span class="pattern-tag" data-pattern="*num*" title="An incremental number that increases with each new download session, great for avoiding duplicate filenames">*num*</span>
+                    <span class="pattern-tag" data-pattern="*y*" title="Year (e.g., '2025')">*y*</span>
+                    <span class="pattern-tag" data-pattern="*m*" title="Month (e.g., '10')">*m*</span>
+                    <span class="pattern-tag" data-pattern="*d*" title="Day (e.g., '19')">*d*</span>
+                    <span class="pattern-tag" data-pattern="*hh*" title="Hours (e.g., '23')">*hh*</span>
+                    <span class="pattern-tag" data-pattern="*mm*" title="Minutes (e.g., '30')">*mm*</span>
+                    <span class="pattern-tag" data-pattern="*ss*" title="Seconds (e.g., '45')">*ss*</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Retry attempts</span>
+                <small>Number of times to retry failed downloads</small>
+              </div>
+              <select id="retryAttemptsSelect" class="select-control">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Advanced Settings -->
+          <div class="settings-section">
+            <h4>Advanced Settings</h4>
+            <div class="setting-item">
+              <div class="setting-label">
+                <span class="setting-name">Debug Mode</span>
+                <small>Enable detailed debug logs for troubleshooting</small>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="debugToggle">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+
+
+          <!-- Settings Actions -->
+          <div class="settings-section">
+            <div class="settings-actions">
+              <button class="btn btn-secondary btn-full" id="resetSettingsBtn">Reset to Defaults</button>
+              <button class="btn btn-primary btn-full" id="saveSettingsBtn">Save Settings</button>
+            </div>
+          </div>
+
+        </div>
+      </details>
+
+      <!-- Activity Log (Collapsible Card at bottom) -->
+      <details class="card" id="activityLogCard">
+        <summary class="card-header">
+          <span class="card-title">📋 Activity Log</span>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="card-content">
+          <div class="activity-log" id="activityLog">
+            <div class="log-entry">
+              <span class="log-time">--:--</span>
+              <span class="log-message">Ready to start...</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="panel-footer">
+      <div class="footer-left">
+        <span class="version">StepThree v2.0</span>
+      </div>
+      <div class="footer-right">
+        <button id="debugPanelBtn" class="btn-icon" title="Debug Panel">
+          <span>🐛</span>
+        </button>
+        <button id="helpBtn" class="btn-icon" title="Help & Support">
+          <span>❓</span>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <!-- External Libraries -->
+  <script src="../lib/vue.global.prod.js"></script>
+  <script src="../lib/papaparse.min.js"></script>
+  <script src="../lib/xlsx.full.min.js"></script>
+  <!-- jszip.min.js removed - ZIP functionality removed per requirements -->
+  <!-- Message Schema -->
+  <script src="../lib/message-schema.js"></script>
+  <!-- Main Application -->
+  <script src="sidepanel-new.js"></script>
+</body>
+</html>

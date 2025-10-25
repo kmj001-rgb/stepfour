@@ -1,0 +1,11 @@
+﻿urls,fileTypes,folderName,downloadTime,zipDownload,buildCheckbox,sortableList,sequenceStart,downloadIfEnabled,downloadIfKeywords,downloadIfLogic,enabled,format,quality,status
+http://example.com/image1.jpg;http://example.com/image2.png,jpg;png,My Images,2024-12-01T12:00,TRUE,TRUE,filename,,TRUE,contains: example.com;not-contains: ad,and,TRUE,webp,100,pending
+http://example.com/image3.gif,all,GIF Images,2024-12-01T14:30,FALSE,FALSE,,,FALSE,,,FALSE,png,45,pending
+http://example.com/image1.jpg,jpg,JPG Images,2024-12-01T12:00,TRUE,TRUE,sequence,1,FALSE,,,TRUE,jpeg,100,pending
+http://example.com/image2.jpg,png,PNG Images,2024-12-01T14:30,FALSE,FALSE,,,FALSE,,,TRUE,png,50,pending
+http://example.com/image3.jpg;http://example.com/image4.png,jpg;png,Mixed Images,2024-12-02T10:00,TRUE,TRUE,urlfragments,,TRUE,contains: example,,FALSE,webp,100,pending
+http://example.com/image1.jpg;http://example.com/image2.png,jpg;png,My Images,2024-12-01T12:00,TRUE,TRUE,_,,TRUE,contains: example.com;not-contains: ad,or,TRUE,png,90,pending
+http://example.com/image3.gif,all,GIF Images,2024-12-01T14:30,FALSE,FALSE,,,FALSE,,,FALSE,png,60,pending
+http://example.com/image1.jpg,jpg,JPG Images,2024-12-01T12:00,TRUE,TRUE,uuid,,FALSE,,,FALSE,png,100,pending
+http://example.com/image2.jpg,png,PNG Images,2024-12-01T14:30,FALSE,TRUE,Test,,FALSE,,,TRUE,png,75,pending
+http://example.com/image3.jpg;http://example.com/image4.png,jpg;png,Mixed Images,2024-12-02T10:00,TRUE,TRUE,filename;-;timestamp;_;sequence,1002,TRUE,contains: example,,TRUE,jpeg,80,pending

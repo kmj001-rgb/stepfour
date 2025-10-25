@@ -1,0 +1,11 @@
+{
+  "name": {
+    "message": "Bulk Image Downloader"
+  },
+  "description": {
+    "message": "Simple bulk image download extension, filter by resolution and file type, download photos from multiple tabs in one click."
+  },
+  "download_settings_save_confirm_key": {
+    "message": "Ask where to save each file before downloading"
+  }
+}

@@ -1,0 +1,5 @@
+Increment Per Minute
+=TEXT(DATEVALUE(LEFT($M$2,10)) + TIMEVALUE(MID($M$2,12,5)) + (ROW() - ROW($M$2)) / 1440, "yyyy-mm-ddThh:mm")
+
++1 every 100 rows
+=TEXT(DATEVALUE(LEFT($M$2,10)) + TIMEVALUE(MID($M$2,12,5)) + (INT((ROW() - ROW($M$2)) / 100)) / 1440, "yyyy-mm-ddThh:mm")

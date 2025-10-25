@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bulk Image Downloader From Url List</title>
+  <link rel="stylesheet" type="text/css" href="sidepanel.css">
+  <script src="dist/jszip.min.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+</head>
+
+<body>
+  <div class="sidepanel-container">
+    <h2>Bulk Image Downloader From Url List</h2>
+      <div class="auth-container">
+        <div id="authStatus" class="auth-status"></div>
+        <button id="loginBtn" class="btn auth-btn">Sign In</button>
+        <button id="logoutBtn" class="btn auth-btn" style="display:none;">Sign Out</button>
+        <button id="refreshBtn" class="btn auth-btn" title="Refresh status">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+            <path d="M16 16h5v5"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div id="licenseIndicator"></div>
+      <div id="tasks-container"></div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+      <button class="tab-button active" data-tab="tab2">Downloader</button>
+      <button class="tab-button" data-tab="tab1">eXtractor (Beta)</button>
+      <button class="tab-button" data-tab="tab3" style="font-size: 17px">&#x1F6C8;</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="tab1" class="tab-content">
+      <div class="extractor-container">        
+        <div class="extractor-controls">
+          <div class="scan-options">
+            <label>
+                <input type="checkbox" id="continuousScanCheckbox" checked>
+                Continuous Scanning
+            </label>
+            <label>
+                Scan Duration:
+                <select id="scanDuration">
+                    <option value="30">30 seconds</option>
+                    <option value="60">1 minute</option>
+                    <option value="120">2 minutes</option>
+                    <option value="300">5 minutes</option>
+                    <option value="0">Until stopped</option>
+                </select>
+            </label>
+          </div>
+
+          <div class="scan-buttons">
+            <button id="scanPageBtn" class="btn extractor-btn">Scan Current Page</button>
+            <button id="deepScanBtn" class="btn extractor-btn">Deep Scan <br> (AJAX/Lazy Load)</button>
+            <button id="areaScanBtn" class="btn extractor-btn">Area Scan</button>
+            <button id="stopScanBtn" class="btn extractor-btn btn-danger" disabled>Stop Scan</button>
+          </div>
+        </div>
+
+        <div class="scan-progress">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <span class="progress-text">Ready to scan</span>
+          
+        </div>
+        
+        <div class="results-container">
+          <div class="results-header">
+            <button id="copyAllBtn" class="btn results-btn">Copy URLs</button>
+            <button id="exportCSVBtn" class="btn results-btn">Export(CSV)</button>
+            <button id="downloadAllBtn" class="btn results-btn">Send to Downloader</button>
+            <button id="createTaskBtn" class="btn results-btn">Create Task</button>
+            <button id="clearImagesBtn" class="btn results-btn btn-danger">Clear Images</button>
+          </div>
+
+          <div class="image-grid" id="imageGrid">
+            <!-- Images will be displayed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab2" class="tab-content active">
+      Total URLs: <span id="urlCount">0</span> 
+      <span id="duplicateCount" style="display: none; color: white; background: red; padding: 4px; border-radius: 5px; padding-right: 50px;"></span>
+      
+      <textarea id="imageLinks" rows="5" placeholder="Paste image links (one per line)"></textarea>
+      
+      <div class="input-group">
+        <div class="checkbox-container">
+          <main>
+            <div class="formats">
+              <p style="font-size:10px;"><i>Click the Advanced Features button at the bottom to use the advanced downloading features of this extension!</i></p> <br>
+              <p class="popular">Download Only</p>
+              <p> 
+                <input type="checkbox" id="allFormatsCheckbox" class="option" checked>
+                <label for="allFormatsCheckbox">All</label>
+
+                <input type="checkbox" id="jpgCheckbox" value="jpg" disabled>
+                <label for="jpgCheckbox">JPG</label>
+
+                <input type="checkbox" id="pngCheckbox" value="png" disabled>
+                <label for="pngCheckbox">PNG</label>
+
+                <input type="checkbox" id="jpegCheckbox" value="jpeg" disabled>
+                <label for="jpegCheckbox">JPEG</label>
+
+                <input type="checkbox" id="gifCheckbox" value="gif" disabled>
+                <label for="gifCheckbox">GIF</label>
+
+                <input type="checkbox" id="webpCheckbox" value="webp" disabled>
+                <label for="webpCheckbox">WebP</label>
+
+                <input type="checkbox" id="pdfCheckbox" value="pdf" disabled>
+                <label for="svgCheckbox">PDF</label>
+
+                <input type="checkbox" id="svgCheckbox" value="svg" disabled>
+                <label for="svgCheckbox">SVG</label>
+
+              <details>
+                <summary class="others">View Others</summary>
+                <input type="checkbox" id="apngCheckbox" value="apng" disabled>
+                <label for="apngCheckbox">APNG</label>
+
+                <input type="checkbox" id="arwCheckbox" value="arw" disabled>
+                <label for="arwCheckbox">ARW</label>
+
+                <input type="checkbox" id="avifCheckbox" value="avif" disabled>
+                <label for="avifCheckbox">AVIF</label>
+
+                <input type="checkbox" id="bmpCheckbox" value="bmp" disabled>
+                <label for="bmpCheckbox">BMP</label>
+
+                <input type="checkbox" id="cr2Checkbox" value="cr2" disabled>
+                <label for="cr2Checkbox">CR2</label>
+
+                <input type="checkbox" id="crwCheckbox" value="crw" disabled>
+                <label for="crwCheckbox">CRW</label>
+
+                <input type="checkbox" id="dcrCheckbox" value="dcr" disabled>
+                <label for="dcrCheckbox">DCR</label>
+
+                <input type="checkbox" id="dngCheckbox" value="dng" disabled>
+                <label for="dngCheckbox">DNG</label>
+
+                <input type="checkbox" id="exifCheckbox" value="exif" disabled>
+                <label for="exifCheckbox">EXIF</label>
+
+                <input type="checkbox" id="hdrCheckbox" value="hdr" disabled>
+                <label for="hdrCheckbox">HDR</label>
+
+                <input type="checkbox" id="heicCheckbox" value="heic" disabled>
+                <label for="heicCheckbox">HEIC</label>
+
+                <input type="checkbox" id="heifCheckbox" value="heif" disabled>
+                <label for="heifCheckbox">HEIF</label>
+
+                <input type="checkbox" id="icoCheckbox" value="ico" disabled>
+                <label for="icoCheckbox">ICO</label>
+
+                <input type="checkbox" id="inddCheckbox" value="indd" disabled>
+                <label for="inddCheckbox">INDD</label>
+
+                <input type="checkbox" id="jp2Checkbox" value="jp2" disabled>
+                <label for="jp2Checkbox">JP2</label>
+
+                <input type="checkbox" id="jfifCheckbox" value="jfif" disabled>
+                <label for="jfifCheckbox">JFIF</label>
+                <br>
+                <input type="checkbox" id="nefCheckbox" value="nef" disabled>
+                <label for="nefCheckbox">NEF</label>
+
+                <input type="checkbox" id="orfCheckbox" value="orf" disabled>
+                <label for="orfCheckbox">ORF</label>
+
+                <input type="checkbox" id="rawCheckbox" value="raw" disabled>
+                <label for="rawCheckbox">RAW</label>
+
+                <input type="checkbox" id="rafCheckbox" value="raf" disabled>
+                <label for="rafCheckbox">RAF</label>
+
+                <input type="checkbox" id="rw2Checkbox" value="rw2" disabled>
+                <label for="rw2Checkbox">RW2</label>
+
+                <input type="checkbox" id="svgzCheckbox" value="svgz" disabled>
+                <label for="svgzCheckbox">SVGZ</label>
+
+                <input type="checkbox" id="tiffCheckbox" value="tiff" disabled>
+                <label for="tiffCheckbox">TIFF</label>
+
+                <input type="checkbox" id="tifCheckbox" value="tif" disabled>
+                <label for="tifCheckbox">TIF</label>
+
+              </p>
+              </details>
+              </p>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="fl_const">Filename Constructor</div>
+        <input type="checkbox" id="build-checkbox" class="build-checkbox">
+        <label for="build-checkbox"></label>
+
+        <select id="newItem" class="new-item-dropdown">
+          <option value="">Select an option</option>
+          <option value="filename">Filename</option>
+          <option value="-">Hyphen</option>
+          <option value="sequence">Sequence</option>
+          <option value="timestamp">Timestamp</option>
+          <option value="_">Underscore</option>
+          <option value="urlfragments">URL Fragments</option>
+          <option value="website">Website</option>
+          <option value="uuid">Random String</option>
+          <option value="add_new">Add New</option>
+        </select>
+
+        <input type="text" id="newItemInput" class="new-item-input" placeholder="Enter new keyword">
+        <button id="addButton" class="add-new-item-btn">Add</button>
+        <input type="text" id="folderName" placeholder="Enter folder name">
+        
+        <ul id="sortable" class="sortable isort">
+          <li class="ui-state-default extension">.extension</li>
+        </ul>
+      </div>
+
+      <div id="duplicateHandlingContainer">
+        <label for="duplicateHandling">Handle Duplicate Filenames:</label>
+        <select id="duplicateHandling">
+          <option value="chrome_default">Parentheses Sequence ~ image (1).jpg</option>
+          <option value="hyphen_sequence">Hyphen Sequence ~ image-1.jpg</option>
+          <option value="underscore_sequence">Underscore Sequence ~ image_1.jpg</option>
+          <option value="uuid">Random UUID ~ image_xxxx.jpg</option>
+        </select>
+      </div>
+
+      <div class="button-group">
+        <button id="stripDuplicatesButton">Strip Duplicates</button>
+        <button id="downloadButton">Download</button>
+        <button id="download-zip-btn">Zip It!</button>
+        <button id="more-features"><a href="/options.html" target="_blank">Advanced Features</a></button>
+      </div>
+      
+      <div id="zipMessage" style="display: none;">Preparing Zip Download...Please wait.</div>
+      <br>
+      <div id="progressBar"></div>
+    </div>
+
+            <!-- Dark Mode Toggle -->
+    <div class="dark-mode-container" style="padding-bottom: 10px; float: right;">
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle" style="margin-top: 1px; max-width: 100%;" />
+        <span class="slider round"></span>
+      </label>
+      <label for="darkModeToggle" class="dark-mode-label">Dark Mode</label>
+    </div>
+  </div>
+
+        <div id="tab3" class="tab-content tab-desc">
+        <div class="preview-instructions">
+          <p><strong>To preview and filter images:</strong></p>
+          <ol>
+            <li>First you need to scan the page using either two buttons i.e the Normal Scan, Deep Scan or Area Scan</li>
+            <li>Once the process is complete (you can abort scanning) click the <strong>Create Task</strong> button </li>
+            <li>You will be redirected to the Downloader tab in the Options page (Extension's advanced features page).</li> 
+            <li>Click Draft Save button and then switch to the Preview tab to preview your images and run advanced filters</li>
+          </ol>
+        </div>
+      </div>
+
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

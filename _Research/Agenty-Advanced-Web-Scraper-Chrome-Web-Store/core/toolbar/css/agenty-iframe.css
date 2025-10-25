@@ -1,0 +1,124 @@
+#agenty-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 350px;
+    background: #377FEA;
+    z-index: 1040;
+    font-size: 12px;
+}
+#agenty-sidebar .hidden{
+	display:none !important;
+}
+#header, #body {
+    background: #377FEA;
+    padding: 8px;
+}
+
+#agenty-sidebar.left {
+    right: auto;
+    left: 0;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+#panel-container{
+  overflow: hidden;
+  overflow-y: auto;
+  max-height: calc(90vh);
+}
+.panel.scrollable{
+  overflow: hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+}
+
+.searchbar input {
+    background: #fff no-repeat 10px 8px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=);
+    border: none;
+    width: 100%;
+    padding: 8px 0;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px #c4c4c4 inset;
+    text-align: left;
+    font-size: 12px;
+    font-family: inherit;
+    color: #738289;
+    font-weight: bold;
+    outline: none;
+    text-indent: 40px;
+}
+.fields, .list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+.fields > li {
+    background-color: #fafafa;
+    border-radius: 2px;
+  	margin-bottom: 8px;
+}
+
+.results_header {
+    display: block;
+    margin: 4px 0;
+    border: 1px #666 solid;
+    border-radius: 2px;
+    color: #fff;
+    padding: 2px;
+}
+
+.results_header a {
+    font-weight: bold;
+    color: rgb(250, 167, 50);
+    text-align: right;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.results > ul > li {
+    background: #eee;
+    border: 1px solid #aaa;
+    overflow: hidden;
+}
+
+.results > ul > li:hover {
+    box-shadow: 2px 2px 7px #666;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    vertical-align: middle;
+}
+.td-max-125{
+  max-width: 125px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: inherit;
+}
+.tags{
+  margin-bottom: 5px;
+}
+.tags .tag {
+    display: inline-block !important;
+    margin-right: 5px;
+    font-size: 12px;
+    display: inline;
+    padding: .2em .5em .2em;
+    font-weight: 700;
+    white-space: nowrap;
+    border-radius: .25em;
+    margin-bottom: 5px;
+    background-color: #fff;
+    border: 1px solid #0295FF;
+    color: #0295FF;
+    transition: all .3s ease;
+}
+.tags .tag span{
+  margin-right: 4px;
+}
+.alert a{
+  text-decoration: underline;
+}

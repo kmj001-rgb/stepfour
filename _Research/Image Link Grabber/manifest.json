@@ -1,0 +1,27 @@
+{
+   "action": {
+      "default_icon": "icon.png",
+      "default_popup": "popup.html"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "all_frames": false,
+      "js": [ "content.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_end"
+   } ],
+   "default_locale": "en",
+   "description": "Grab all image links from webpage.",
+   "host_permissions": [ "\u003Call_urls>" ],
+   "icons": {
+      "128": "icon.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzu2Q0grQiM6I45OG5afjONPaTYCr9rOGqR6uTS3VPsnKxqJ4QZmQvo4v1/veRJxMciPLYlXCDuZw/P7VObwJ+V8REkblj+4tzE7EId1/zRxQZv4EyFhmCzA+D4AwctDtpDtzM6jLExITj/bQY8OboHy39cXjN3nA2mfPP0UUp7rqV2ZY9MU9tDlChkyqwxQO/0sZ1sIG7eDDwIhOgsBDcWzRr+rFQmHTIZl3JlFmTXeX83t/ooqCkJpyTa2Lad//w+Y7wLNsiiTzxUPV+etHsq//Mm4fQt0Qv2TrRf+jUqgQ2aOS90q2wr+fuFgvFsIBF+m9SVd2W5IYw0NnoNLySwIDAQAB",
+   "manifest_version": 3,
+   "name": "Image Link Grabber",
+   "permissions": [ "activeTab", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}

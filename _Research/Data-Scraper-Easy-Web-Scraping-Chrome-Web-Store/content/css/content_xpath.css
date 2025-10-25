@@ -1,0 +1,104 @@
+/* note: changing content script CSS requires the extension to be reloaded to take effect */
+/* keep all large size values in px not rem. We don't control the content of the tab with which RC is interacting so can't use rem */
+
+/* keep this on the top */
+.dm-fmousehigh {
+    background-color: #ffe8d3 !important;
+    box-shadow: 0 0 1px 3px #ffe8d3 !important;
+    cursor: crosshair !important;
+    z-index: 999999;
+}
+
+/* these needs to come after dm-fmousehigh */
+
+.dm-fnext {
+    border: dashed 4px #ff5fa2 !important;
+    z-index: 999997;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-next {
+    border: dashed 4px #ff2982 !important;
+    z-index: 999997;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-fadv {
+    outline: dashed 4px #34e802 !important;
+    z-index: 999996;
+}
+
+.dm-frow1 {
+    outline: dashed 4px #ff0000 !important;
+    z-index: 999996;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-frow2 {
+    outline: dashed 4px #ed0000 !important;
+    z-index: 999996;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-row {
+    border: dashed 4px #bd0000 !important;
+    z-index: 999998;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-fcol {
+    outline: dashed 4px #7f7ffc !important;
+    z-index: 999996;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-col {
+    border: dashed 4px #6565fe !important;
+    z-index: 999995;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-pageform {
+    outline: solid 4px #a693fa !important;
+    z-index: 999996;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+    overflow: visible !important;
+}
+
+.dm-formelm {
+    outline: solid 4px #6e63a0 !important;
+    box-shadow: 0px 0px 10px 10px #6e63a0 !important;
+    z-index: 999996;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-fformelm {
+    background-color: #ffe8d3 !important;
+    box-shadow: 0px 0px 10px 10px #6e63a0 !important;
+    /* border: dashed 4px #6e63a0 !important; */
+    z-index: 999995;
+    position: relative; /* Relative positioning for absolute positioning of the title */
+}
+
+.dm-element-title {
+    position: absolute;
+    transform: translateX(-50%);
+    left: 25px;
+    top: -25px;
+    /* width: unset; */
+    color: white;
+    background-color: black;
+    padding: 0px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 4px 2px gray;
+    z-index: 999995;
+    max-width: 200px !important;
+    text-align: center;
+    max-height: 2rem;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+}

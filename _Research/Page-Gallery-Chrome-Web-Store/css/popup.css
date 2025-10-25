@@ -1,0 +1,156 @@
+:root {
+    --main-margin: 10px;
+    --thumbnail-spacing: 4px;
+    --border-radius: 5px;
+}
+
+html {
+    width: 640px;
+    height: 480px;
+}
+
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--main-margin);
+    padding-right: var(--main-margin);
+    padding-top: var(--main-margin);
+    padding-bottom: var(--main-margin);
+    gap: var(--main-margin);
+}
+
+select, input, option {
+    padding: 0.25em;
+}
+
+button {
+    padding: 0.25em 0.5em;
+}
+
+#options {
+    display: flex;
+    flex-direction: row;
+    gap: var(--main-margin);
+    align-items: center;
+
+    input, select, span {
+        vertical-align: middle;
+    }
+    
+    input[type=number] {
+        text-align: right;
+        width: 5em;
+    }
+    
+    label + label {
+        margin-left: 0.5em;
+    }
+}
+
+
+#thumbnails {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-items: start;
+    align-content: start;
+
+    & > * {
+        position: relative;
+        padding-top: 100%;
+    }
+    
+    a {
+        /* All of the below is needed to make sure elements within are positioned properly. */
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: var(--thumbnail-spacing);
+        transition-property: transform;
+        transition-duration: 0.25s;
+        /* Not sure if backface-visibility is still needed. I think it is/was related to the smoothness of the animation somehow. */
+        backface-visibility: hidden;
+    }
+    
+    a:hover,
+    a:focus {
+        /* The transform below uses a bit more than just simple scaling, to avoid
+        sudden jumps in the animation. It's still not perfect, though. */
+        transform: translateZ(0) scale(1.075);
+    }
+    
+    img {
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        border-radius: var(--border-radius);
+        /* Improve image rendering (less "pixelly"). */
+        transform: translateZ(0) scale(1.001);
+    }
+    
+    .image-filename, .image-dimensions {
+        position: absolute;
+        padding: 2px;
+        font-size: 10px;
+        font-family: sans-serif;
+        color: white;
+        background-color: hsla(0, 0%, 0%, 0.75);
+    }
+    
+    .image-filename {
+        left: var(--thumbnail-spacing);
+        right: var(--thumbnail-spacing);
+        top: var(--thumbnail-spacing);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+    }
+    
+    html:not(.show-filenames) & .image-filename {
+        display: none;
+    }
+    
+    .image-dimensions {
+        right: var(--thumbnail-spacing);
+        bottom: var(--thumbnail-spacing);
+        padding: 2px;
+        border-bottom-right-radius: var(--border-radius);
+    }
+    
+    html:not(.show-dimensions) & .image-dimensions {
+        display: none;
+    }
+}
+
+#thumbnails-empty,
+#thumbnails-loading,
+#error {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: hsl(0, 0%, 50%);
+}
+
+#thumbnails-empty {
+    button {
+        border: 0;
+        padding: 0;
+        color: blue;
+        text-decoration: underline;
+        background-color: transparent;
+        font-size: inherit;
+    }
+}

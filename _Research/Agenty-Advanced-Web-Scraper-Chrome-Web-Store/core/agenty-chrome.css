@@ -1,0 +1,45 @@
+#agentychrome, #agenty-sidebar {
+    position: fixed !important;
+    right: 0;
+    top: 0 !important;
+    height: 100% !important;
+	  width: 350px;
+    z-index: 2147483647 !important;
+    border: 0 !important;
+    opacity: 1.0 !important;
+	  left: auto;
+	  display: block !important;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px 0px !important;
+    animation: 0.5s cubic-bezier(0.4, -0.07, 0.09, 1.01) 0s 1 normal none running panel-in;
+}
+
+#agentychrome.fullWidth, #agenty-sidebar.fullWidth {
+    width: 100% !important;
+}
+
+#agentychrome.left, #agenty-sidebar.left {
+    right: auto;
+    left: 0;
+}
+
+.agentychrome_highlight {
+    position: absolute;
+    border: 4px dotted rgb(0, 68, 204);
+    z-index: 9999997;
+}
+
+.agentychrome_selected {
+  background-color: rgb(152, 176, 224) !important;
+  background-image: none !important;
+}
+
+.agentychrome_overlay {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 9999998;
+    background: rgb(250, 167, 50);
+    display: none;
+}

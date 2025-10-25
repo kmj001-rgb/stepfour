@@ -1,0 +1,83 @@
+{
+  "manifest_version": 3,
+  "name": "StepThree Gallery Scraper",
+  "version": "2.0.0",
+  "description": "Advanced image gallery detection, extraction, and export with Manifest V3 support",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "downloads",
+    "scripting",
+    "tabs",
+    "notifications",
+    "sidePanel",
+    "alarms",
+    "offscreen"
+  ],
+  
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  
+  "incognito": "split",
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "lib/production-mode.js",
+        "lib/dom-cache.js",
+        "lib/content-hasher.js",
+        "lib/pagination-detector.js",
+        "lib/pagination-integration.js",
+        "lib/advanced-collector-system.js",
+        "lib/enhanced-css-selector.js",
+        "content.js",
+        "src/lib/paginationState.js",
+        "src/content/validators/contentHashValidator.js",
+        "src/content/validators/urlValidator.js",
+        "src/content/navigators/urlNavigator.js",
+        "src/content/navigators/clickNavigator.js",
+        "src/content/strategies/queryStringStrategy.js",
+        "src/content/strategies/nextButtonStrategy.js",
+        "src/content/strategies/pathBasedStrategy.js",
+        "src/content/strategies/loadMoreStrategy.js",
+        "src/content/paginationEngine.js",
+        "src/content/content.js",
+        "src/ui/debugUI.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  
+  "side_panel": {
+    "default_path": "ui/sidepanel-new.html"
+  },
+  
+  "action": {
+    "default_title": "StepThree Gallery Scraper"
+  },
+  
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "styles/*", "scripts/*", "ui/*", "lib/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: https:; connect-src 'self' https:; style-src 'self' 'unsafe-inline'"
+  }
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="photon/css/photon.min.css" rel="stylesheet">
+    <link href="tablesort-5.0.0/tablesort.css" rel="stylesheet">
+    <link href="panel.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="window">
+
+    <div class="window-content">
+        <table class="table-striped" id="tools">
+            <thead>
+            <tr>
+                <th class="check" data-sort-method="none"><input id="checkall" title="Check all" type="checkbox"></th>
+                <th>preview</th>
+                <th class="url">URL</th>
+                <th>mime</th>
+                <th data-sort-method="number">status</th>
+                <th data-sort-method="filesize">size</th>
+                <th data-sort-method="number">time</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <footer class="toolbar toolbar-footer">
+        <div class="toolbar-actions">
+            <div id="dl-button">
+                <button class="btn btn-default btn-large" id="btn">
+                    <span class="icon icon-download" style="margin-right: 6px"></span> Download
+                </button>
+                <input id="filter" placeholder="Filter" title="Filter" type="search">
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+<script src="jquery/jquery.min.js"></script>
+
+<script src="tablesort-5.0.0/src/tablesort.js"></script>
+<script src="tablesort-5.0.0/src/sorts/tablesort.number.js"></script>
+<script src="tablesort-5.0.0/src/sorts/tablesort.filesize.js"></script>
+
+<script src="panel.js"></script>
+
+</body>
+</html>

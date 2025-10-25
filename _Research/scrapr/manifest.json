@@ -1,0 +1,20 @@
+{
+   "action": {
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "description": "Scrape data from any web page easily and efficiently",
+   "icons": {
+      "128": "spider.png",
+      "16": "spider.png",
+      "32": "spider.png",
+      "48": "spider.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnTUs3qDB7IURRMGiprkvtz/omziLIfT8pu1xUZZnAKpeJltWwOiS2RAImpd5DMYZPOzyX/Gy7BO+BopVGvz7N9tKUaaVxMhdaeWCDn+px35cil94EDmJEkOBvtrXowKQUBDkjullbc88Kb08bP2SD/gYrI1jrncd/TFyc6hjEQr6Is0HTk8if3CJx8SarY+eUoABLcK3da8WMGx0Yef77x1s99ZzUnzeg60X1zIIN0dOiByQ7xXtyAaAKLwPf1Sys+ovaBvCiAZ6m5xevKb6v83fdMoENttBlM2pNcySj8pMxoRP8C1uv1r7JxBL+hqMrdsF9Dd9ywezTCCuicGG3wIDAQAB",
+   "manifest_version": 3,
+   "name": "ScrapR",
+   "permissions": [ "activeTab", "scripting", "storage", "downloads", "tabs", "windows" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.1.0"
+}

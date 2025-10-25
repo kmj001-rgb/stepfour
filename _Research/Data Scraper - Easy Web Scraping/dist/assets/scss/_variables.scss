@@ -1,0 +1,69 @@
+$color-logo: #ac1214;
+
+$color-premium: #ff8c00; //darkorange
+$color-ok: #1aaa55;
+
+$color-shell-background: #38414e; //#333;
+$color-content-background: #f5f5f5; //#fff8f8;
+$color-sidebar-background: #38414e; //#333; //#f3dad9; // #fbf4f4; // #fff8f8; //white;
+// $color-topbar-gradient: #a90e0f;
+
+$color-rc-component-bg: #e5f2ff;
+$color-rc-border: #7191ea; //#d6e4f2;#e5f2ff
+
+$color-clickable: #007bff; // #017bff; // #0062cc; //
+$color-disabled: #bbb; // #017bff; // #0062cc; //
+$color-clickable-underline: #0091ff99; // #017bff; // #0062cc; //
+
+$color-row-value: rgb(240, 240, 240);
+
+$color-menu-background: #38414e; // #333;// #f3dad9; //#fbf4f4; //#fff8f8;
+$color-menu-background-active: #5d6a7b;
+$color-menu-text: #ddd; // #5a5a5a;
+$color-menu-hover-text: white;
+$color-menu-submenu-text: #ddd; //#666;
+$color-menu-submenu-background: #171a23; // #e7b9b8;
+
+$color-section-border: #666;
+$color-section-header: #efefef;
+
+$color-recipe-selected-border: #0069d9;
+$color-recipe-hover-border: #047bfe;
+$color-recipe-name: #333;
+$color-recipe-text-secondary: #777;
+$color-recipe-not-working: #bbb;
+
+$color-collectionheader: #fff;
+$color-collectionheader-hover: #007bff;
+$color-collectionheader-text-secondary: #777;
+$color-collectionheader-highlight: #fefefe;
+
+$length-sidebar: 18rem;
+$length-sidebar-menu: $length-sidebar;
+$length-top: 4.8rem;
+$length-footer: 3rem;
+$length-content-height: calc(100vh - 4.9rem - 3rem);
+$length-footer-top: calc(100vh - 3rem);
+$length-content-width: calc(100vw - $length-sidebar);
+$length-sidebar-height: 100vh;
+
+$one: 1px;
+
+@mixin scrollbar {
+    &::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: #047bfe;
+    }
+
+    &::-webkit-scrollbar:vertical {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+        height: 5px;
+    }
+}

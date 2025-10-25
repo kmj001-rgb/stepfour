@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Downloader Options</title>
+  <link rel="stylesheet" type="text/css" href="options.css" />
+  <link rel="stylesheet" type="text/css" href="documentation/help.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="dist/jszip.min.js"></script>
+  <script src="dist/image-conversion.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="dragdrop.js"></script>
+  <script src="options.js"></script>
+  <script src="tabs.js"></script>
+  <script src="export-tasks.js"></script>
+  <script src="dist/jquery.watermark.js" type="text/javascript"></script>
+</head>
+<body>
+  <h1>
+    <img src="/images/icon.jpg" class="optlogo" /> <span class="exttitle">Bulk Image Downloader From Url List</span>
+  </h1>
+
+  <div class="controls-container">
+    <div>
+    <button class="lock-btn">Lock Drag</button>
+    <button id="draft-save-btn" class="btn">Draft Save</button>
+    </div>
+   <!-- CSV Uploader -->
+    <div class="csv-uploader">
+      <label for="fileInput"><strong>Bulk Import Tasks From CSV (Premium Feature)</strong> <span> - </span><a href="template.csv" class="downloadcsv">Download CSV Template</a></label>
+      <div class="upload-controls">
+        <input type="file" id="fileInput" accept=".csv" />
+        <button id="parseCsvButton" disabled>Import</button>
+      </div>
+    </div>
+
+<!-- Queued Download Toggle -->
+<div class="toggle-container">
+  <div class="toggle-row">
+    <label class="switch">
+      <input type="checkbox" id="queuedDownloadToggle" />
+      <span class="slider round"></span>
+    </label>
+    <label for="queuedDownloadToggle" class="toggle-label"></label>
+  </div>
+  <p class="toggle-description">Queued Download <br> disables Scheduling <br>  & Vice Versa <br> <i>*Initiates downloads instantly! <br>Remember to Click Save Options</i></p>
+</div>
+
+    <!-- License Information -->
+<div id="licenseInfo" class="license-info" style="display:none;">
+  <div id="statusText" class="status-text"></div>
+  <div class="license-row">
+    <span class="license-label">Key:</span>
+    <span id="licenseKey" class="license-value"></span>
+  </div>
+  <div id="statusRow" class="license-row">
+    <span class="license-label">Status:</span>
+    <span id="licenseStatus" class="license-value"></span>
+  </div>
+  <div id="expiresRow" class="license-row">
+    <span class="license-label">Expires:</span>
+    <span id="licenseExpiration" class="license-value"></span>
+  </div>
+</div>
+
+    <!-- License Message Section -->
+    <div id="licenseMessage" class="license-message" style="display:none;">
+      <!-- Message will be dynamically inserted here -->
+    </div>
+
+<!-- Login/Logout Section -->
+<div class="auth-section">
+  <div id="licenseActionContainer" class="license-action-container"></div>
+    <div class="button-container">
+        <p class="signin-prompt">Sign In to Purchase License</p>
+      <button id="loginBtn" class="google-login-btn" style="display: block;">
+        <img src="/images/branding_guideline_sample_lt_rd_lg.svg" alt="Sign in with Google">
+      </button>
+      <button id="logoutBtn" class="logout-btn" style="display: none;">
+        Logout
+      </button>
+        <button id="exportTasksBtn" class="btn">Export Tasks</button>
+        <a href="https://bulkimagedownloaderurllist.com/contact/" class="help-btn" style="background:grey; padding: 5px; border-radius: 5px; text-decoration: none;" target="_blank">Get Help</a>
+    </div>
+</div>
+  </div>
+
+  <p>These utility tools work hand in hand. Example, you might have thousands of urls to download but some urls <br> are redirected URLs or broken image links. You want error free image downloads, these tools are a lifesaver!</p>
+
+  <!-- Tab Navigation -->
+  <div>
+    <span class="tab active" data-tab="optionsTab">Downloader</span>
+    <span class="tab" data-tab="previewImagesTab">Preview Images</span>
+    <span class="tab" data-tab="redirectCheckerTab">Image URL Redirect Checker</span>
+    <span class="tab" data-tab="notFoundCheckerTab">Image URL 404 Checker</span>
+    <span class="tab" data-tab="watermark">Watermark</span>
+    <span class="tab" data-tab="helpTab">FAQs/How Tos</span>
+  </div>
+
+  <!-- Options Content -->
+  <div id="optionsTab" class="tab-content active">
+    <div id="tasks-container"></div>
+
+    <button id="create-task-btn">Create Task(s)</button>
+    <button id="save-options-btn">Save & Download</button>
+    <br /><br />
+    <span><i>
+      Recommended: +2 minutes between & a fair number of URLs per Task
+      <br />Add as many tasks and let them run unattended. <br />
+      Remember to Save Options :)
+      <br />
+      If you prefer basic download features, use the popup instead. <br>
+      Stay organized with the use of folders. Tip? Zips are faster :)
+      <br />
+    </i></span>
+  </div>
+
+<!-- Preview Images Content -->
+<div id="previewImagesTab" class="tab-content">
+  <h2>Task-Tied Image Preview</h2>
+      <p class="description">
+      <i>Remove images based on advanced filters. Removing an image here also removes it from the task that holds the image. This helps you focus only on the right images. A cool way to handle all the mess!</i>
+    </p> 
+  <br>
+  <!-- Main Controls -->
+  <div class="preview-controls">
+    <div class="search-filter">
+      <input type="text" id="imageSearch" placeholder="Search images..." />
+      <select id="taskFilter">
+        <option value="all">All Tasks</option>
+      </select>
+    </div>
+    
+    <div class="pagination-controls">
+      <button id="prevPage" disabled><i class="fas fa-chevron-left"></i></button>
+      <span id="pageInfo">Page 1 of 1</span>
+      <button id="nextPage" disabled><i class="fas fa-chevron-right"></i></button>
+      <select id="perPage">
+        <option value="10">10 per page</option>
+        <option value="20" selected>20 per page</option>
+        <option value="50">50 per page</option>
+        <option value="100">100 per page</option>
+        <option value="200">200 per page</option>
+        <option value="500">500 per page</option>
+        <option value="1000">1000 per page</option>
+      </select>
+    </div>
+    
+    <div class="preview-status">
+      <span id="imageCount">0 images</span>
+      <button id="refreshPreview" class="refresh-btn">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
+      <button id="toggleAdvancedFilters" class="control-btn">
+        <i class="fas fa-filter"></i> Filters
+      </button>
+      <button id="gridSettingsBtn" class="control-btn">
+        <i class="fas fa-th"></i> Layout
+      </button>
+    </div>
+  </div>
+  
+  <!-- Advanced Filters Panel -->
+<div id="advancedFiltersPanel" class="advanced-filters">
+  <!-- Other filter groups remain the same -->
+  <div class="filter-group">
+    <h4>Image Size</h4>
+    <div class="filter-row">
+      <select id="sizeFilter">
+        <option value="all">All Sizes</option>
+        <option value="small">Small (≤500px)</option>
+        <option value="medium">Medium (501-1200px)</option>
+        <option value="large">Large (1201+px)</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="filter-group">
+    <h4>Image Format</h4>
+    <div class="filter-row">
+      <select id="formatFilter">
+        <option value="all">All Formats</option>
+        <option value="jpg">JPG</option>
+        <option value="jpeg">JPEG</option>
+        <option value="png">PNG</option>
+        <option value="gif">GIF</option>
+        <option value="webp">WebP</option>
+        <option value="pdf">PDF</option>
+        <option value="svg">SVG</option>
+        <option value="apng">APNG</option>
+        <option value="arw">ARW</option>
+        <option value="avif">AVIF</option>
+        <option value="bmp">BMP</option>
+        <option value="cr2">CR2</option>
+        <option value="crw">CRW</option>
+        <option value="dcr">DCR</option>
+        <option value="dng">DNG</option>
+        <option value="exif">EXIF</option>
+        <option value="hdr">HDR</option>
+        <option value="heic">HEIC</option>
+        <option value="heif">HEIF</option>
+        <option value="ico">ICO</option>
+        <option value="indd">INDD</option>
+        <option value="jp2">JP2</option>
+        <option value="jfif">JFIF</option>
+        <option value="nef">NEF</option>
+        <option value="orf">ORF</option>
+        <option value="raw">RAW</option>
+        <option value="raf">RAF</option>
+        <option value="rw2">RW2</option>
+        <option value="svgz">SVGZ</option>
+        <option value="tiff">TIFF</option>
+        <option value="tif">TIF</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="filter-group">
+    <h4>Image Shape</h4>
+    <div class="filter-row">
+      <select id="shapeFilter">
+        <option value="all">All Shapes</option>
+        <option value="square">Square</option>
+        <option value="horizontal">Horizontal</option>
+        <option value="vertical">Vertical</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="filter-group">
+    <h4>Aspect Ratio</h4>
+    <div class="filter-row">
+      <div class="ratio-controls">
+        <select id="ratioOperator">
+          <option value="≈">≈</option>
+          <option value=">">></option>
+          <option value="<"><</option>
+          <option value="≥">≥</option>
+          <option value="≤">≤</option>
+        </select>
+        <input type="text" id="customRatio" placeholder="16:9" style="margin-top: 0px !important;">
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-group">
+  <h4>File Size</h4>
+  <div class="filter-row">
+    <div class="size-controls">
+      <input type="number" id="minFileSize" min="0" placeholder="Min">
+      <span>to</span>
+      <input type="number" id="maxFileSize" min="0" placeholder="Max">
+      <select id="fileSizeUnit">
+        <option value="kb">KB</option>
+        <option value="mb">MB</option>
+      </select>
+    </div>
+  </div>
+</div>
+  
+  <!-- Custom Dimensions Section - New Layout -->
+  <div class="dimensions-section">
+    <h4>Custom Dimensions</h4>
+    <div class="dimension-input">
+      <label for="minWidth">Min Width</label>
+      <input type="number" id="minWidth" min="0" placeholder="px">
+    </div>
+    <div class="dimension-input">
+      <label for="maxWidth">Max Width</label>
+      <input type="number" id="maxWidth" min="0" placeholder="px">
+    </div>
+    <div class="dimension-input">
+      <label for="minHeight">Min Height</label>
+      <input type="number" id="minHeight" min="0" placeholder="px">
+    </div>
+    <div class="dimension-input">
+      <label for="maxHeight">Max Height</label>
+      <input type="number" id="maxHeight" min="0" placeholder="px">
+    </div>
+  </div>
+</div>
+  
+  <!-- Grid Settings Panel -->
+  <div id="gridSettingsPanel" class="grid-settings">
+    <h4>Grid Layout</h4>
+    <div class="filter-row">
+      <label>
+        Columns: 
+        <input type="range" id="columnsInput" min="1" max="10" value="5">
+        <span id="columnsValue">5</span>
+      </label>
+    </div>
+  </div>
+  
+  <!-- Loading Indicator -->
+  <div id="loadingIndicator" style="display: none;">
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+          <p>Loading images... This might take a while if you have many urls.</p>
+         <p>You can either reduce the number of urls, click Draft Save & try refreshing the page.</p>
+         <p>Or just be be patient as they load.</p>
+         <p>You can track the download progress of the preview above</p>
+    </div>
+  </div>
+  
+  <!-- Image Grid -->
+  <div id="image-preview-container" class="thumbnail-grid-container">
+    <!-- Thumbnails will be loaded here -->
+  </div>
+</div>
+
+  <script src="preview/preview-images.js"></script>
+
+  <!-- Redirect Checker Content -->
+  <div id="redirectCheckerTab" class="tab-content">
+    <h2>URL Redirect Checker</h2>
+    <p class="description">
+      This tool allows you to check the final destination of multiple URLs by following any redirects.
+      Enter the URLs in the text area below, one per line, and click "Check Redirects" to begin.
+    </p>
+    <textarea id="urls" placeholder="Enter URLs, one per line" style="height: 100px;"></textarea>
+    <button id="checkRedirects">Check Redirects</button>
+    <button id="copyResults" style="display: none;">Copy Results</button>
+
+    <!-- Progress Bar Section -->
+    <div id="progress-container">
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
+      <div id="progress-status">Processed 0 of 0 URLs</div>
+    </div>
+
+    <div id="output"></div>
+
+    <script src="redirection/redirect-checker.js"></script>
+  </div>
+
+  <!-- URL 404 Checker Content -->
+  <div id="notFoundCheckerTab" class="tab-content">
+    <h2>URL 404 Checker</h2>
+    <p class="description">
+      This tool checks URLs for 404 errors and verifies if they link to valid image formats.
+      Enter the URLs in the text area below, one per line, and click "Check 404" to begin.
+    </p>
+    <textarea id="urls404" placeholder="Enter URLs, one per line" style="height:100px;"></textarea>
+    <button id="check404">Check 404</button>
+    <button id="copyResults404" style="display: none;">Copy Results</button>
+
+    <!-- Progress Bar Section for 404 Checker -->
+    <div id="progress-container-404">
+      <div id="progress-bar-404">
+        <div id="progress-fill-404"></div>
+      </div>
+      <div id="progress-status-404">Processed 0 of 0 URLs</div>
+    </div>
+
+    <div id="output-404"></div>
+
+    <script src="notfound/not-found.js"></script>
+  </div>
+
+<!-- watermark.html -->
+<div id="watermark" class="tab-content">
+  <h2>Watermark Preparer</h2>
+  <p class="description">
+    Preview and tweak how your PNG watermark will be applied. Upload a sample background and your watermark; the settings you save here will be used when you process your real images.
+  </p>
+
+  <!-- SETTINGS PANEL -->
+  <div class="settings-section">
+    <!-- Row 1: Uploads -->
+    <div class="settings-row">
+      <div class="upload-field">
+        <label for="backgroundImage">Sample Background Image</label>
+        <input type="file" id="backgroundImage" accept="image/*">
+      </div>
+      <div class="upload-field">
+        <label for="watermarkImage">Watermark Image (.png)</label>
+        <input type="file" id="watermarkImage" accept="image/png">
+      </div>
+    </div>
+
+    <!-- Row 2: Controls -->
+    <div class="settings-row">
+      <div class="control-group">
+        <label for="gravity">Position</label>
+        <select id="gravity">
+          <option value="northwest">Top Left</option>
+          <option value="north">Top Center</option>
+          <option value="northeast">Top Right</option>
+          <option value="west">Middle Left</option>
+          <option value="center" selected>Center</option>
+          <option value="east">Middle Right</option>
+          <option value="southwest">Bottom Left</option>
+          <option value="south">Bottom Center</option>
+          <option value="southeast">Bottom Right</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="opacity">Opacity <span id="opacityValue">50%</span></label>
+        <input type="range" id="opacity" min="0" max="100" value="50">
+      </div>
+
+      <div class="control-group">
+        <label for="margin">Margin (px)(Distance from edges)</label>
+        <input type="number" id="margin" min="0" value="10">
+      </div>
+
+      <div class="control-group">
+        <label for="maxWatermarkSize">Max Size (% of the main image )</label>
+        <input type="number" id="maxWatermarkSize" min="5" max="100" value="30">
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW PANEL (unchanged) -->
+  <div class="preview-panel">
+    <div class="preview-main">
+      <h3 id="mainPreviewTitle">Main Image Preview</h3>
+      <div class="image-preview" id="backgroundPreview">
+        <span>No image selected</span>
+      </div>
+    </div>
+    <div class="preview-watermark">
+      <h3>Watermark Preview</h3>
+      <div class="image-preview" id="watermarkPreview">
+        <span>No image selected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION BUTTONS (unchanged) -->
+  <div class="action-buttons">
+    <button id="previewWatermark" class="btn">Preview Watermark</button>
+    <button id="downloadWatermark" class="btn" disabled>Download Result</button>
+    <button id="resetSettings" class="btn btn-reset">Reset All Settings</button>
+  </div>
+
+  <script src="watermark/watermark.js"></script>
+</div>
+
+
+
+
+  <!-- Help Articles Content -->
+  <div id="helpTab" class="tab-content">
+        <div class="container">
+        <header>
+            <h1 style="color:#fff !important;"></i> Complete Guide</h1>
+            <p>Complete User Guide for Chrome Extension</p>
+        </header>
+        <div class="warning">
+            <i class="fas fa-exclamation-triangle icon"></i> <strong>Signing In</strong> In the previous versions, only Google Login was available. In this and future versions, after purchasing a license on the website even as a guest, with the data you provide - your name and email, your account is automatically created and a licensed you purchased is attached to the account. And of course, just like the Login with Google option, your license type is detected in the extension automatically. That's freedom!
+        </div>
+
+        <div class="warning">
+            <i class="fas fa-exclamation-triangle icon"></i> <strong>Important:</strong> If you encounter any issues while using this extension such as folder or zip downloading not working, please consider disabling any other image downloaders you might already be having even if it's temporarily. We just identified that this is one of the things that can cause issues. You can re-enable them if you wish later.
+        </div>
+
+        <div class="success">
+            <i class="fas fa-heart icon"></i> <strong>A Personal Thank You</strong>
+            <p>Hello friend, I'm Dan. Let me share how this tool came to be...</p><br>
+            
+            <p>Two years ago, I found myself staring at a screen at 2 AM, facing what seemed impossible - thousands of images to download, sort, and organize. Like many of you, I needed <em>one complete solution</em>, but found only scattered tools that each solved just part of the problem.</p> <br>
+            
+            <p>That night, I built a simple downloader - just enough to get through my project. But when morning came, I realized the real work had just begun. The images needed proper naming, conversion, filtering... the list grew longer with every task.</p><br>
+            
+            <p>What started as a personal tool became something bigger when I shared it. Your feature requests poured in - "Could it do this?" "Would it handle that?" Each suggestion made the tool better, more complete. For two years, we kept it completely free, fueled by your incredible feedback and stories of how it helped photographers, researchers, designers, and creators like you.</p><br>
+            
+            <p>But here's the truth we kept hidden: Many nights squashing bugs, domain and hosting costs, development, support tickets and maintenance was taking a toll. We reached a point where to keep improving - to keep this tool alive and thriving - we needed your help. It would have been my wish to keep it totally free. However, since support was introduced, the extension has become much better intuitively and a ton of features have landed and more. And our promise is for every coin and trust you give us, we will work to deliver value tenfold.</p><br>
+            
+            <p>To those who are supporting us with licenses: <strong>Thank you from the heart!</strong> You're the reason we can keep the lights on 🥰. To our free users: We see you too ❤️. Your enthusiasm drives us forward. How do you know whether to buy a license of not? If you think the tool can save you some hours of work on your projects! If you love it more, you can leave a 5 star rating to help other users find it.</p><br>
+            
+            <p>This isn't just my tool anymore - it's <em>our</em> tool. I know there are many of you out there that run ecommerce sites, photography portfolio sites, design teams who collect visual inspirations, researchers who gather datasets, digital archivists, marketers, developers, content creators and many more - this tool is for all of you! And together, we'll craft and fine tune this so well that we won't need to hustle another day! 
+
+            <p>We're all part of a community that deserves better - this tool exists to <strong>reclaim your time</strong> from tedious tasks and return it to what truly matters by replacing endless manual work with efficient solutions so you can focus on bigger goals. This may be well done, but we're just getting started!</p><br>
+            
+            <p>With gratitude,<br>
+            Dan & The BIDFUL Team</p>
+        </div>
+        
+        <div class="toc">
+            <h2><i class="fas fa-list-ul icon"></i> Table of Contents</h2>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#installation">Installation & Setup</a></li>
+                <li><a href="#authentication">User Authentication</a></li>
+                <li><a href="#license">License Management</a></li>
+                <li><a href="#tasks">Task Management</a></li>
+                <li><a href="#urls">URL Management</a></li>
+                <li><a href="#filetypes">File Type Selection</a></li>
+                <li><a href="#download">Download Options</a></li>
+                <li><a href="#filenames">Filename Constructor</a></li>
+                <li><a href="#conditions">Download Conditions</a></li>
+                <li><a href="#csv">Bulk Import via CSV</a></li>
+                <li><a href="#darkmode">Dark Mode</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#faqs">FAQs</a></li>
+            </ol>
+        </div>
+        
+        <section id="introduction">
+            <h2><i class="fas fa-info-circle icon"></i> 1. Introduction</h2>
+            
+            <p>This <strong>tool</strong> revolutionizes how you collect and organize web images, offering enterprise-grade downloading capabilities in a simple Chrome extension.</p>
+            
+            <div class="feature-card">
+                <ul class="feature-list">
+                    <li><i class="fas fa-clock icon"></i> <strong>Scheduled downloads</strong> - Set precise future download times down to the minute</li>
+                    <li><i class="fas fa-tasks icon"></i> <strong>Queued downloads</strong> - Process tasks sequentially for reliable large batches</li>
+                    <li><i class="fas fa-file-signature icon"></i> <strong>Dynamic filenames</strong> - Construct custom names using URL segments, sequences, and metadata</li>
+                    <li><i class="fas fa-filter icon"></i> <strong>Smart filtering</strong> - Download only if URLs meet specific "Contains/Not Contains" conditions</li>
+                    <li><i class="fas fa-file-csv icon"></i> <strong>CSV import/export</strong> - Manage thousands of URLs via spreadsheet integration</li>
+                    <li><i class="fas fa-id-card icon"></i> <strong>License tiers</strong> - Free (5 URLs/task) and Premium (unlimited) versions</li>
+                    <li><i class="fas fa-file-archive icon"></i> <strong>ZIP packaging</strong> - Automatically compress downloads into organized archives</li>
+                    <li><i class="fas fa-redo icon"></i> <strong>Duplicate prevention</strong> - Automatic URL deduplication within tasks</li>
+                </ul>
+            </div>
+
+            <div class="pro-tip">
+                <p><strong>Perfect for:</strong> E-commerce product catalogs • Image archive migration • Content aggregation • Research datasets</p>
+            </div>
+
+            <div class="quick-start">
+                <h3><i class="fas fa-rocket icon"></i> Quick Start</h3>
+                <ol class="steps">
+                    <li>Install from Chrome Web Store</li>
+                    <li>Click the extension icon to open if you want to use the popup or use the options page from the extension's menu</li>
+                    <li>Paste URLs or import via CSV</li>
+                    <li>Configure your download preferences</li>
+                    <li>Save and let the extension handle the rest</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section id="authentication">
+            <h2><i class="fas fa-user-shield icon"></i> 3. User Authentication</h2>
+            
+            <h3><i class="fas fa-sign-in-alt icon"></i> Signing In</h3>
+            <ol class="steps">
+                <li>Click <strong>"Sign In"</strong> (Google OAuth)</li>
+                <li>You'll be redirected to the login page</li>
+                <li>After successful login, you'll see your email displayed in the top-right corner. This login enables premium license activation and unlocks all features. We take your privacy seriously:</li> 
+                Alternatively, you can just proceed to our shop and buy a license as a guest. We'll only ask for your name and email address. That will enable us create an account for you and attach the license you just purchased. With this option, upon purchase, an account is created and the license automatically updates in the extension.
+            </ol>
+            <br>
+            <div class="privacy-notice">
+                <h4><i class="fas fa-shield-alt icon"></i> Privacy Assurance</h4>
+                <ul>
+                    <li><strong>Minimal Data Collection:</strong> We only store your email address for license verification</li>
+                    <li><strong>No Tracking:</strong> We never monitor or record your download activities</li>
+                    <li><strong>Secure Storage:</strong> All data is encrypted using industry-standard AES-256 encryption</li>
+                    <li><strong>No Sharing:</strong> We never sell or share your information with third parties</li>
+                    <li><strong>Browser-Only Processing:</strong> All URL processing happens locally in your browser</li>
+                </ul>
+                
+                <p>For complete details, please review our <a href="https://bulkimagedownloaderurllist.com/privacy-policy/" target="_blank">Privacy Policy</a>.</p>
+            </div>
+            
+            <h3><i class="fas fa-sign-out-alt icon"></i> Signing Out</h3>
+            <ol class="steps">
+                <li>Click <strong>"Sign Out"</strong></li>
+                <li>Your session will be cleared</li>
+            </ol>
+            
+            <div class="warning">
+                <i class="fas fa-exclamation-triangle icon"></i> <strong>Note:</strong> You must be signed in to access premium features. 
+            </div>
+        </section>
+        
+        <section id="license">
+            <h2><i class="fas fa-key icon"></i> 4. License Management</h2>
+            
+            <h3><i class="fas fa-clipboard-check icon"></i> Checking License Status</h3>
+            <p>The extension shows:</p>
+            <ul>
+                <li><strong>License Key</strong> - Your unique identifier</li>
+                <li><strong>Status</strong> - <span class="license-status status-active">Active</span>, <span class="license-status status-expired">Expired</span>, or <span class="license-status status-pending">No License</span></li>
+                <li><strong>Expiration Date</strong> - Automatically converted to your local timezone. You can also confirm this from the my-account page on the website. be sure to be logged in.</li>
+            </ul>
+            
+            <h3><i class="fas fa-arrow-up icon"></i> Upgrading License</h3>
+            <p>If your license is expired or missing:</p>
+            <ol class="steps">
+                <li>Click <strong>"Get License"</strong></li>
+                <li>You'll be redirected to the shop page</li>
+            </ol>
+            
+            <div class="note">
+                <i class="fas fa-lightbulb icon"></i> <strong>Tip:</strong> Premium licenses remove all restrictions (unlimited URLs, unlimited duplicate actions, unlimited task creation, bulk task creation from csv etc.).
+            </div>
+        </section>
+        
+        <section id="tasks">
+            <h2><i class="fas fa-tasks icon"></i> 5. Task Management</h2>
+            
+            <div class="feature-highlight">
+                <h3>Efficiently organize and manage your download tasks with these powerful controls.</h3>
+            </div>
+
+            <h3><i class="fas fa-plus-circle icon"></i>Lock/Unlock Drag</h3>
+            <div class="feature-highlight">
+                <p>The Lock/Unlock Drag feature allows users to control whether tasks can be rearranged by dragging.</p>
+            </div>
+            <h3><i class="fas fa-plus-circle icon"></i>Draft Save</h3>
+            <div class="feature-highlight">
+                <p>The Draft Save feature allows users to save tasks without triggering downloads:</p>
+            </div>
+
+            <h3><i class="fas fa-plus-circle icon"></i> Creating a New Task</h3>
+            <ol class="steps">
+                <li>Click <strong>"Create Task"</strong> (below the default task)</li>
+                <li>Configure all settings:
+                    <ul>
+                        <li><strong>URLs</strong> - Paste one URL per line (max 5 in free version)</li>
+                        <li><strong>File Types</strong> - Select formats or choose "All Types"</li>
+                        <li><strong>Folder Name</strong> - Optional subfolder for organization</li>
+                        <li><strong>Download Time</strong> - Future scheduling (uses your local timezone)</li>
+                        <li><strong>ZIP Download</strong> - Toggle to package files automatically</li>
+                        <li><strong>Filename Constructor</strong> - Enable for custom naming patterns</li>
+                        <li><strong>Download If</strong> - Set conditional filters if needed</li>
+                        <li><strong>Convert</strong> - Download a different format other that that of your original images e.g PNG to WebP</li>
+                        <li><strong>Quality</strong> - Default quality is 100%. Downgrade the quality slightly (no significant quality changes) by adjusting it to, say 80% to reduce the image size.</li>
+                    </ul>
+                </li>
+                <li>Click to Save. Use (Save Options to Trigger the Schedule or Queued downloads OR click the Draft Save to save tasks without triggering downloads.</li>
+            </ol>
+
+            <h3><i class="fas fa-edit icon"></i> Editing an Existing Task</h3>
+            <ol class="steps">
+                <li>Locate the task you want to modify</li>
+                <li>Change any field:
+                    <ul>
+                        <li>URL list (add/remove/edit)</li>
+                        <li>File type selections</li>
+                        <li>Download timing</li>
+                        <li>Folder destination</li>
+                    </ul>
+                </li>
+                <li>Click <strong>"Save Options"</strong> (floating button on right edge or below the default task or on the top left for the Draft Save) to apply changes</li>
+                <li>For immediate changes to scheduled tasks:
+                    <ul>
+                        <li>Cancel and recreate the task</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3><i class="fas fa-copy icon"></i> Duplicating a Task</h3>
+            <ol class="steps">
+                <li>Find the task you want to duplicate</li>
+                <li>Click the <strong>"Duplicate"</strong> button (bottom-right of task)</li>
+                <li>New task appears with:
+                    <ul>
+                        <li>All original settings</li>
+                        <li>New unique ID</li>
+                        <li>"Pending" status</li>
+                    </ul>
+                </li>
+                <li class="note">Note: Duplicated tasks maintain their own sequence numbers. This means a duplicated task is technically a new unique task with the settings of the parent task. Duplicate tasks save automatically on clicking the Duplicate button. </li>
+            </ol>
+
+            <h3><i class="fas fa-trash icon"></i> Deleting a Single Task</h3>
+            <ol class="steps">
+                <li>Locate the task to remove</li>
+                <li>Click the red <strong>"X"</strong> button (bottom-right corner)</li>
+                <li>Task disappears immediately without confirmation. This is to prevent multiple confirmations when you are deleting many specific tasks.</li>
+                <li>For recovery:
+                    <ul>
+                        <li>Recreate manually</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3><i class="fas fa-trash-alt icon"></i> Deleting All Tasks</h3>
+            <ol class="steps">
+                <li>Click the floating <strong>"Remove All Tasks"</strong> button (right screen edge)</li>
+                <li>Confirm deletion in the popup dialog</li>
+                <li>All tasks will be permanently removed</li>
+                <li>Alternative options:
+                    <ul>
+                        <li>Delete tasks individually</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="warning">
+                <i class="fas fa-exclamation-triangle icon"></i> <strong>Important Notes:</strong>
+                <ul>
+                    <li>Deleted tasks cannot be recovered</li>
+                    <li>Active downloads will complete before deletion takes effect</li>
+                    <li>The "Save Options" button saves all task changes simultaneously</li>
+                </ul>
+            </div>
+
+            <div class="pro-tip">
+                <i class="fas fa-lightbulb icon"></i> <strong>Workflow Tip:</strong> Use CSV exports to:
+                <ul>
+                    <li>Backup your task configurations</li>
+                    <li>Transfer tasks between browsers/devices</li>
+                    <li>Create templates for recurring download patterns</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="urls">
+            <h2><i class="fas fa-link icon"></i> 6. URL Management</h2>
+            
+            <h3><i class="fas fa-plus icon"></i> Adding URLs</h3>
+            <ol class="steps">
+                <li>Paste URLs in the text area (one per line)</li>
+                <li>The extension shows:
+                    <ul>
+                        <li><strong>Total URLs</strong></li>
+                        <li><strong>Duplicate count</strong> (if any)</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3><i class="fas fa-filter icon"></i> Removing Duplicate URLs</h3>
+            <ol class="steps">
+                <li>Click <strong>"Strip Duplicates"</strong></li>
+                <li>Duplicate URLs will be removed</li>
+            </ol>
+            
+            <div class="note">
+                <i class="fas fa-lightbulb icon"></i> <strong>Tip:</strong> The free version limits you to 5 URLs per task. Upgrade for unlimited URLs.
+            </div>
+        </section>
+        
+        <section id="filetypes">
+            <h2><i class="fas fa-file-image icon"></i> 7. File Type Selection</h2>
+            <p>Choose from:</p>
+            <ul>
+                <li><strong>All Formats</strong> - Downloads all supported types</li>
+                <li><strong>Specific formats</strong> - JPG, PNG, GIF, WEBP, SVG, PDF, and more</li>
+            </ul>
+            
+            <div class="feature-card">
+                <p><i class="fas fa-check-circle icon"></i> Supported formats include:</p>
+                <div style="columns: 3;">
+                    <ul>
+                        <li>JPG</li>
+                        <li>PNG</li>
+                        <li>GIF</li>
+                        <li>WEBP</li>
+                        <li>SVG</li>
+                        <li>PDF</li>
+                        <li>APNG</li>
+                        <li>BMP</li>
+                        <li>TIFF</li>
+                        <li>RAW</li>
+                        <li>+20 more</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="download">
+            <h2><i class="fas fa-cloud-download-alt icon"></i> 8. Download Options</h2>
+            
+            <div class="feature-highlight">
+                <p>Flexible download methods to suit different needs and connection types.</p>
+            </div>
+
+            <h3><i class="fas fa-clock icon"></i> Scheduled Downloads</h3>
+            <ol class="steps">
+                <li>Set a precise future time using the datetime picker</li>
+                <li>The extension's background process checks every <strong>30 seconds</strong> for pending tasks</li>
+                <li>Features:
+                    <ul>
+                        <li>Runs exactly at specified time (nearest 30-second interval)</li>
+                        <li>Respects system sleep/wake cycles</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3><i class="fas fa-list-ol icon"></i> Queued Downloads</h3>
+            <ol class="steps">
+                <li>Toggle the <strong>"Queued Download"</strong> switch at the top</li>
+                <li>Tasks process sequentially:
+                    <ul>
+                        <li>One task completes fully before next begins</li>
+                        <li>Files within a task download consecutively</li>
+                        <li>Progress bar shows queue position</li>
+                    </ul>
+                </li>
+                <li>Automatic features:
+                    <ul>
+                        <li>Pauses on connection loss</li>
+                        <li>Resumes from last successful download</li>
+                        <li>Skips failed items after 3 attempts</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3><i class="fas fa-file-archive icon"></i> ZIP Download</h3>
+            <ol class="steps">
+                <li>Enable the <strong>"Zip"</strong> toggle in task options</li>
+                <li>Configuration options:
+                    <ul>
+                        <li>ZIP filename matches folder name</li>
+                        <li>Maintains original file structure</li>
+                        <li>Standard ZIP compression (no password)</li>
+                    </ul>
+                </li>
+                <li>System handles:
+                    <ul>
+                        <li>Automatic retries if ZIP creation fails</li>
+                        <li>Validation of archive integrity</li>
+                        <li>Cleanup of temporary files</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="feature-card">
+                <h4><i class="fas fa-sync-alt icon"></i> Automatic Retry System</h4>
+                <p>The extension automatically retries failed downloads with:</p>
+                <ul>
+                    <li>3 attempts per file</li>
+                    <li>30-second intervals between retries</li>
+                    <li>Exponential backoff on server errors</li>
+                </ul>
+            </div>
+
+            <div class="pro-tip">
+                <i class="fas fa-lightbulb icon"></i> <strong>Pro Tips:</strong>
+                <ul>
+                    <li>Use <strong>Queued Mode</strong> for slow connections or server-side rate limits</li>
+                    <li>Combine <strong>Scheduled</strong> and <strong>ZIP</strong> for overnight backups</li>
+                    <li>Monitor progress via the browser's native download manager</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <i class="fas fa-exclamation-triangle icon"></i> <strong>Note:</strong>
+                <ul>
+                    <li>Scheduled tasks require Chrome to be running at the trigger time</li>
+                    <li>ZIP creation may fail for very large collections (>2GB)</li>
+                    <li>Queued mode disables parallel downloads across all tasks</li>
+                </ul>
+            </div>
+        </section>
+                
+        <section id="filenames">
+            <h2><i class="fas fa-file-signature icon"></i> 9. Filename Constructor</h2>
+            
+            <div class="feature-highlight">
+                <p>The filename constructor provides powerful customization for organizing downloaded files exactly how you need them.</p>
+            </div>
+
+            <h3><i class="fas fa-puzzle-piece icon"></i> Customizing Filenames</h3>
+            <ol class="steps">
+                <li>Enable the <strong>"Filename Constructor"</strong> checkbox</li>
+                <li>Build your filename using these components:
+                    <ul>
+                        <li><strong>Filename</strong> - Original name from URL</li>
+                        <li><strong>Sequence</strong> - Auto-incrementing number with zero-padding</li>
+                        <li><strong>Timestamp</strong> - Current download time in milliseconds</li>
+                        <li><strong>URL Fragments</strong> - Path segments (e.g., "products" from example.com/products/)</li>
+                        <li><strong>Website</strong> - Domain name (e.g., "example-com")</li>
+                        <li><strong>Random String</strong> - 8-character unique ID</li>
+                        <li><strong>Custom text</strong> - Any text you enter manually</li>
+                        <li><strong>URL Segments</strong> - Automatically detected when pasting structured URLs</li>
+                    </ul>
+                </li>
+                <li>Drag and drop components to arrange them</li>
+                <li>The system automatically handles:
+                    <ul>
+                        <li>File extensions (always positioned last)</li>
+                        <li>Duplicate filename prevention</li>
+                        <li>Special character sanitization</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3><i class="fas fa-sort-numeric-up icon"></i> Advanced Sequence Numbering</h3>
+            <ol class="steps">
+                <li>Set your starting number in the "Start from" field:
+                    <ul>
+                        <li>Simple numbers: <code>1</code>, <code>42</code></li>
+                        <li>Padded numbers: <code>001</code>, <code>0050</code></li>
+                    </ul>
+                </li>
+                <li>The system will:
+                    <ul>
+                        <li>Maintain your padding style (e.g., <code>0050</code> → <code>0051</code>)</li>
+                        <li>Increment automatically for each file</li>
+                        <li>Apply sequence numbers exactly where placed in your pattern</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3><i class="fas fa-link icon"></i> Smart URL Processing</h3>
+            <p>When pasting URLs with consistent structures, the system automatically detects available segments:</p>
+            <div class="code-example">
+                <p><strong>Example URL:</strong> <code>https://example.com/images/2023/products/photo123.jpg</code></p>
+                <p><strong>Detected Segments:</strong></p>
+                <ul>
+                    <li>Segment 1: example</li>
+                    <li>Segment 2: com</li>
+                    <li>Segment 3: images</li>
+                    <li>Segment 4: 2023</li>
+                    <li>Segment 5: products</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <p><strong>Example filename patterns:</strong></p>
+                <ul>
+                    <li><code>photo_001.jpg</code> (basic sequence)</li>
+                    <li><code>example-com_2023-products_0001.jpg</code> (website + year + category)</li>
+                    <li><code>product-[sequence]_[timestamp].jpg</code> (custom pattern)</li>
+                    <li><code>downloaded_[Segment4]_[Segment5]_[random].jpg</code> (URL segments + random ID)</li>
+                </ul>
+                <p class="note">Note: The ".extension" component is automatically positioned and cannot be removed.</p>
+            </div>
+
+            <div class="pro-tip">
+                <p><strong>Pro Tip:</strong> Combine URL segments with sequence numbers for perfectly organized downloads.<br>
+                Example: <code>[Segment4]/[Segment5]_[sequence].[extension]</code> creates "2023/products_0001.jpg"</p>
+            </div>
+        </section>
+                
+        <section id="conditions">
+            <h2><i class="fas fa-filter icon"></i> 10. Download Conditions (Download IF)</h2>
+            
+            <div class="feature-highlight">
+                <p>Advanced URL filtering that gives you precise control over which files get downloaded.</p>
+            </div>
+
+            <h3><i class="fas fa-cog icon"></i> Setting Up Conditions</h3>
+            <ol class="steps">
+                <li>Enable the <strong>"DOWNLOAD IF URL"</strong> checkbox</li>
+                <li>Create rules using:
+                    <ul>
+                        <li><strong>Contains</strong> - URL must include this text
+                            <div class="note">Example: <code>product</code> matches "product-image.jpg"</div>
+                        </li>
+                        <li><strong>Not Contains</strong> - URL must exclude this text
+                            <div class="note">Example: <code>thumbnail</code> excludes "product-thumbnail.jpg"</div>
+                        </li>
+                    </ul>
+                </li>
+                <li>Click <strong>"Add"</strong> to save each condition</li>
+                <li>The system automatically:
+                    <ul>
+                        <li>Prevents duplicate conditions</li>
+                        <li>Shows active conditions in a list</li>
+                        <li>Updates the AND/OR logic options when needed</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3><i class="fas fa-code-branch icon"></i> Advanced Logic Options</h3>
+            <ol class="steps">
+                <li>When using both <strong>Contains</strong> and <strong>Not Contains</strong>:
+                    <ul>
+                        <li><strong>AND</strong> - Both conditions must be true
+                            <div class="note">Example: Must contain "summer" AND not contain "sale"</div>
+                        </li>
+                        <li><strong>OR</strong> - Either condition must be true
+                            <div class="note">Example: Must contain "blue" OR not contain "red"</div>
+                        </li>
+                    </ul>
+                </li>
+                <li>Logic options automatically appear when needed</li>
+                <li>Single condition types work without logic selection</li>
+            </ol>
+
+            <h3><i class="fas fa-lightbulb icon"></i> Practical Examples</h3>
+            <div class="feature-card">
+                <p><strong>Common use cases:</strong></p>
+                <ul>
+                    <li><code>Contains: "high-res"</code> - Only downloads high resolution versions</li>
+                    <li><code>Not Contains: "/thumbnails/"</code> - Excludes thumbnail directory</li>
+                    <li><code>Contains: "product" AND Not Contains: "discontinued"</code> - Current products only</li>
+                    <li><code>Contains: "2023" OR Contains: "new"</code> - Either current year or new items</li>
+                </ul>
+            </div>
+
+            <div class="pro-tip">
+                <p><strong>Pro Tip:</strong> Combine with filename construction for powerful organization:<br>
+                Example: <code>Contains: "product-[A-Z0-9]{6}"</code> to download only product SKUs matching a specific pattern</p>
+            </div>
+
+            <div class="important-note">
+                <p><strong>Important:</strong> Conditions are applied during download, not when pasting URLs. You'll still see all URLs in the list, but only matching ones will download.</p>
+            </div>
+        </section>
+                
+        <section id="csv">
+            <h2><i class="fas fa-file-csv icon"></i> 11. Bulk Import via CSV</h2>
+            
+            <div class="feature-highlight">
+                <p>Powerful bulk task creation for managing large numbers of downloads efficiently.</p>
+            </div>
+
+            <h3><i class="fas fa-upload icon"></i> Import Process</h3>
+            <ol class="steps">
+                <li>Click <strong>"Choose File"</strong> and select your CSV</li>
+                <li>CSV must include these columns (in any order):
+                    <div class="scrollable-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Description</th>
+                                    <th>Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>URL</td>
+                                    <td>Image URL (one per line for multiple URLs)</td>
+                                    <td>http://example.com/image.jpg or http://example.com/image1.jpg; http://example.com/image2.jpg for more than 1 images, separated by semi-colon</td>
+                                </tr>
+                                <tr>
+                                    <td>File Types</td>
+                                    <td>Semicolon-separated formats (or "all")</td>
+                                    <td>jpg;png;webp</td>
+                                </tr>
+                                <tr>
+                                    <td>Folder Name</td>
+                                    <td>Target download folder</td>
+                                    <td>Summer_Collection</td>
+                                </tr>
+                                <tr>
+                                    <td>Download Time</td>
+                                    <td>ISO 8601 format (YYYY-MM-DDTHH:MM)</td>
+                                    <td>2023-12-01T14:30</td>
+                                </tr>
+                                <tr>
+                                    <td>ZIP Download</td>
+                                    <td>TRUE/FALSE for zip packaging</td>
+                                    <td>TRUE</td>
+                                </tr>
+                                <tr>
+                                    <td>Build Filename</td>
+                                    <td>TRUE/FALSE for custom filename construction</td>
+                                    <td>TRUE</td>
+                                </tr>
+                                <tr>
+                                    <td>Sortable List</td>
+                                    <td>Filename components as HTML</td>
+                                    <td>"filename;-;sequence"</td>
+                                </tr>
+                                <tr>
+                                    <td>Sequence Start</td>
+                                    <td>Initial number for sequencing</td>
+                                    <td>1 or 0050</td>
+                                </tr>
+                                <tr>
+                                    <td>Download If Enabled</td>
+                                    <td>TRUE/FALSE for conditional downloading</td>
+                                    <td>TRUE</td>
+                                </tr>
+                                <tr>
+                                    <td>Keywords</td>
+                                    <td>Semicolon-separated conditions</td>
+                                    <td>"contains: product;not-contains: thumb"</td>
+                                </tr>
+                                <tr>
+                                    <td>Logic</td>
+                                    <td>AND/OR for multiple conditions</td>
+                                    <td>AND</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>Initial task status</td>
+                                    <td>pending</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li>Click <strong>"Import"</strong> to process the file</li>
+                <li>The system will:
+                    <ul>
+                        <li>Validate license requirements (max 20 URLs in free version)</li>
+                        <li>Create separate tasks for each CSV row</li>
+                        <li>Preserve all settings exactly as specified</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3><i class="fas fa-file-export icon"></i> Exporting Templates</h3>
+            <div class="feature-card">
+                <p><strong>Recommended workflow:</strong></p>
+                <ol>
+                    <li>Create one task manually with your desired settings</li>
+                    <li>Use the <strong>Export</strong> function to generate a template CSV</li>
+                    <li>Duplicate and modify the template for bulk imports</li>
+                </ol>
+            </div>
+
+            <div class="important-note">
+                <p><strong>Requirements:</strong></p>
+                <ul>
+                    <li>CSV must use UTF-8 encoding</li>
+                    <li>First row must be header row</li>
+                    <li>When importing if you want multiple urls in a task make sure you separate them with a semicolon (;)</li>
+                    <li>License restrictions apply (max URLs per task)</li>
+                </ul>
+            </div>
+
+            <div class="pro-tip">
+                <p><strong>Advanced Tip:</strong> Use spreadsheet formulas to generate complex patterns:<br>
+                Example: <code>=CONCAT("product-",TEXT(ROW(A1),"000"),"-",TEXT(TODAY(),"yyyy"))</code> creates sequential product filenames with current year</p>
+            </div>
+        </section>      
+        
+        <section id="darkmode">
+            <h2><i class="fas fa-moon icon"></i> 12. Dark Mode</h2>
+            <ol class="steps">
+                <li>Toggle <strong>"Dark Mode"</strong> to switch to dark mode. The button is in the bottom right corner</li>
+                <li>The interface will switch between light and dark themes</li>
+            </ol>
+        </section>
+        
+        <section id="troubleshooting">
+            <h2><i class="fas fa-tools icon"></i> 13. Troubleshooting</h2>
+            
+            <div class="feature-highlight">
+                <p>Quick solutions for common issues and technical troubleshooting guidance.</p>
+            </div>
+
+            <div class="responsive-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Symptoms</th>
+                            <th>Solution</th>
+                            <th>Advanced Fixes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Downloads not starting</td>
+                            <td>
+                                <ul>
+                                    <li>Progress bar stuck at 0%</li>
+                                    <li>No download notifications</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Verify license status is "Active"</li>
+                                    <li>Check download time is in future</li>
+                                    <li>Ensure Chrome has download permissions</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Check <code>chrome://downloads</code> for errors</li>
+                                    <li>Inspect console logs (F12 → Console)</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Task duplication</td>
+                            <td>
+                                <ul>
+                                    <li>Multiple identical tasks after refresh</li>
+                                    <li>Task IDs don't match storage</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Always click Save before refreshing</li>
+                                    <li>Delete duplicates manually</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>N/A</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>File extension issues</td>
+                            <td>
+                                <ul>
+                                    <li>Downloads have wrong extensions</li>
+                                    <li>"Invalid format" errors</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Verify URLs end with proper extensions</li>
+                                    <li>Check "All Formats" option</li>
+                                    <li>Try enabling filename in filename construction</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Manually specify extensions in CSV imports</li>
+                                    <li>Use the filetype filer to filter by extension</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ZIP file corruption</td>
+                            <td>
+                                <ul>
+                                    <li>Cannot open ZIP files</li>
+                                    <li>"Invalid archive" errors</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Temporarily disable antivirus</li>
+                                    <li>Ensure sufficient disk space</li>
+                                    <li>Reduce batch sizes (try ≤100 files)</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Try alternative ZIP programs (7-Zip, WinRAR)</li>
+                                    <li>Check Chrome's download integrity flag</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Extension instability</td>
+                            <td>
+                                <ul>
+                                    <li>Unexpected crashes</li>
+                                    <li>UI freezing</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Clear browser cache (chrome://settings/clearBrowserData)</li>
+                                    <li>Restart Chrome completely</li>
+                                    <li>Reinstall the extension</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Check for conflicts with other extensions</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>License validation failures</td>
+                            <td>
+                                <ul>
+                                    <li>Features suddenly restricted</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Check internet connection</li>
+                                    <li>Log out and back in</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Verify system clock is correct</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Prompted to save each file</td>
+                            <td>
+                                <ul>
+                                    <li>Chrome asks where to save every download</li>
+                                    <li>Batch downloads become interrupted</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ol>
+                                    <li>Go to <code>chrome://settings/downloads</code></li>
+                                    <li>Disable the option <strong>"Ask where to save each file before downloading"</strong></li>
+                                    <li>Restart Chrome to apply the setting</li>
+                                </ol>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Ensure downloads folder is not restricted by OS or third-party software</li>
+                                    <li>Use Chrome profiles with consistent permissions</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="important-note">
+                <p><strong>Still stuck?</strong> Contact support with these details:</p>
+                <ul>
+                    <li>Steps to reproduce the issue</li>
+                </ul>
+            </div>
+        </section>
+
+        
+        <section id="faqs">
+            <h2><i class="fas fa-question-circle icon"></i> 14. FAQs</h2>
+            
+            <div class="feature-highlight">
+                <p>Quick answers to common questions about setup, licensing, and troubleshooting.</p>
+            </div>
+
+            <div class="faq-grid">
+                <!-- Licensing -->
+                <div class="faq-card">
+                    <h3><i class="fas fa-key icon"></i> Q: Why can I only add 5 URLs per task?</h3>
+                    <div class="faq-answer">
+                        <p>The free version has this limit to ensure server stability. Also, when you upgrade you enable us to pay for development costs, hosting, maintenance, support etc. With an upgrade you unlock:</p>
+                        <ul>
+                            <li>Unlimited URLs per task</li>
+                            <li>Priority download processing</li>
+                            <li>Advanced filename templates</li>
+                        </ul>
+                        <p class="note">Note: This is per download task.</p>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <h3><i class="fas fa-sync-alt icon"></i> Q: How do I renew an expired license?</h3>
+                    <div class="faq-answer">
+                        <ol>
+                            <li>Click <strong>"Get License"</strong> in the license panel</li>
+                            <li>Select your preferred plan duration</li>
+                            <li>Complete checkout</li>
+                            <li>Return to the extension - activation is automatic</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Functionality -->
+                <div class="faq-card">
+                    <h3><i class="fas fa-clock icon"></i> Q: Can I schedule downloads for different times?</h3>
+                    <div class="faq-answer">
+                        <p>Yes! Each task has independent scheduling:</p>
+                        <ul>
+                            <li>Set precise download times per task</li>
+                            <li>Future-dated tasks show as "Scheduled"</li>
+                            <li>Enable by disabling <strong>Queued Downloads</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <h3><i class="fas fa-folder icon"></i> Q: Where are my downloaded files saved?</h3>
+                    <div class="faq-answer">
+                        <p>The extension respects Chrome's download settings:</p>
+                        <ul>
+                            <li>Default: Chrome's default download folder</li>
+                            <li>Custom: Specify folders in task settings</li>
+                            <li>ZIP files: Saved to same location as individual files</li>
+                        </ul>
+                        <p class="note">Tip: Use absolute paths (e.g., <code>C:\Images</code>) for specific locations.</p>
+                    </div>
+                </div>
+
+                <!-- Troubleshooting -->
+                <div class="faq-card">
+                    <h3><i class="fas fa-bug icon"></i> Q: How do I report a bug?</h3>
+                    <div class="faq-answer">
+                        <p>We appreciate bug reports! Include:</p>
+                        <ol>
+                            <li>Example URLs (5-10)</li>
+                            <li>Steps to reproduce</li>
+                            <li>Screenshots of errors</li>
+                            <li>Browser version</li>
+                        </ol>
+                        <p>Email: <a href="mailto:info@bulkimagedownloader.com">info@bulkimagedownloader.com</a></p>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <h3><i class="fas fa-plug icon"></i> Q: Why do downloads sometimes fail?</h3>
+                    <div class="faq-answer">
+                        <p>Common causes and fixes:</p>
+                        <ul>
+                            <li><strong>Server blocks:</strong> Try smaller batches</li>
+                            <li><strong>Invalid URLs:</strong> Check URL formatting</li>
+                            <li><strong>License issues:</strong> Revalidate your license</li>
+                            <li><strong>Network problems:</strong></li>
+                            <li><strong>Visit our site<i> <a href="www.bulkimagedownloader.com">Check Downtime</a></i> to confirm that there's no downtime. A downtime can last between 5-15 minutes not more but rarely happens.</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Advanced Features -->
+                <div class="faq-card">
+                    <h3><i class="fas fa-magic icon"></i> Q: How does filename construction work?</h3>
+                    <div class="faq-answer">
+                        <p>Our smart filename builder:</p>
+                        <ol>
+                            <li>Drag-and-drop components into order</li>
+                            <li>Special tokens auto-convert (e.g., [timestamp])</li>
+                            <li>Sequences auto-increment</li>
+                            <li>Extensions are automatically appended</li>
+                        </ol>
+                        <p class="note">Pro Tip: Combine URL segments with sequences for perfect organization.</p>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <h3><i class="fas fa-filter icon"></i> Q: Can I filter by multiple conditions?</h3>
+                    <div class="faq-answer">
+                        <p>Yes! The "Download If" system supports:</p>
+                        <ul>
+                            <li>Unlimited "Contains" rules</li>
+                            <li>Unlimited "Not Contains" rules</li>
+                            <li>AND/OR logic between condition types</li>
+                            <li>Keyword highlighting in the UI (Coming soon)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Technical -->
+                <div class="faq-card">
+                    <h3><i class="fas fa-database icon"></i> Q: Where are my tasks stored?</h3>
+                    <div class="faq-answer">
+                        <p>All data is stored locally in Chrome:</p>
+                        <ul>
+                            <li>Tasks: <code>chrome.storage.local</code></li>
+                            <li>License: You receive an encrypted version of your original license</li>
+                            <li>Never transmitted to our servers!</li>
+                        </ul>
+                        <p class="note">Export tasks regularly for backup.</p>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <h3><i class="fas fa-redo icon"></i> Q: How do I reset the extension?</h3>
+                    <div class="faq-answer">
+                        <p>Complete reset steps:</p>
+                        <ol>
+                            <li>Go to <code>chrome://extensions</code></li>
+                            <li>Click "Remove" on our extension</li>
+                            <li>Reinstall from Chrome Web Store</li>
+                        </ol>
+                        <p>This preserves your license but clears tasks.</p>
+                    </div>
+                </div>
+
+                <!-- New Additions -->
+                <div class="faq-card">
+                    <h3><i class="fas fa-file-import icon"></i> Q: What CSV formats are supported?</h3>
+                    <div class="faq-answer">
+                        <p>Accepted:</p>
+                        <ul>
+                            <li>Standard CSV (UTF-8 encoded)</li>
+                            <li>Excel-generated CSV</li>
+                            <li>Google Sheets exports</li>
+                            <li>Tab-delimited files</li>
+                        </ul>
+                        <p class="note">Download our template CSV for perfect formatting.</p>
+                    </div>
+                </div>
+
+                <div class="faq-card">
+                    <h3><i class="fas fa-shield-alt icon"></i> Q: Is my download data private?</h3>
+                    <div class="faq-answer">
+                        <p>Absolutely. Our privacy guarantee:</p>
+                        <ul>
+                            <li>URLs never leave your browser</li>
+                            <li>No tracking of download content</li>
+                            <li>License verification uses encrypted tokens only</li>
+                            <li>Open-source core components</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-prompt">
+                <p><i class="fas fa-envelope icon"></i> <strong>Still have questions?</strong> Contact us at <a href="mailto:info@bulkimagedownloader.com">info@bulkimagedownloader.com</a> with your query and we'll respond within 24 hours.</p>
+            </div>
+        </section>
+        
+        <footer style="text-align: center; margin-top: 3rem; padding: 1rem; color: #666;">
+            <p><i class="fas fa-copyright icon"></i> 2023 Bulk Image Downloader | All Rights Reserved</p>
+            <p>Need help? <a href="mailto:info@bulkimagedownloader.com">Contact Support</a></p>
+        </footer>
+    </div>
+  </div>
+
+  <!-- Donation and Support Section (Always Visible) -->
+  <div class="support-section">
+    <br />
+    <span><i>
+      <br />
+      <span>Upgrade for unrestricted downloading.</span>
+      <br />
+      It's what keeps your extension alive. To help us pay for hosting costs, <br> development, customer support and maintenance. </i>
+    </span>
+    <br /><br />
+    <span>
+      <a href="https://bulkimagedownloaderurllist.com/hire-me" style="color: cornflowerblue">Or let's do the work for you :) (Hire Me)</a> <br>
+      <a href="https://bulkimagedownloaderurllist.com/contact" style="color: cornflowerblue">Stuck? We're here! (Support)</a>
+    </span>
+    <span style="padding-right: 10px"></span>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-container" style="padding-bottom: 10px; float: right;">
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle" />
+        <span class="slider round"></span>
+      </label>
+      <label for="darkModeToggle" class="dark-mode-label">Dark Mode</label>
+    </div>
+  </div>
+
+  <!-- Docked Toolbar -->
+  <div id="dockedToolbar">
+    <button id="dockedSaveButton">
+      <img src="images/save.png" alt="Save" id="saveIcon" width="30" height="30">
+    </button>
+    <img id="loadingImage" src="images/loading.gif" width="60" height="60" style="display: none; padding-top: 10px;">
+    <button id="removeAllTasksButton">
+      <img src="images/delete.png" alt="Remove All" id="removeIcon" width="30" height="30">
+    </button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Redirect Checker - Options</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px; }
+    #urls { width: 100%; height: 200px; }
+    .url-container { display: flex; gap: 10px; margin-top: 10px; }
+    .url-textarea { width: 48%; height: 200px; }
+    #output { white-space: pre-wrap; margin-top: 20px; border: 1px solid #ddd; padding: 10px; }
+    button { margin-top: 10px; }
+    #progress-container { margin-top: 20px; display: none; }
+    #progress-bar {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    #progress-fill {
+      height: 20px;
+      width: 0%;
+      background-color: #4caf50;
+      transition: width 0.2s ease-in-out;
+    }
+    #progress-status { margin-top: 5px; text-align: center; font-size: 14px; color: #333; }
+  </style>
+</head>
+<body>
+  <h2>URL Redirect Checker</h2>
+  <p>This tool allows you to check the final destination of multiple URLs by following any redirects. Enter the URLs in the text area below, one per line, and click "Check Redirects" to begin.</p>
+  
+  <textarea id="urls" placeholder="Enter URLs, one per line"></textarea>
+  <button id="checkRedirects">Check Redirects</button>
+  <button id="copyResults" style="display: none;">Copy Results</button>
+
+  <!-- Progress Bar Section -->
+  <div id="progress-container">
+    <div id="progress-bar">
+      <div id="progress-fill"></div>
+    </div>
+    <div id="progress-status">Processed 0 of 0 URLs</div>
+  </div>
+
+  <div id="output" style="display:none;"></div>
+
+  <script src="redirect-checker.js"></script>
+</body>
+</html>

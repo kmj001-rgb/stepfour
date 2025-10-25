@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="agentyChromeApp">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenty</title>
+  <link rel="icon" sizes="16x16" type="image/png" href="../icons/agenty-16.png" />
+  <link rel="icon" sizes="32x32" type="image/png" href="../icons/agenty-32.png" />
+  <link rel="stylesheet" href="toolbar/bootstrap-5.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="toolbar/css/agenty-iframe.css">
+  <link rel="stylesheet" href="toolbar/css/loaders.css">
+  <link rel="stylesheet" href="toolbar/css/angular-toastr.css">
+  <script src="toolbar/js/jquery.min.js"></script>
+  <script src="toolbar/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
+
+  <script src="toolbar/js/angular.min.js"></script>
+  <script src="toolbar/js/angular-loaders.min.js"></script>
+  <script src="toolbar/js/angular-toastr.tpls.min.js"></script>
+  <script src="toolbar/js/angular-sanitize.min.js"></script>
+  <script src="toolbar/js/agenty-iframe.js"></script>
+  <script src="toolbar/js/store.everything.min.js"></script>
+</head>
+
+<body ng-controller="agentyChromeController" style="background:none transparent;">
+  <div id="sg_div"></div>
+
+  <div id="agenty-sidebar" class="selectorgadget_ignore" ng-init="initSideBar()">
+    <nav class="navbar navbar-dark bg-primary border-bottom py-1 mb-2">
+      <div class="container px-1">
+        <div class="d-flex my-auto">
+          <button id="back" type="button" class="btn btn-sm btn-link text-light" title="Back" ng-if="panel != 'home'" ng-click="back()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+            </svg>
+          </button>
+
+          <a class="navbar-brand" title="Go to Agenty.com" href="https://agenty.com" target="_blank">
+            <img src="./toolbar/images/agenty-logo.png" alt="Agenty" title="Go to Agenty.com" width="100">
+          </a>
+        </div>
+        <div>
+        <div class="btn-group btn-group-sm" role="group">
+          <button id="Settings" type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" title="Settings">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="Settings">
+            <li><a class="dropdown-item" ng-click="togglePosition()" href="#">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+              </svg>
+              <span>Toggle Position</span></a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="https://github.com/Agenty/public-roadmap" target="_blank">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+              </svg>
+              <span>Suggest a Feature</span>
+              </a>
+            </li>
+            <li><a class="dropdown-item" href="https://agenty.com/docs/" target="_blank">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+              <span>Help center</span></a>
+            </li>
+            <li><a class="dropdown-item" href="https://agenty.com/company/contact/" target="_blank">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+              </svg>
+              <span>Contact support</span></a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li>
+              <a class="dropdown-item" ng-click="LogOut()" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>   
+        <button ng-click="disable()" type="button" class="btn btn-sm btn-close me-2" aria-label="Close"></button>  
+      </div>
+      </div>
+    </nav>    
+    <div id="toolbar" class="selectorgadget_ignore ng-cloak" ng-show="panel == 'scraping' || panel == 'changedetection' || panel == 'crawling'">     
+            <div class="btn-group btn-group-sm" role="group" ng-show="agent.type === 'scraping' || panel === 'crawling'">      
+              <button ng-click="addField()" type="button" class="btn btn-light btn-sm ms-1 border-right" title="Add field">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                  </svg>
+                  <span>Add field</span>                
+              </button>        
+              <button type="button" class="btn btn-secondary mx-0 px-0" disabled></button>
+              <button id="btnGroupDrop1" type="button" class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" href="#" ng-click="addCollection()">Add collection</a></li>
+              </ul>
+            </div>
+
+            <button ng-show="agent.type === 'scraping' || panel === 'crawling'" ng-click="PreviewResult()" title="Preview result" type="button"
+              class="btn btn-light btn-sm mx-1 selectorgadget_ignore">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
+              </svg>
+              <span>Preview</span>
+            </button>
+
+            <button ng-click="SaveAgent()" class="btn btn-light btn-sm mx-1 selectorgadget_ignore" type="button" title="Save agent" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
+                <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
+              </svg>
+              <span>Save</span> 
+            </button>
+         
+    </div>
+
+    <div id="panel-container" class="my-2">   
+      <div id="scraping" class="mx-1 selectorgadget_ignore ng-cloak" ng-show="panel === 'scraping' || panel === 'crawling'">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-12">
+                <select class="float-end" ng-model="selectedCollection"
+                  ng-options="collection.name for collection in agent.config.collections">
+                </select>
+              </div>
+            </div>
+
+            <div class="card selectorgadget_ignore" ng-repeat="(idx, collection) in agent.config.collections"
+              ng-show="selectedCollection.name == collection.name">
+              <div class="card-header">{{collection.name}}
+                <button ng-show="idx > 0" title="Remove this collection" ng-click="remove(agent.config.collections, idx)" type="button" class="close btn btn-sm float-end">
+                  &times;
+                </button>
+              </div>
+              <div class="card-body px-2">
+                <ul class="fields selectorgadget_ignore">
+                  <li ng-repeat="field in collection.fields" class="my-2 border-bottom selectorgadget_ignore ng-cloak">
+                    <div class="d-flex justify-content-between my-2">
+                      <div class="w-100">
+                        <input type="text" placeholder="name..." ng-model="field.name"
+                          class="form-control form-control-sm selectorgadget_ignore" autocomplete="off">
+                      </div>
+                      <div>
+                        <button type="button" class="btn-close ms-3 btn-sm selectorgadget_ignore" aria-label="Close" title="Delete this field" ng-click="removeField(collection.fields, field)"></button>
+                     </div>
+                    </div>
+                    <div class="d-flex justify-content-between my-2">
+                      <div class="w-100">
+                        <input type="text" placeholder="selector..." ng-model="field.selector"
+                          ng-change="selectCustom(collection.fields, field, $index)" name="selector"
+                          class="form-control form-control-sm selectorgadget_ignore" autocomplete="off">
+                      </div>
+                      <div>
+                        <button type="button" class="btn btn-warning ms-3 btn-sm selectorgadget_ignore" 
+                          title="Enable Selector" ng-click="select(collection.fields, field, $index)"
+                          ng-show="!field.selecting || field.selectingCustom">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
+                            <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between my-2" ng-show="field.results.length">
+                      <div>
+                        <select class="form-select form-select-sm selectorgadget_ignore" ng-model="field.extract"
+                          ng-change="updateLeafAndAttr(field)">
+                          <option value="HTML" class="selectorgadget_ignore">HTML</option>
+                          <option value="TEXT" class="selectorgadget_ignore">TEXT</option>
+                          <option value="ATTR" class="selectorgadget_ignore">ATTR</option>
+                        </select>
+                      </div>
+                      <div>
+                        <input type="text" placeholder="attribute..." name="attribute" ng-model="field.attribute"
+                          ng-show="field.extract =='ATTR'" ng-change="updateLeafAndAttr(field)"
+                          class="form-control form-control-sm selectorgadget_ignore" autocomplete="off"></input>
+                      </div>
+                    </div>
+                    <div class="results_header bg-dark selectorgadget_ignore">
+                      <span class="selectorgadget_ignore"><strong>{{field.results.length}}</strong> results</span>
+                      <a ng-show="field.resultsShown && field.results.length" ng-click="field.resultsShown=false"
+                        class="text-warning selectorgadget_ignore">hide</a>
+                      <a ng-show="!field.resultsShown && field.results.length" ng-click="field.resultsShown=true"
+                        class="text-warning selectorgadget_ignore">show</a>
+                    </div>
+                    <div class="results selectorgadget_ignore" ng-show="field.resultsShown && field.results.length">
+                      <ul class="list selectorgadget_ignore">
+                        <li ng-repeat="result in field.results track by $index"
+                          ng-mouseover="highlightResult(field, $index)" ng-mouseout="unhighlightResult()"
+                          class="selectorgadget_ignore">{{result}}</li>
+                      </ul>
+                    </div>
+                    <br />
+                    <button ng-click="selectOk(field)" ng-show="field.selecting || field.selectingCustom"
+                      class="btn btn-sm py-0 btn-success selectorgadget_ignore">Accept</button>
+                    <button ng-click="selectCancel(field)" ng-show="field.selecting || field.selectingCustom"
+                      class="btn btn-sm py-0 btn-danger selectorgadget_ignore">Cancel</button>
+                  </li>
+                </ul>
+                
+                <div class="alert alert-primary alert-dismissible fade show" role="alert" ng-show="!collection.fields || collection.fields.length < 1">
+                  <p>
+                    Click on the "New" button to add field and then "*" button to enable point-and-click selectors. <a
+                      target="_blank" href="https://agenty.com/docs/scraping-agent/how-to-create-a-scraping-agent-to-extract-data-from-websites">See docs
+                      here</a>.
+                    <br /><br />
+                    Or <a target="_blank" href="https://agenty.com/docs/videos">video tutorials here</a>
+                  </p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>  
+            </div>
+        
+            <div ng-show="panel === 'crawling'">
+              <div class="card my-2">
+                <div class="card-header">Rules</div>
+                <div class="card-body p-0">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active px-2  " data-bs-toggle="tab" href="#crawlingRules">Crawling rules</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link px-2" data-bs-toggle="tab" href="#processingRules">Processing rules</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link px-2" data-bs-toggle="tab" href="#priorityRules">Priority rules</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div class="tab-pane active" id="crawlingRules">
+                      <textarea class="form-control form-control-sm border-top-0" ng-model="agent.config.crawl_rules" rows="2" cols="1000" wrap="off" spellcheck="false">
+                      </textarea>
+                      <p class="help-text small">Specify rules to configure which one links should be followed by the crawler</p>
+                    </div>
+                    <div class="tab-pane fade" id="processingRules">
+                      <textarea class="form-control form-control-sm border-top-0" ng-model="agent.config.processing_rules" rows="2" cols="1000" wrap="off" spellcheck="false">
+                      </textarea>
+                      <p class="help-text small">Specify rules to configure which pages should be processed by Agenty to extract meaningful information from targeted pages.</p>
+                   </div>
+                    <div class="tab-pane fade" id="priorityRules">
+                      <textarea class="form-control form-control-sm border-top-0" ng-model="agent.config.priority_rules" rows="2" cols="1000" wrap="off" spellcheck="false">
+                      </textarea>
+                      <p class="help-text small">Specify priority rules to configure which pages should be priortized by Agenty to crawl important pages first.</p>
+                   </div>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          
+            <div class="card my-2" ng-show="panel === 'crawling'">
+            <div class="card-header">Settings</div>
+            <div class="card-body">
+              <div class="form-group row my-1">
+                <div class="col-6 my-auto">
+                    <label class="control-label">
+                        maxDepthToCrawl
+                    </label>
+                </div>
+                <div class="col-4">
+                    <input class="form-control form-control-sm" type="number" ng-model="agent.config.max_depth_to_crawl" />
+                </div>
+              </div>
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          maxTimeToCrawl(seconds)
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input class="form-control form-control-sm" type="number" ng-model="agent.config.max_time_to_crawl" />
+                  </div>
+              </div>
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          maxPagesToCrawl
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input class="form-control form-control-sm" type="number" ng-model="agent.config.max_pages_to_crawl" />
+                  </div>
+              </div>
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          maxLinkPerPage
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input class="form-control form-control-sm" type="number" ng-model="agent.config.max_link_per_page" />
+                  </div>
+              </div>
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          maxErrorThreshold
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input class="form-control form-control-sm" type="number" ng-model="agent.config.max_error_threshold" />
+                  </div>
+              </div>
+              <div class="form-group row my-1">
+                <div class="col-6 my-auto">
+                    <label class="control-label">
+                        maxResults
+                    </label>
+                </div>
+                <div class="col-4">
+                    <input class="form-control form-control-sm" type="number" ng-model="agent.config.max_results" />
+                </div>
+              </div>
+              <div class="form-group row my-1">
+                <div class="col-6 my-auto">
+                    <label class="control-label">
+                      followSitemaps
+                    </label>
+                </div>
+                <div class="col-4">
+                    <input type="checkbox" ng-model="agent.config.follow_sitemaps" />
+                </div>
+             </div>
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          respectRobotsTxt
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input type="checkbox" ng-model="agent.config.respect_robots_txt" />
+                  </div>
+              </div>
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          respectRelNoFollow
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input type="checkbox" ng-model="agent.config.respect_rel_nofollow"/>
+                  </div>
+              </div>
+            
+              <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                          shouldCrawlInternalPages
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input type="checkbox" ng-model="agent.config.should_crawl_internal_pages"/>
+                  </div>
+              </div>
+                <div class="form-group row my-1">
+                  <div class="col-6 my-auto">
+                      <label class="control-label">
+                        followExternalLinks
+                      </label>
+                  </div>
+                  <div class="col-4">
+                      <input type="checkbox" ng-model="agent.config.follow_external_links"/>
+                  </div>
+              </div>
+             </div>
+            </div>
+
+          
+          </div>
+        </div>
+      </div>
+
+      <div id="changedetection" class="mx-1 selectorgadget_ignore ng-cloak" ng-show="panel == 'changedetection'">
+        <div class="row">          
+          <div class="col-sm-12">
+            <div class="card my-2">
+              <div class="card-header">Config</div>
+              <div class="card-body">
+                <div class="alert alert-primary alert-dismissible fade show" role="alert" ng-show="!agent.config.selector">
+                  <p>
+                    Click on the "*" button to enable point-and-click selector and then, click on website element you want to watch. <a
+                      target="_blank" href="https://agenty.com/docs/change-detection/how-to-create-a-website-change-detection-agent">See docs
+                      here</a>.              
+                  </p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="d-flex justify-content-between my-2">
+                  <div class="w-100">
+                    <input type="text" placeholder="selector..." ng-model="agent.config.selector"
+                      ng-change="changeDetectionCustomSelect(agent.config)" name="selector"
+                      class="form-control form-control-sm selectorgadget_ignore" autocomplete="off">
+                  </div>
+                  <div>
+                    <button type="button" title="Enable Selector" ng-click="changeDetectionSelect(agent.config)"
+                      ng-show="!agent.config.selecting || agent.config.selectingCustom"
+                      class="btn btn-warning btn-sm ms-3 selectorgadget_ignore">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
+                          <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between my-2" ng-show="agent.config.results.length">
+                  <div>
+                    <select class="form-select form-select-sm selectorgadget_ignore" ng-model="agent.config.extract"
+                      ng-change="updateLeafAndAttr(agent.config)">
+                      <option value="HTML" class="selectorgadget_ignore">HTML</option>
+                      <option value="TEXT" class="selectorgadget_ignore">TEXT</option>
+                      <option value="ATTR" class="selectorgadget_ignore">ATTR</option>
+                    </select>
+                  </div>
+                  <div>
+                    <input type="text" placeholder="attribute..." name="attribute" ng-model="agent.config.attribute"
+                      ng-show="agent.config.extract =='ATTR'" ng-change="updateLeafAndAttr(agent.config)"
+                      class="form-control form-control-sm selectorgadget_ignore" autocomplete="off"></input>
+                  </div>
+                </div>
+                <div class="results_header bg-dark selectorgadget_ignore">
+                  <span class="selectorgadget_ignore"><strong>{{agent.config.results.length}}</strong> results</span>
+                  <a ng-show="agent.config.resultsShown && agent.config.results.length"
+                    ng-click="agent.config.resultsShown=false" class="selectorgadget_ignore text-warning">hide</a>
+                  <a ng-show="!agent.config.resultsShown && agent.config.results.length"
+                    ng-click="agent.config.resultsShown=true" class="selectorgadget_ignore text-warning">show</a>
+                </div>
+                <div class="results selectorgadget_ignore"
+                  ng-show="agent.config.resultsShown && agent.config.results.length">
+                  <ul class="list selectorgadget_ignore">
+                    <li ng-repeat="result in agent.config.results track by $index"
+                      ng-mouseover="highlightResult(agent.config, $index)" ng-mouseout="unhighlightResult()"
+                      class="selectorgadget_ignore">{{result}}</li>
+                  </ul>
+                </div>
+                <br>
+                <button ng-click="selectOk(agent.config)" ng-show="agent.config.selecting || agent.config.selectingCustom"
+                  class="btn btn-sm py-0 btn-success selectorgadget_ignore">Accept</button>
+                <button ng-click="selectCancel(agent.config)"
+                  ng-show="agent.config.selecting || agent.config.selectingCustom"
+                  class="btn btn-sm py-0 btn-danger selectorgadget_ignore">Cancel</button>
+              </div>
+            </div>
+            <div class="card my-2">
+              <div class="card-header">Keywords</div>
+              <div class="card-body">
+                <div class="form-group">
+                  <p>Alert me only if any of these keywords (<i>example : sale, discount...</i>) are : </p>
+                  <label>
+                    <input type="radio" name="choice" ng-model="agent.config.keywordschange" ng-value="'Added'" />
+                    Added
+                  </label>
+                  <br />
+                  <label>
+                    <input type="radio" name="choice" ng-model="agent.config.keywordschange" ng-value="'Removed'" />
+                    Removed
+                  </label>
+                </div>
+                <div class="form-group">
+                  <div class="tags">
+                    <div ng-repeat="(idx, keyword) in agent.config.keywords track by $index" class="tag">
+                      <span>{{keyword}}</span>
+                      <a class="close" href="#" ng-click="remove(agent.config.keywords, idx)">×</a>
+                    </div>
+                  </div>
+                  <form>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm" placeholder="add a keyword..." ng-model="keyword"
+                        autocomplete="off">
+                      <span class="input-group-btn">
+                        <button type="submit" class="btn btn-outline-primary btn-sm"
+                          ng-click="add(agent.config.keywords, keyword); keyword = null;">Add</button>
+                      </span>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="card my-2">
+              <div class="card-header">Email notification</div>
+              <div class="card-body">
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" ng-model="agent.config.emails" placeholder="Email id">
+                  <p class="help-block">Email will be sent to these email address(es) when change detected.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="agents" class="mx-1 ng-cloak my-2" ng-show="panel == 'home'">
+        <div class="row" ng-if="draft">
+          <div class="col-sm-12">
+            <div class="card bg-warning">
+                <div class="card-header">Unsaved draft</div>
+                <div class="card-body">
+                  You have one unsaved {{draft.type}} agent: {{draft.name}}
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-sm btn-outline-primary" ng-click="cancelDraft()">Cancel</button>
+                  <button class="btn btn-sm btn-primary" ng-click="openDraft()">Open</button>
+              </div>
+             </div>
+           </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card my-2">
+              <div class="card-header">Create new agent</div>
+              <div class="card-body px-1">
+                <button ng-click="initScrapingAgent()" class="btn btn-outline-primary btn-sm me-1" title="Create scraping agent" style="width: 100px; height:100px;">
+                  <div class="category-box-icon">
+                    <img alt="Scraping agent" src="toolbar/images/scraping-40.png" width="40" height="40">
+                  </div>
+                  <span>Scraping agent</span>
+                </button>
+                <button ng-click="initChangeDetectionAgent()" class="btn btn-outline-primary btn-sm me-1" style="width: 100px; height:100px;"
+                  title="Create change detection agent">
+                  <div class="category-box-icon">
+                    <img alt="Change Detection agent" src="toolbar/images/changedetection-40.png" width="40" height="40">
+                  </div>
+                  <span>Change detection ..</span>
+                </button>
+                <button ng-click="initCrawlingAgent()" class="btn btn-outline-primary btn-sm" style="width: 100px; height:100px;"
+                  title="Create web crawling agent">
+                  <div class="category-box-icon">
+                    <img alt="Web Crawling agent" src="toolbar/images/crawling-40.png" width="40" height="40" >
+                  </div>
+                  <span>Crawling agent</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="card scrollable" ng-if="panel == 'home'">
+              <div class="card-header">
+                <span>My agents<span>
+                    <div class="float-end btn-group">
+                      <button title="Refresh" type="button" ng-click="GetAgents()" class="btn btn-sm btn-default"><i
+                          class="glyphicon glyphicon-refresh"></i></button>
+                    </div>
+              </div>
+              <div class="card-body px-1" ng-init="GetAgents()">  
+                <div class="alert alert-warning margin-top-5" ng-if="!user">
+                  <p>Login to your Agenty account to see your agents, personalized settings and export options.</p> 
+                  <button ng-click="showModal('login')" class="btn btn-sm btn-outline-primary" type="button">Login</button>
+                </div>
+                <div ng-if="user">
+                  <form class="form-inline searchbar">
+                    <input ng-model="searchQuery" type="search" placeholder="Search...">
+                  </form>               
+                  <div class="loader-large blue text-center" ng-show="loading.agents">
+                    <div loader-css="ball-clip-rotate"></div>
+                  </div>
+                  <ul class="list-group list-group-flush" ng-show="myAgents && myAgents.length > 1">
+                    <li ng-repeat="agent in myAgents | orderBy: 'created_at':true | filter: searchQuery"
+                    ng-if="agent.type === 'scraping' || agent.type === 'crawling' || agent.type === 'changedetection'" 
+                    class="list-group-item d-flex justify-content-between align-items-start">
+                      <div class="me-auto">
+                        <div class="fw-bold"><a title="{{agent.name}}" target="_blank"
+                          href="{{appBaseURL}}/agents/{{agent.type}}/{{agent.agent_id}}">{{agent.name}}</a>
+                        </div>                        
+                        {{agent.description}}
+                      </div>
+                      <span>
+                        <button ng-click="editAgent(agent)"  type="button" class="btn btn-sm btn-link" title="Edit this agent">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                          </svg>
+                        </button>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modal" aria-labelledby="agentyModal" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="agentyModalLabel">Agenty</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="loading" class="mx-1 text-center" ng-show="modal == 'loading'">
+            <div class="loader-large blue">
+              <div loader-css="ball-clip-rotate"></div>
+            </div>
+          </div>
+
+          <div ng-if="modal == 'login'">
+            <div class="d-grid mb-3">
+              <button class="btn btn-outline-primary btn-block mt-2" ng-click="oauthGoogle()">
+                <img width="24" height="24" src="./toolbar/images/google-icon.svg" />
+                Continue with Google
+              </button>
+            </div>
+            <form name="loginForm" method="post">
+              <div class="form-group">
+                <label for="username" class="control-label">Your email*</label>
+                <input type="email" class="form-control" ng-model="login.email" placeholder="Enter your email id"
+                  required>
+              </div>
+              <div class="form-group">
+                <label for="password" class="control-label">Your password*</label>
+                <input type="password" class="form-control" ng-model="login.password" placeholder="Enter your password"
+                  required>
+                <p><a target="_blank" href="{{appBaseURL}}/forgot-password" class="float-end">Forgot
+                    your password?</a></p>
+              </div>
+              <div class="form-group" ng-show="login.email && login.email.indexOf('agenty.com') != -1">
+                <label class="control-label">Environment*</label>
+                <select class="form-select form-select-sm" ng-model="domain" ng-change="envChange(domain)"
+                  ng-options="o as o for o in ['agenty.com', 'agenty.in']">
+                </select>
+              </div>
+              <div class="form-group mt-3">
+                <button type="submit" ng-click="Login(login)" class="btn btn-primary btn-block">
+                  <span loader-css="ball-clip-rotate" ng-show="loading.login"></span>
+                  <span>Login</span>
+                </button>
+              </div>
+            </form>
+            <p class="text-center">No account? <a target="_blank" href="{{appBaseURL}}/signup"><u>Sign up
+                  here</u></a></p>
+          </div>
+
+          <div ng-if="modal == 'preview'">
+            <div ng-repeat="result in results">
+              <div class="form-group mb-3">
+                <p>{{result.collection}} (<span>{{result.json.length}}</span> records)</p>
+                <textarea json-text class="form-control" ng-model="result.json" rows="6" cols="1000" wrap="off"
+                  spellcheck="false">
+                </textarea>
+              </div>
+              <a ng-click="exportJSON(result.json)" class="btn btn-outline-primary btn-sm">JSON</a>
+              <a ng-click="exportCSV(result.json)" class="btn btn-outline-primary btn-sm">CSV</a>
+              <a ng-click="exportTSV(result.json)" class="btn btn-outline-primary btn-sm">TSV</a>
+            </div>
+          </div>
+
+          <div ng-if="modal == 'save'">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" ng-show="!loading.savingagent && success">
+              <p ng-bind-html="success.message"></p>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ng-click="success = null"></button>
+            </div>
+
+            <form name="saveAgentForm" method="post">
+              <div class="form-group">
+                <label class="control-label">Name of agent*</label>
+                <input type="text" class="form-control form-control-sm" ng-model="agent.name" placeholder="Name of your agent"
+                  required>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Source URL*</label>
+                <input type="url" class="form-control form-control-sm" ng-model="agent.config.url" placeholder="Source URL"
+                  required>
+                <p><a href="#" ng-click="showMore = !showMore" class="float-end">Show more option</a></p>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" ng-model="autoStart" id="autoStart">
+                <label class="form-check-label" for="autoStart">
+                  Start agent automatically
+                </label>
+              </div>
+              <div class="form-group" ng-show="agent.type == 'changedetection' || showMore">
+                <label class="control-label">Schedule</label>
+                <select class="form-select form-select-sm" ng-model="agent.scheduler.expression"
+                  ng-options="schedule.value as schedule.text disable when schedule.disabled for schedule in scheduleOptions">
+                </select>
+              </div>
+              <div class="form-group" ng-show="showMore">
+                <label class="control-label">Description (optional)</label>
+                <textarea class="form-control" ng-model="agent.description" placeholder="Descripiton (if any)" rows="2"
+                  cols="20"> </textarea>
+              </div>
+              <div class="form-group mt-3" ng-if="!agent.agent_id">
+                <button type="submit" ng-click="CreateAgent()" class="btn btn-primary btn-block">
+                  <span loader-css="ball-clip-rotate" ng-show="loading.savingagent"></span>
+                  <span>Save agent</span>
+                </button>
+              </div>
+              <div class="form-group mt-3" ng-if="agent.agent_id">
+                <button type="submit" ng-click="UpdateAgent()" class="btn btn-primary btn-block">
+                  <span loader-css="ball-clip-rotate" ng-show="loading.savingagent"></span>
+                  <span>Update agent</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

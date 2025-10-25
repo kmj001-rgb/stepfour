@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagination Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .test-section h2 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        .pagination {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+        }
+        .pagination a,
+        .pagination button {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pagination a:hover,
+        .pagination button:hover {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .pagination a.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .content-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .content-item {
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .content-item h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .load-more {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .load-more:hover {
+            background: #218838;
+        }
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Pagination Engine Test Page</h1>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Load this page with the StepThree extension installed</li>
+                <li>Look for the debug panel in the top-right corner</li>
+                <li>Click "Detect Pagination" to test detection</li>
+                <li>Click "Navigate Next" to test navigation</li>
+            </ol>
+        </div>
+
+        <!-- Test 1: Query String Pagination -->
+        <div class="test-section">
+            <h2>Test 1: Query String Pagination</h2>
+            <p>Current Page: <strong>Page 1</strong></p>
+            <div class="pagination">
+                <a href="?page=1" class="active">1</a>
+                <a href="?page=2">2</a>
+                <a href="?page=3">3</a>
+                <a href="?page=4">4</a>
+                <a href="?page=5">5</a>
+                <a href="?page=2" class="next">Next →</a>
+            </div>
+        </div>
+
+        <!-- Test 2: Path-Based Pagination -->
+        <div class="test-section">
+            <h2>Test 2: Path-Based Pagination</h2>
+            <p>Current Page: <strong>Page 1</strong></p>
+            <div class="pagination">
+                <a href="/page/1" class="active">1</a>
+                <a href="/page/2">2</a>
+                <a href="/page/3">3</a>
+                <a href="/page/4">4</a>
+                <a href="/page/5">5</a>
+                <a href="/page/2" class="next">Next →</a>
+            </div>
+        </div>
+
+        <!-- Test 3: Next Button -->
+        <div class="test-section">
+            <h2>Test 3: Next Button</h2>
+            <p>Current Page: <strong>Page 1</strong></p>
+            <div class="pagination">
+                <button disabled>← Previous</button>
+                <span>Page 1 of 10</span>
+                <a href="test-pagination-engine.html?p=2" rel="next" class="next">Next →</a>
+            </div>
+        </div>
+
+        <!-- Test 4: Load More Button -->
+        <div class="test-section">
+            <h2>Test 4: Load More Button</h2>
+            <div class="content-items">
+                <div class="content-item">
+                    <h3>Item 1</h3>
+                    <p>Sample content item</p>
+                </div>
+                <div class="content-item">
+                    <h3>Item 2</h3>
+                    <p>Sample content item</p>
+                </div>
+                <div class="content-item">
+                    <h3>Item 3</h3>
+                    <p>Sample content item</p>
+                </div>
+            </div>
+            <button class="load-more">Load More Items</button>
+        </div>
+
+        <!-- Sample Content -->
+        <div class="test-section">
+            <h2>Sample Content</h2>
+            <div class="content-items">
+                <div class="content-item">
+                    <h3>Article 1</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="content-item">
+                    <h3>Article 2</h3>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+                <div class="content-item">
+                    <h3>Article 3</h3>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                </div>
+                <div class="content-item">
+                    <h3>Article 4</h3>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit.</p>
+                </div>
+                <div class="content-item">
+                    <h3>Article 5</h3>
+                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa.</p>
+                </div>
+                <div class="content-item">
+                    <h3>Article 6</h3>
+                    <p>Qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity to the load more button
+        document.querySelector('.load-more').addEventListener('click', function() {
+            alert('Load More clicked! In a real scenario, this would load more content.');
+        });
+    </script>
+</body>
+</html>

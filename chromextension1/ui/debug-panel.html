@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StepThree Debug Panel</title>
+  <link rel="stylesheet" href="debug-panel.css">
+</head>
+<body>
+  <div class="debug-panel">
+    
+    <!-- Header -->
+    <header class="debug-header">
+      <div class="header-left">
+        <h1>🐛 Debug Panel</h1>
+        <div class="debug-status" id="debugStatus">
+          <span class="status-indicator" id="statusIndicator"></span>
+          <span id="statusText">Inactive</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="exportBtn" class="btn btn-primary" title="Export Debug Session">
+          📥 Export
+        </button>
+        <button id="clearBtn" class="btn btn-secondary" title="Clear All Data">
+          🗑️ Clear
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="debug-content">
+      
+      <!-- Control Panel -->
+      <section class="debug-section">
+        <h2>🎛️ Control Panel</h2>
+        <div class="controls-grid">
+          <div class="control-item">
+            <label class="switch">
+              <input type="checkbox" id="debugToggle">
+              <span class="slider"></span>
+            </label>
+            <span>Debug Mode</span>
+          </div>
+          
+          <div class="control-item">
+            <label for="debugLevel">Debug Level:</label>
+            <select id="debugLevel" class="select-control">
+              <option value="0">Minimal</option>
+              <option value="1" selected>Normal</option>
+              <option value="2">Verbose</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="component-toggles">
+          <h3>Component Debugging</h3>
+          <div class="toggles-grid">
+            <label class="checkbox-label">
+              <input type="checkbox" class="component-toggle" data-component="background" checked>
+              <span>Background</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" class="component-toggle" data-component="content" checked>
+              <span>Content</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" class="component-toggle" data-component="ui" checked>
+              <span>UI</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" class="component-toggle" data-component="network" checked>
+              <span>Network</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" class="component-toggle" data-component="performance" checked>
+              <span>Performance</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" class="component-toggle" data-component="state" checked>
+              <span>State</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Log Viewer -->
+      <section class="debug-section">
+        <div class="section-header">
+          <h2>📋 Log Viewer</h2>
+          <div class="section-controls">
+            <select id="logCategoryFilter" class="select-control">
+              <option value="">All Categories</option>
+              <option value="NETWORK">Network</option>
+              <option value="STATE">State</option>
+              <option value="PERFORMANCE">Performance</option>
+              <option value="UI">UI</option>
+              <option value="ERROR">Error</option>
+              <option value="WARN">Warning</option>
+            </select>
+            <input type="search" id="logSearch" placeholder="Search logs..." class="search-input">
+            <button id="clearLogsBtn" class="btn btn-sm">Clear Logs</button>
+          </div>
+        </div>
+        <div class="log-container" id="logContainer">
+          <div class="empty-state">No logs yet. Enable debug mode to start logging.</div>
+        </div>
+        <div class="log-stats" id="logStats">
+          <span>Total: <strong>0</strong></span>
+          <span>Errors: <strong class="error-count">0</strong></span>
+          <span>Warnings: <strong class="warn-count">0</strong></span>
+        </div>
+      </section>
+
+      <!-- System State -->
+      <section class="debug-section">
+        <div class="section-header">
+          <h2>📊 System State</h2>
+          <button id="refreshStateBtn" class="btn btn-sm">🔄 Refresh</button>
+        </div>
+        <div class="state-grid">
+          <div class="state-card">
+            <h3>Registered Systems</h3>
+            <div id="systemsList" class="state-content">Loading...</div>
+          </div>
+          <div class="state-card">
+            <h3>Storage Info</h3>
+            <div id="storageInfo" class="state-content">Loading...</div>
+          </div>
+          <div class="state-card">
+            <h3>Memory Usage</h3>
+            <div id="memoryInfo" class="state-content">Loading...</div>
+          </div>
+          <div class="state-card">
+            <h3>Active Alarms</h3>
+            <div id="alarmsInfo" class="state-content">Loading...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Network Activity -->
+      <section class="debug-section">
+        <div class="section-header">
+          <h2>🌐 Network Activity</h2>
+          <button id="refreshNetworkBtn" class="btn btn-sm">🔄 Refresh</button>
+        </div>
+        <div class="network-stats" id="networkStats">
+          <div class="stat-box">
+            <span class="stat-label">Total Messages</span>
+            <span class="stat-value" id="totalMessages">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Active Ports</span>
+            <span class="stat-value" id="activePorts">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Failed</span>
+            <span class="stat-value error-count" id="failedMessages">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Avg Response</span>
+            <span class="stat-value" id="avgResponse">0ms</span>
+          </div>
+        </div>
+        <div class="network-tabs">
+          <button class="tab-btn active" data-tab="messages">Messages</button>
+          <button class="tab-btn" data-tab="ports">Ports</button>
+        </div>
+        <div class="network-content">
+          <div id="messagesTab" class="tab-content active"></div>
+          <div id="portsTab" class="tab-content"></div>
+        </div>
+      </section>
+
+      <!-- Performance Metrics -->
+      <section class="debug-section">
+        <div class="section-header">
+          <h2>⚡ Performance Metrics</h2>
+          <div class="section-controls">
+            <button id="startProfilingBtn" class="btn btn-sm btn-success">▶️ Start</button>
+            <button id="stopProfilingBtn" class="btn btn-sm btn-danger" disabled>⏹️ Stop</button>
+          </div>
+        </div>
+        <div class="perf-summary" id="perfSummary">
+          <div class="perf-item">
+            <span>Total Measures:</span>
+            <strong id="totalMeasures">0</strong>
+          </div>
+          <div class="perf-item">
+            <span>Function Calls:</span>
+            <strong id="totalFunctions">0</strong>
+          </div>
+          <div class="perf-item">
+            <span>Avg Execution:</span>
+            <strong id="avgExecution">0ms</strong>
+          </div>
+          <div class="perf-item">
+            <span>Memory Trend:</span>
+            <strong id="memoryTrend">Stable</strong>
+          </div>
+        </div>
+        <div class="perf-details" id="perfDetails">
+          <h3>Slowest Operations</h3>
+          <div id="slowOperations" class="operations-list"></div>
+        </div>
+      </section>
+
+      <!-- Pagination Debug -->
+      <section class="debug-section">
+        <div class="section-header">
+          <h2>📄 Pagination Debug</h2>
+          <button id="refreshPaginationBtn" class="btn btn-sm">🔄 Refresh</button>
+        </div>
+        <div class="debug-controls">
+          <button id="paginationDetectBtn" class="btn btn-primary">Detect Pagination</button>
+          <button id="paginationNextBtn" class="btn btn-success">Navigate Next</button>
+          <button id="paginationResetBtn" class="btn btn-secondary">Reset State</button>
+        </div>
+        <div class="pagination-results">
+          <h3>Detection Result:</h3>
+          <pre id="paginationDetectionResult" class="code-block">No detection yet. Click "Detect Pagination" to analyze the current page.</pre>
+          <h3>Current State:</h3>
+          <pre id="paginationStateResult" class="code-block">No state yet.</pre>
+        </div>
+      </section>
+
+      <!-- Error History -->
+      <section class="debug-section">
+        <div class="section-header">
+          <h2>❌ Error History</h2>
+          <button id="clearErrorsBtn" class="btn btn-sm">Clear</button>
+        </div>
+        <div class="error-list" id="errorList">
+          <div class="empty-state">No errors recorded</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Load dependencies -->
+  <script src="../lib/debug-config.js"></script>
+  <script src="../lib/debug-logger.js"></script>
+  <script src="../lib/state-inspector.js"></script>
+  <script src="../lib/network-debugger.js"></script>
+  <script src="../lib/performance-profiler.js"></script>
+  <script src="../lib/debug-exporter.js"></script>
+  <script src="debug-panel.js"></script>
+</body>
+</html>

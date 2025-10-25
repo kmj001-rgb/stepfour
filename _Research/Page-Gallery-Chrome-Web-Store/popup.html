@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Page Gallery</title>
+        <script src="popup.js"></script>
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/popup.css">
+    </head>
+    <body>
+        <div id="options">
+            <fieldset>
+                <label>
+                    <span>Size:</span>
+                    <select id="size-criterion-dropdown">
+                        <option value="at-least">At least</option>
+                        <option value="at-most">At most</option>
+                    </select>
+                </label>
+                <input type="number" min="0" step="50" id="width-input">
+                <span>⨯</span>
+                <input type="number" min="0" step="50" id="height-input">
+            </fieldset>
+            <fieldset>
+                <label>
+                    <span>Sort by:</span>
+                    <select id="sort-dropdown">
+                        <option value="largest">Largest</option>
+                        <option value="smallest">Smallest</option>
+                        <option value="filename">Filename</option>
+                    </select>
+                </label>
+            </fieldset>
+            <fieldset>
+                <label>
+                    <input type="checkbox" id="show-filenames-checkbox">
+                    <span>Filenames</span>
+                </label>
+                <label>
+                    <input type="checkbox" id="show-dimensions-checkbox">
+                    <span>Sizes</span>
+                </label>
+            </fieldset>
+        </div>
+        <ul id="thumbnails">
+            <li id="thumbnail-template">
+                <a href="" target="_blank">
+                    <img src="" alt="">
+                    <span class="image-filename"></span>
+                    <span class="image-dimensions">width⨯height</span>
+                </a>
+            </li>
+        </ul>
+        <div id="thumbnails-empty">
+            <p>There are no images matching the selected size. <button type="button" id="show-all-images-button">Show All Images</button></p>
+        </div>
+        <div id="thumbnails-loading">
+            <p>Loading images…</p>
+        </div>
+        <div id="error">
+            <p>Could not load images: <span id="error-text"></span></p>
+        </div>
+    </body>
+</html>
