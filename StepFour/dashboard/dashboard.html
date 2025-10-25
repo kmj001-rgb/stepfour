@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StepFour Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header class="header">
+      <h1>StepFour</h1>
+      <p class="subtitle">Gallery Image Scraper</p>
+    </header>
+
+    <section class="gallery-detection card">
+      <h2>Gallery Detection</h2>
+      <div class="detection-status">
+        <div class="status-indicator" id="statusIndicator">
+          <span class="status-dot"></span>
+          <span id="statusText">Analyzing page...</span>
+        </div>
+        <div class="detection-info">
+          <div class="info-item">
+            <span class="label">Type:</span>
+            <span id="galleryType">Unknown</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Confidence:</span>
+            <span id="confidence">-</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Images on page:</span>
+            <span id="pageImageCount">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pagination-control card">
+      <h2>Pagination Control</h2>
+      <div class="pagination-settings">
+        <div class="form-group">
+          <label for="paginationMethod">Pagination Method:</label>
+          <select id="paginationMethod">
+            <option value="auto">Auto-detect</option>
+            <option value="nextButton">Next Button</option>
+            <option value="loadMore">Load More</option>
+            <option value="infiniteScroll">Infinite Scroll</option>
+            <option value="arrow">Arrow Navigation</option>
+            <option value="urlPattern">URL Pattern</option>
+            <option value="api">API-Based</option>
+          </select>
+        </div>
+        <div class="pagination-actions">
+          <button id="startPagination" class="btn btn-primary">Start Pagination</button>
+          <button id="stopPagination" class="btn btn-secondary" disabled>Stop</button>
+        </div>
+      </div>
+      <div class="pagination-status">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="pagination-info">
+          <span id="paginationStatus">Ready</span>
+          <span id="currentPage">Page: 1</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="image-preview card">
+      <h2>Collected Images</h2>
+      <div class="image-stats">
+        <div class="stat-item">
+          <span class="stat-value" id="totalImages">0</span>
+          <span class="stat-label">Total Images</span>
+        </div>
+        <button id="clearImages" class="btn btn-small btn-warning">Clear All</button>
+      </div>
+      <div class="thumbnail-grid" id="thumbnailGrid">
+        <p class="empty-state">No images collected yet. Start pagination to find images.</p>
+      </div>
+    </section>
+
+    <section class="export-download card">
+      <h2>Export & Download</h2>
+      <div class="export-actions">
+        <button id="exportCsv" class="btn btn-success">Export CSV</button>
+        <button id="downloadImages" class="btn btn-success">Download All Images</button>
+      </div>
+      <div class="download-settings">
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="autoDownload">
+            <span>Auto-download images during pagination</span>
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="downloadFolder">Download Folder:</label>
+          <input type="text" id="downloadFolder" placeholder="e.g., StepFour/Galleries">
+        </div>
+        <div class="form-group">
+          <label for="filenamePattern">Filename Pattern:</label>
+          <input type="text" id="filenamePattern" value="*num-3*-*name*.*ext*">
+          <div class="pattern-buttons">
+            <button class="pattern-btn" data-pattern="*num*">*num*</button>
+            <button class="pattern-btn" data-pattern="*date*">*date*</button>
+            <button class="pattern-btn" data-pattern="*name*">*name*</button>
+            <button class="pattern-btn" data-pattern="*ext*">*ext*</button>
+            <button class="pattern-btn" data-pattern="*domain*">*domain*</button>
+            <button class="pattern-btn" data-pattern="*page*">*page*</button>
+          </div>
+          <p class="pattern-example">Example: <span id="filenameExample">001-image.jpg</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="settings card collapsible">
+      <h2 class="collapsible-header" id="settingsHeader">
+        Settings
+        <span class="collapse-icon">▼</span>
+      </h2>
+      <div class="collapsible-content" id="settingsContent">
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="galleryAutoDetect" checked>
+            <span>Enable automatic gallery detection</span>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Pagination Templates:</label>
+          <div class="template-list">
+            <button class="template-btn" data-method="nextButton">Next Button</button>
+            <button class="template-btn" data-method="loadMore">Load More</button>
+            <button class="template-btn" data-method="infiniteScroll">Infinite Scroll</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Filename Templates:</label>
+          <div class="template-list">
+            <button class="filename-template-btn" data-pattern="*num-3*-*name*.*ext*">001-name.jpg</button>
+            <button class="filename-template-btn" data-pattern="*date*-*num*.*ext*">2025-10-25-1.jpg</button>
+            <button class="filename-template-btn" data-pattern="*domain*-*page*-*num*.*ext*">domain-1-001.jpg</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
