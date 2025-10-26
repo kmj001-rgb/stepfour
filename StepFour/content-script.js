@@ -3,17 +3,175 @@ let paginationMethod = 'auto';
 let currentPage = 1;
 let collectedImageUrls = new Set();
 let paginationAttempts = 0;
+let contentHashHistory = new Set();
+let detectedAPIEndpoints = [];
 const MAX_PAGINATION_ATTEMPTS = 50;
 
 chrome.runtime.sendMessage({ type: 'INIT_TAB' }).catch(() => {});
 
+injectNetworkMonitor();
 detectAndAnalyzeGallery();
 
+function injectNetworkMonitor() {
+  const script = document.createElement('script');
+  script.textContent = `
+    (function() {
+      const originalFetch = window.fetch;
+      const originalXHROpen = XMLHttpRequest.prototype.open;
+      const originalXHRSend = XMLHttpRequest.prototype.send;
+      
+      window.fetch = async function(...args) {
+        const response = await originalFetch.apply(this, args);
+        const clonedResponse = response.clone();
+        
+        try {
+          const url = typeof args[0] === 'string' ? args[0] : args[0].url;
+          const contentType = clonedResponse.headers.get('content-type');
+          
+          if (contentType && contentType.includes('application/json')) {
+            const data = await clonedResponse.json();
+            window.postMessage({
+              type: 'STEPFOUR_API_RESPONSE',
+              url: url,
+              data: data
+            }, '*');
+          }
+        } catch (e) {}
+        
+        return response;
+      };
+      
+      XMLHttpRequest.prototype.open = function(method, url) {
+        this._stepfourUrl = url;
+        this._stepfourMethod = method;
+        return originalXHROpen.apply(this, arguments);
+      };
+      
+      XMLHttpRequest.prototype.send = function() {
+        const xhr = this;
+        const originalOnLoad = xhr.onload;
+        
+        xhr.addEventListener('load', function() {
+          try {
+            const contentType = xhr.getResponseHeader('content-type');
+            if (contentType && contentType.includes('application/json')) {
+              const data = JSON.parse(xhr.responseText);
+              window.postMessage({
+                type: 'STEPFOUR_API_RESPONSE',
+                url: xhr._stepfourUrl,
+                data: data
+              }, '*');
+            }
+          } catch (e) {}
+        });
+        
+        return originalXHRSend.apply(this, arguments);
+      };
+    })();
+  `;
+  document.documentElement.appendChild(script);
+  script.remove();
+}
+
+let capturedAPIResponses = [];
+let latestPaginationInfo = null;
+
+window.addEventListener('message', (event) => {
+  if (event.source !== window) return;
+  if (event.data.type === 'STEPFOUR_API_RESPONSE') {
+    handleAPIResponse(event.data);
+  }
+});
+
+function handleAPIResponse(response) {
+  capturedAPIResponses.push(response);
+  
+  const { url, data } = response;
+  
+  if (!detectedAPIEndpoints.includes(url)) {
+    detectedAPIEndpoints.push(url);
+  }
+  
+  const paginationInfo = extractPaginationInfo(data);
+  if (paginationInfo) {
+    latestPaginationInfo = { ...paginationInfo, endpoint: url };
+    console.log('StepFour: Pagination info extracted from API response:', latestPaginationInfo);
+  }
+  
+  const imageUrls = extractImageUrlsFromJSON(data);
+  if (imageUrls.length > 0 && isPaginating) {
+    const images = imageUrls.map((url) => {
+      const filename = url.split('/').pop().split('?')[0] || 'image.jpg';
+      return {
+        filename,
+        fileUrl: url.startsWith('http') ? url : new URL(url, window.location.href).href,
+        thumbnailUrl: url.startsWith('http') ? url : new URL(url, window.location.href).href,
+        caption: '',
+        sourcePage: window.location.href,
+        pageNumber: currentPage
+      };
+    });
+    
+    chrome.runtime.sendMessage({
+      type: 'IMAGES_FOUND',
+      images: images
+    }).catch(() => {});
+  }
+}
+
+function extractPaginationInfo(data) {
+  const info = {
+    nextPage: null,
+    nextUrl: null,
+    nextToken: null,
+    nextCursor: null,
+    totalPages: null,
+    currentPage: null
+  };
+  
+  if (data.next || data.nextPage || data.next_page) {
+    info.nextUrl = data.next || data.nextPage || data.next_page;
+  }
+  
+  if (data.pagination) {
+    info.nextUrl = data.pagination.next || data.pagination.nextPage;
+    info.totalPages = data.pagination.totalPages || data.pagination.total_pages;
+    info.currentPage = data.pagination.currentPage || data.pagination.current_page;
+    info.nextToken = data.pagination.nextToken || data.pagination.next_token;
+  }
+  
+  if (data.cursor || data.nextCursor || data.next_cursor) {
+    info.nextCursor = data.cursor || data.nextCursor || data.next_cursor;
+  }
+  
+  if (data.paging) {
+    info.nextUrl = data.paging.next;
+    info.nextCursor = data.paging.cursors?.after;
+  }
+  
+  if (Object.values(info).some(v => v !== null)) {
+    return info;
+  }
+  
+  return null;
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'API_ENDPOINT_DETECTED') {
+    if (!detectedAPIEndpoints.includes(message.endpoint)) {
+      detectedAPIEndpoints.push(message.endpoint);
+      console.log('StepFour: API endpoint detected:', message.endpoint);
+    }
+    sendResponse({ success: true });
+    return true;
+  }
+  
   if (message.type === 'START_PAGINATION') {
     isPaginating = true;
     paginationMethod = message.method || 'auto';
     paginationAttempts = 0;
+    currentPage = 1;
+    latestPaginationInfo = null;
     startPagination();
     sendResponse({ success: true });
     return true;
@@ -49,7 +207,7 @@ async function detectAndAnalyzeGallery() {
   
   const images = document.querySelectorAll('img');
   const links = document.querySelectorAll('a');
-  const textLength = document.body.innerText.length;
+  const textLength = document.body.innerText.length || 1;
   
   detection.imageCount = images.length;
   
@@ -63,15 +221,40 @@ async function detectAndAnalyzeGallery() {
     }
   }
   
-  const gridContainers = document.querySelectorAll('.gallery, .image-grid, .grid, .photos, [class*="gallery"], [class*="grid"]');
+  const gridContainers = document.querySelectorAll('.gallery, .image-grid, .grid, .photos, [class*="gallery"], [class*="grid"], [class*="photo"], .thumbnails, .image-list');
   if (gridContainers.length > 0) {
     detection.isGallery = true;
     detection.galleryType = 'Grid Gallery';
     detection.confidence = 'High';
   }
   
-  const urlPatterns = ['/gallery', '/photos', '/images', '/album', '/portfolio'];
-  if (urlPatterns.some(pattern => window.location.pathname.includes(pattern))) {
+  const flexGrids = Array.from(document.querySelectorAll('*')).filter(el => {
+    const style = window.getComputedStyle(el);
+    return (style.display === 'grid' || style.display === 'flex') && 
+           el.querySelectorAll('img').length > 5;
+  });
+  if (flexGrids.length > 0) {
+    detection.isGallery = true;
+    detection.galleryType = 'CSS Grid Gallery';
+    detection.confidence = 'High';
+  }
+  
+  const urlPatterns = ['/gallery', '/photos', '/images', '/album', '/portfolio', '/search'];
+  if (urlPatterns.some(pattern => window.location.pathname.toLowerCase().includes(pattern))) {
+    detection.isGallery = true;
+    if (detection.confidence === 'Low') {
+      detection.confidence = 'Medium';
+    }
+  }
+  
+  if (document.querySelector('.lightbox, [class*="lightbox"], [class*="modal"], [data-fancybox]')) {
+    detection.isGallery = true;
+    detection.galleryType = 'Lightbox Gallery';
+    detection.confidence = 'High';
+  }
+  
+  const lazyImages = document.querySelectorAll('[loading="lazy"], [data-src], [data-lazy-src]').length;
+  if (lazyImages > 10) {
     detection.isGallery = true;
     if (detection.confidence === 'Low') {
       detection.confidence = 'Medium';
@@ -108,18 +291,22 @@ async function detectPaginationMethods() {
   
   const nextSelectors = [
     'a[rel="next"]',
+    'link[rel="next"]',
     'a.next',
     'a.pagination-next',
+    'a.page-next',
     'button.next',
-    'a:contains("Next")',
     'a[aria-label*="next" i]',
-    'a[title*="next" i]'
+    'a[title*="next" i]',
+    '.pagination .next a',
+    '.pager .next',
+    'nav a[rel="next"]'
   ];
   
   for (const selector of nextSelectors) {
     try {
       const element = document.querySelector(selector);
-      if (element) {
+      if (element && isElementVisible(element)) {
         methods.nextButton.available = true;
         methods.nextButton.selector = selector;
         break;
@@ -128,10 +315,22 @@ async function detectPaginationMethods() {
   }
   
   if (!methods.nextButton.available) {
-    const allLinks = document.querySelectorAll('a');
+    const allLinks = document.querySelectorAll('a, button');
+    const nextPatterns = [
+      /^next$/i,
+      /^next\s+page$/i,
+      /^→$/,
+      /^›$/,
+      /^»$/,
+      /^continue$/i,
+      /^siguiente$/i,
+      /^suivant$/i,
+      /^weiter$/i
+    ];
+    
     for (const link of allLinks) {
-      const text = link.textContent.trim().toLowerCase();
-      if (text === 'next' || text === '→' || text === 'next page' || text === 'continue') {
+      const text = link.textContent.trim();
+      if (nextPatterns.some(pattern => pattern.test(text)) && isElementVisible(link)) {
         methods.nextButton.available = true;
         methods.nextButton.selector = null;
         methods.nextButton.element = link;
@@ -145,13 +344,16 @@ async function detectPaginationMethods() {
     'a[class*="load-more" i]',
     'button[data-action="load-more"]',
     '[class*="show-more" i]',
-    '[class*="view-more" i]'
+    '[class*="view-more" i]',
+    'button[aria-label*="load more" i]',
+    '.infinite-scroll-button',
+    '.load-more-btn'
   ];
   
   for (const selector of loadMoreSelectors) {
     try {
       const element = document.querySelector(selector);
-      if (element) {
+      if (element && isElementVisible(element)) {
         methods.loadMore.available = true;
         methods.loadMore.selector = selector;
         break;
@@ -161,9 +363,17 @@ async function detectPaginationMethods() {
   
   if (!methods.loadMore.available) {
     const allButtons = document.querySelectorAll('button, a');
+    const loadMorePatterns = [
+      /load\s+more/i,
+      /show\s+more/i,
+      /view\s+more/i,
+      /see\s+more/i,
+      /more\s+results/i
+    ];
+    
     for (const button of allButtons) {
-      const text = button.textContent.trim().toLowerCase();
-      if (text.includes('load more') || text.includes('show more') || text.includes('view more')) {
+      const text = button.textContent.trim();
+      if (loadMorePatterns.some(pattern => pattern.test(text)) && isElementVisible(button)) {
         methods.loadMore.available = true;
         methods.loadMore.selector = null;
         methods.loadMore.element = button;
@@ -173,18 +383,17 @@ async function detectPaginationMethods() {
   }
   
   const arrowSelectors = [
-    'a:contains("›")',
-    'a:contains("»")',
-    'button:contains("›")',
-    'button:contains("»")',
-    '[class*="arrow-right"]',
-    '[class*="next-arrow"]'
+    '[aria-label*="next" i]',
+    '[aria-label*="forward" i]',
+    '.arrow-right',
+    '.next-arrow',
+    '.chevron-right'
   ];
   
   for (const selector of arrowSelectors) {
     try {
       const element = document.querySelector(selector);
-      if (element) {
+      if (element && isElementVisible(element)) {
         methods.arrow.available = true;
         methods.arrow.selector = selector;
         break;
@@ -194,9 +403,11 @@ async function detectPaginationMethods() {
   
   if (!methods.arrow.available) {
     const allElements = document.querySelectorAll('a, button');
+    const arrowSymbols = ['>', '›', '»', '→', '⟩', '⇨', '➔'];
+    
     for (const el of allElements) {
       const text = el.textContent.trim();
-      if (text === '>' || text === '›' || text === '»' || text === '→') {
+      if (arrowSymbols.includes(text) && isElementVisible(el)) {
         methods.arrow.available = true;
         methods.arrow.selector = null;
         methods.arrow.element = el;
@@ -207,18 +418,21 @@ async function detectPaginationMethods() {
   
   const url = window.location.href;
   const urlPatterns = [
-    /[?&]page=(\d+)/,
-    /\/page\/(\d+)/,
-    /[?&]p=(\d+)/,
-    /\/p\/(\d+)/,
-    /-(\d+)\.html?$/
+    { pattern: /[?&]page=(\d+)/, param: 'page' },
+    { pattern: /\/page\/(\d+)/, param: 'page' },
+    { pattern: /[?&]p=(\d+)/, param: 'p' },
+    { pattern: /\/p\/(\d+)/, param: 'p' },
+    { pattern: /[?&]offset=(\d+)/, param: 'offset' },
+    { pattern: /[?&]start=(\d+)/, param: 'start' },
+    { pattern: /-(\d+)\.html?$/, param: 'page' }
   ];
   
-  for (const pattern of urlPatterns) {
+  for (const { pattern, param } of urlPatterns) {
     const match = url.match(pattern);
     if (match) {
       methods.urlPattern.available = true;
       methods.urlPattern.pattern = pattern;
+      methods.urlPattern.param = param;
       methods.urlPattern.currentPage = parseInt(match[1]);
       break;
     }
@@ -242,6 +456,15 @@ async function detectPaginationMethods() {
   return methods;
 }
 
+function isElementVisible(element) {
+  if (!element) return false;
+  const style = window.getComputedStyle(element);
+  return style.display !== 'none' && 
+         style.visibility !== 'hidden' && 
+         style.opacity !== '0' &&
+         element.offsetParent !== null;
+}
+
 function detectAPIEndpoint() {
   const result = {
     detected: false,
@@ -250,56 +473,27 @@ function detectAPIEndpoint() {
     pageParam: 'page'
   };
   
-  const scripts = document.querySelectorAll('script');
-  for (const script of scripts) {
-    const content = script.textContent;
-    
-    const apiPatterns = [
-      /["']api["']\s*:\s*["']([^"']+)["']/i,
-      /fetch\s*\(\s*["']([^"']+\/api\/[^"']+)["']/i,
-      /axios\.\w+\s*\(\s*["']([^"']+)["']/i,
-      /"endpoint":\s*"([^"]+)"/i,
-      /"nextPage":\s*"([^"]+)"/i
-    ];
-    
-    for (const pattern of apiPatterns) {
-      const match = content.match(pattern);
-      if (match && match[1]) {
-        result.detected = true;
-        result.endpoint = match[1];
-        
-        if (match[1].includes('?')) {
-          result.nextUrl = match[1];
-        }
-        break;
-      }
-    }
-    
-    if (result.detected) break;
-  }
-  
-  if (!result.detected) {
-    const currentUrl = window.location.href;
-    const apiIndicators = ['/api/', '/json/', '/data/', '/feed/'];
-    
-    if (apiIndicators.some(indicator => currentUrl.includes(indicator))) {
-      result.detected = true;
-      result.endpoint = currentUrl;
-      
-      const urlObj = new URL(currentUrl);
-      if (urlObj.searchParams.has('page')) {
-        result.pageParam = 'page';
-        result.nextUrl = currentUrl;
-      } else if (urlObj.searchParams.has('offset')) {
-        result.pageParam = 'offset';
-        result.nextUrl = currentUrl;
-      }
-    }
-  }
-  
-  if (window.__NEXT_DATA__ || window.__INITIAL_STATE__) {
+  if (detectedAPIEndpoints.length > 0) {
     result.detected = true;
-    result.endpoint = window.location.pathname + '/api/images';
+    result.endpoint = detectedAPIEndpoints[0];
+    
+    const url = new URL(result.endpoint);
+    if (url.searchParams.has('page')) {
+      result.pageParam = 'page';
+      result.nextUrl = result.endpoint;
+    } else if (url.searchParams.has('offset')) {
+      result.pageParam = 'offset';
+      result.nextUrl = result.endpoint;
+    } else if (url.searchParams.has('p')) {
+      result.pageParam = 'p';
+      result.nextUrl = result.endpoint;
+    }
+    return result;
+  }
+  
+  if (window.__NEXT_DATA__ || window.__INITIAL_STATE__ || window.__APOLLO_STATE__) {
+    result.detected = true;
+    result.endpoint = window.location.pathname + '/api';
   }
   
   return result;
@@ -318,18 +512,29 @@ function extractAndSendImages() {
 
 function extractImages() {
   const images = [];
-  const imageElements = document.querySelectorAll('img');
   const sourcePage = window.location.href;
   
+  const imageElements = document.querySelectorAll('img');
   imageElements.forEach((img) => {
-    let fileUrl = img.src || img.dataset.src || img.dataset.lazy || img.dataset.original || img.dataset.full;
+    let fileUrl = img.src || 
+                  img.dataset.src || 
+                  img.dataset.lazySrc || 
+                  img.dataset.original || 
+                  img.dataset.full || 
+                  img.dataset.fullSrc ||
+                  img.getAttribute('data-src') ||
+                  img.getAttribute('data-lazy');
     
     if (!fileUrl || fileUrl.startsWith('data:') || fileUrl.length < 10) {
       return;
     }
     
     if (!fileUrl.startsWith('http')) {
-      fileUrl = new URL(fileUrl, window.location.href).href;
+      try {
+        fileUrl = new URL(fileUrl, window.location.href).href;
+      } catch (e) {
+        return;
+      }
     }
     
     if (collectedImageUrls.has(fileUrl)) {
@@ -348,6 +553,16 @@ function extractImages() {
       const linkHref = parentLink.href;
       if (linkHref.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i)) {
         fullResUrl = linkHref;
+      } else if (parentLink.dataset.full || parentLink.dataset.original) {
+        fullResUrl = parentLink.dataset.full || parentLink.dataset.original;
+      }
+    }
+    
+    const srcset = img.srcset || img.dataset.srcset;
+    if (srcset) {
+      const srcsetUrls = parseSrcset(srcset);
+      if (srcsetUrls.length > 0) {
+        fullResUrl = srcsetUrls[srcsetUrls.length - 1];
       }
     }
     
@@ -373,7 +588,11 @@ function extractImages() {
       }
       
       if (!fileUrl.startsWith('http')) {
-        fileUrl = new URL(fileUrl, window.location.href).href;
+        try {
+          fileUrl = new URL(fileUrl, window.location.href).href;
+        } catch (e) {
+          return;
+        }
       }
       
       if (collectedImageUrls.has(fileUrl)) {
@@ -388,14 +607,58 @@ function extractImages() {
         filename,
         fileUrl,
         thumbnailUrl: fileUrl,
-        caption: el.alt || el.title || '',
+        caption: el.alt || el.title || el.getAttribute('aria-label') || '',
         sourcePage,
         pageNumber: currentPage
       });
     }
   });
   
+  const pictureElements = document.querySelectorAll('picture');
+  pictureElements.forEach((picture) => {
+    const sources = picture.querySelectorAll('source[srcset], source[src]');
+    sources.forEach((source) => {
+      const srcset = source.getAttribute('srcset') || source.getAttribute('src');
+      if (srcset) {
+        const urls = parseSrcset(srcset);
+        urls.forEach((url) => {
+          if (!collectedImageUrls.has(url)) {
+            collectedImageUrls.add(url);
+            images.push({
+              filename: url.split('/').pop().split('?')[0] || 'image.jpg',
+              fileUrl: url,
+              thumbnailUrl: url,
+              caption: '',
+              sourcePage,
+              pageNumber: currentPage
+            });
+          }
+        });
+      }
+    });
+  });
+  
   return images;
+}
+
+function parseSrcset(srcset) {
+  const urls = [];
+  const parts = srcset.split(',');
+  parts.forEach((part) => {
+    const urlMatch = part.trim().match(/^([^\s]+)/);
+    if (urlMatch) {
+      let url = urlMatch[1];
+      if (!url.startsWith('http')) {
+        try {
+          url = new URL(url, window.location.href).href;
+        } catch (e) {
+          return;
+        }
+      }
+      urls.push(url);
+    }
+  });
+  return urls;
 }
 
 async function startPagination() {
@@ -425,6 +688,7 @@ async function startPagination() {
     }
   }).catch(() => {});
   
+  const beforeHash = getContentHash();
   const methods = await detectPaginationMethods();
   let success = false;
   
@@ -469,6 +733,21 @@ async function startPagination() {
     currentPage++;
     await new Promise(resolve => setTimeout(resolve, 2000));
     
+    const afterHash = getContentHash();
+    if (beforeHash === afterHash && contentHashHistory.has(afterHash)) {
+      isPaginating = false;
+      chrome.runtime.sendMessage({
+        type: 'PAGINATION_STATUS',
+        data: {
+          status: 'complete',
+          currentPage,
+          message: 'No new content detected (duplicate page)'
+        }
+      }).catch(() => {});
+      return;
+    }
+    contentHashHistory.add(afterHash);
+    
     extractAndSendImages();
     
     if (isPaginating) {
@@ -485,6 +764,21 @@ async function startPagination() {
       }
     }).catch(() => {});
   }
+}
+
+function getContentHash() {
+  const imageUrls = Array.from(document.querySelectorAll('img')).map(img => img.src).join('|');
+  return simpleHash(imageUrls);
+}
+
+function simpleHash(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash;
 }
 
 async function paginateNextButton(method) {
@@ -506,7 +800,9 @@ async function paginateNextButton(method) {
       }
     }
     
-    if (element && !element.disabled && !element.classList.contains('disabled')) {
+    if (element && !element.disabled && !element.classList.contains('disabled') && isElementVisible(element)) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise(resolve => setTimeout(resolve, 300));
       element.click();
       return true;
     }
@@ -535,7 +831,7 @@ async function paginateLoadMore(method) {
       }
     }
     
-    if (element && !element.disabled && !element.classList.contains('disabled') && element.offsetParent !== null) {
+    if (element && !element.disabled && !element.classList.contains('disabled') && isElementVisible(element)) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       await new Promise(resolve => setTimeout(resolve, 500));
       element.click();
@@ -566,7 +862,9 @@ async function paginateArrow(method) {
       }
     }
     
-    if (element && !element.disabled && !element.classList.contains('disabled')) {
+    if (element && !element.disabled && !element.classList.contains('disabled') && isElementVisible(element)) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise(resolve => setTimeout(resolve, 300));
       element.click();
       return true;
     }
@@ -599,13 +897,16 @@ async function paginateUrlPattern(method) {
 async function paginateInfiniteScroll() {
   try {
     const beforeHeight = document.documentElement.scrollHeight;
+    const beforeImageCount = document.querySelectorAll('img').length;
+    
     window.scrollTo(0, document.documentElement.scrollHeight);
     
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     const afterHeight = document.documentElement.scrollHeight;
+    const afterImageCount = document.querySelectorAll('img').length;
     
-    return afterHeight > beforeHeight;
+    return afterHeight > beforeHeight || afterImageCount > beforeImageCount;
   } catch (error) {
     console.error('Infinite scroll pagination failed:', error);
   }
@@ -614,41 +915,68 @@ async function paginateInfiniteScroll() {
 
 async function paginateAPI(method) {
   try {
-    if (!method.endpoint) {
-      return false;
-    }
-    
-    let apiUrl = method.endpoint;
-    
-    if (method.nextUrl) {
-      const urlObj = new URL(method.nextUrl, window.location.href);
-      const currentPageNum = parseInt(urlObj.searchParams.get(method.pageParam) || '1');
-      const nextPageNum = currentPageNum + 1;
-      urlObj.searchParams.set(method.pageParam, nextPageNum.toString());
-      apiUrl = urlObj.toString();
-    } else if (method.pageParam) {
-      const separator = apiUrl.includes('?') ? '&' : '?';
-      apiUrl = `${apiUrl}${separator}${method.pageParam}=${currentPage + 1}`;
-    }
-    
-    const response = await fetch(apiUrl, {
+    let apiUrl = null;
+    let requestOptions = {
       credentials: 'same-origin',
       headers: {
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
       }
-    });
+    };
+    
+    if (latestPaginationInfo && latestPaginationInfo.nextUrl) {
+      apiUrl = latestPaginationInfo.nextUrl;
+      if (!apiUrl.startsWith('http')) {
+        apiUrl = new URL(apiUrl, window.location.href).href;
+      }
+    } else if (latestPaginationInfo && latestPaginationInfo.nextCursor) {
+      const baseUrl = latestPaginationInfo.endpoint || method.endpoint;
+      const url = new URL(baseUrl, window.location.href);
+      url.searchParams.set('cursor', latestPaginationInfo.nextCursor);
+      apiUrl = url.href;
+    } else if (latestPaginationInfo && latestPaginationInfo.nextToken) {
+      const baseUrl = latestPaginationInfo.endpoint || method.endpoint;
+      const url = new URL(baseUrl, window.location.href);
+      url.searchParams.set('token', latestPaginationInfo.nextToken);
+      apiUrl = url.href;
+    } else if (method.endpoint) {
+      apiUrl = method.endpoint;
+      if (method.nextUrl) {
+        const urlObj = new URL(method.nextUrl, window.location.href);
+        const currentPageNum = parseInt(urlObj.searchParams.get(method.pageParam) || '1');
+        const nextPageNum = currentPageNum + 1;
+        urlObj.searchParams.set(method.pageParam, nextPageNum.toString());
+        apiUrl = urlObj.toString();
+      } else if (method.pageParam) {
+        const separator = apiUrl.includes('?') ? '&' : '?';
+        apiUrl = `${apiUrl}${separator}${method.pageParam}=${currentPage + 1}`;
+      }
+    }
+    
+    if (!apiUrl) {
+      return false;
+    }
+    
+    console.log('StepFour: Making API request to:', apiUrl);
+    
+    const response = await fetch(apiUrl, requestOptions);
     
     if (!response.ok) {
+      console.error('StepFour: API request failed:', response.status);
       return false;
     }
     
     const data = await response.json();
     
+    const paginationInfo = extractPaginationInfo(data);
+    if (paginationInfo) {
+      latestPaginationInfo = { ...paginationInfo, endpoint: apiUrl };
+    }
+    
     const imageUrls = extractImageUrlsFromJSON(data);
     
     if (imageUrls.length > 0) {
-      const images = imageUrls.map((url, index) => {
+      const images = imageUrls.map((url) => {
         const filename = url.split('/').pop().split('?')[0] || 'image.jpg';
         return {
           filename,
@@ -664,10 +992,6 @@ async function paginateAPI(method) {
         type: 'IMAGES_FOUND',
         images: images
       }).catch(() => {});
-      
-      if (data.next || data.nextPage || data.pagination?.next) {
-        method.nextUrl = data.next || data.nextPage || data.pagination.next;
-      }
       
       return true;
     }

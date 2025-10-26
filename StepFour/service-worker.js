@@ -2,17 +2,55 @@ let currentTabId = null;
 let collectedImages = [];
 let downloadQueue = [];
 let isDownloading = false;
+let detectedAPIs = new Map();
 let settings = {
   autoDownload: false,
   downloadFolder: '',
   filenamePattern: '*num-3*-*name*.*ext*',
-  paginationMethod: 'auto'
+  paginationMethod: 'auto',
+  galleryAutoDetect: true,
+  maxPages: 50,
+  concurrentDownloads: 3
 };
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log('StepFour extension installed');
   chrome.storage.local.set({ settings });
 });
+
+chrome.webRequest.onCompleted.addListener(
+  (details) => {
+    if (details.type === 'xmlhttprequest' && details.statusCode === 200) {
+      const url = new URL(details.url);
+      
+      if (url.pathname.includes('/api/') || 
+          url.pathname.includes('/json/') ||
+          url.search.includes('format=json') ||
+          details.url.includes('page=') ||
+          details.url.includes('offset=')) {
+        
+        const hostname = url.hostname;
+        if (!detectedAPIs.has(hostname)) {
+          detectedAPIs.set(hostname, []);
+        }
+        
+        const endpoints = detectedAPIs.get(hostname);
+        if (!endpoints.includes(details.url)) {
+          endpoints.push(details.url);
+          
+          if (details.tabId === currentTabId) {
+            chrome.tabs.sendMessage(details.tabId, {
+              type: 'API_ENDPOINT_DETECTED',
+              endpoint: details.url,
+              method: details.method
+            }).catch(() => {});
+          }
+        }
+      }
+    }
+  },
+  { urls: ["<all_urls>"] }
+);
 
 chrome.action.onClicked.addListener(async (tab) => {
   await chrome.sidePanel.open({ tabId: tab.id });
@@ -140,7 +178,8 @@ function queueDownloads(images) {
   images.forEach((image, index) => {
     downloadQueue.push({
       image,
-      index: collectedImages.indexOf(image)
+      index: collectedImages.indexOf(image),
+      retries: 0
     });
   });
   
@@ -155,24 +194,31 @@ async function processDownloadQueue() {
     chrome.runtime.sendMessage({
       type: 'DOWNLOAD_COMPLETE'
     }).catch(() => {});
+    
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: 'icons/icon48.png',
+      title: 'StepFour Downloads Complete',
+      message: `Successfully downloaded ${collectedImages.length} images`
+    });
     return;
   }
   
   isDownloading = true;
-  const concurrentDownloads = 3;
+  const concurrentDownloads = settings.concurrentDownloads || 3;
   
   const batch = downloadQueue.splice(0, concurrentDownloads);
   
-  await Promise.all(batch.map(item => downloadImage(item.image, item.index)));
+  await Promise.all(batch.map(item => downloadImage(item.image, item.index, item)));
   
   setTimeout(() => processDownloadQueue(), 500);
 }
 
-async function downloadImage(image, index) {
+async function downloadImage(image, index, queueItem) {
   try {
     const filename = generateFilename(image, index);
     const fullPath = settings.downloadFolder 
-      ? `${settings.downloadFolder}/${filename}` 
+      ? `${sanitizePath(settings.downloadFolder)}/${filename}` 
       : filename;
     
     await chrome.downloads.download({
@@ -186,19 +232,27 @@ async function downloadImage(image, index) {
       data: {
         url: image.fileUrl,
         filename,
-        status: 'success'
+        status: 'success',
+        current: collectedImages.length - downloadQueue.length,
+        total: collectedImages.length
       }
     }).catch(() => {});
   } catch (error) {
     console.error('Download failed:', error);
-    chrome.runtime.sendMessage({
-      type: 'DOWNLOAD_PROGRESS',
-      data: {
-        url: image.fileUrl,
-        status: 'failed',
-        error: error.message
-      }
-    }).catch(() => {});
+    
+    if (queueItem.retries < 3) {
+      queueItem.retries++;
+      downloadQueue.push(queueItem);
+    } else {
+      chrome.runtime.sendMessage({
+        type: 'DOWNLOAD_PROGRESS',
+        data: {
+          url: image.fileUrl,
+          status: 'failed',
+          error: error.message
+        }
+      }).catch(() => {});
+    }
   }
 }
 
@@ -213,20 +267,20 @@ function generateFilename(image, index) {
   
   const now = new Date();
   const pageNumber = image.pageNumber || 1;
+  const galleryName = extractGalleryName(image.sourcePage || url.hostname);
   
   const replacements = {
-    '\\*name\\*': name,
+    '\\*name\\*': name || 'image',
     '\\*ext\\*': ext,
     '\\*fullname\\*': originalName,
     '\\*domain\\*': url.hostname,
     '\\*hostname\\*': url.hostname.split('.')[0],
     '\\*protocol\\*': url.protocol.replace(':', ''),
-    '\\*path\\*': url.pathname,
+    '\\*path\\*': url.pathname.substring(1).replace(/\//g, '-'),
     '\\*url-1\\*': pathParts[0] || '',
     '\\*url-2\\*': pathParts[1] || '',
     '\\*url-3\\*': pathParts[2] || '',
     '\\*num\\*': String(index + 1).padStart(3, '0'),
-    '\\*num-(\\d+)\\*': (match, digits) => String(index + 1).padStart(parseInt(digits), '0'),
     '\\*index\\*': String(index),
     '\\*timestamp\\*': String(Date.now()),
     '\\*date\\*': `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
@@ -239,41 +293,76 @@ function generateFilename(image, index) {
     '\\*minute\\*': String(now.getMinutes()).padStart(2, '0'),
     '\\*second\\*': String(now.getSeconds()).padStart(2, '0'),
     '\\*page\\*': String(pageNumber),
-    '\\*gallery\\*': sanitizeFilename(image.gallery || 'gallery'),
+    '\\*gallery\\*': sanitizeFilename(galleryName),
     '\\*caption\\*': sanitizeFilename(image.caption || ''),
     '\\*source\\*': sanitizeFilename(url.hostname)
   };
   
-  Object.entries(replacements).forEach(([pattern, value]) => {
-    if (typeof value === 'function') {
-      pattern = pattern.replace(/\\\\/g, '\\');
-      const regex = new RegExp(pattern, 'g');
-      pattern = pattern.replace(regex, value);
-    } else {
-      const regex = new RegExp(pattern, 'g');
-      pattern = pattern.replace(regex, value);
-    }
-  });
+  let result = pattern;
   
-  for (const [key, value] of Object.entries(replacements)) {
-    if (typeof value !== 'function') {
-      const regex = new RegExp(key, 'g');
-      pattern = pattern.replace(regex, value);
-    }
+  const numPatternMatch = pattern.match(/\*num-(\d+)\*/g);
+  if (numPatternMatch) {
+    numPatternMatch.forEach(match => {
+      const digits = match.match(/\*num-(\d+)\*/)[1];
+      const paddedNum = String(index + 1).padStart(parseInt(digits), '0');
+      result = result.replace(new RegExp(match.replace(/\*/g, '\\*'), 'g'), paddedNum);
+    });
   }
   
-  return sanitizeFilename(pattern);
+  for (const [key, value] of Object.entries(replacements)) {
+    const regex = new RegExp(key, 'g');
+    result = result.replace(regex, value);
+  }
+  
+  return sanitizeFilename(result);
+}
+
+function extractGalleryName(url) {
+  try {
+    const urlObj = new URL(url);
+    const pathParts = urlObj.pathname.split('/').filter(p => p && p.length > 0);
+    
+    if (pathParts.length > 0) {
+      const lastPart = pathParts[pathParts.length - 1];
+      if (lastPart.match(/^[\w-]+$/)) {
+        return lastPart;
+      }
+    }
+    
+    return urlObj.hostname.split('.')[0];
+  } catch (e) {
+    return 'gallery';
+  }
 }
 
 function sanitizeFilename(filename) {
   return filename
-    .replace(/[<>:"/\\|?*]/g, '-')
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, '-')
     .replace(/\s+/g, '_')
     .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
     .substring(0, 200);
 }
 
+function sanitizePath(path) {
+  return path
+    .split('/')
+    .map(part => sanitizeFilename(part))
+    .filter(part => part.length > 0)
+    .join('/');
+}
+
 function exportCSV(images) {
+  if (images.length === 0) {
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: 'icons/icon48.png',
+      title: 'StepFour Export Failed',
+      message: 'No images to export'
+    });
+    return;
+  }
+  
   const headers = ['Filename', 'File URL', 'Thumbnail URL', 'Caption', 'Source Page'];
   const rows = images.map((img, index) => {
     const filename = generateFilename(img, index);
@@ -300,5 +389,12 @@ function exportCSV(images) {
     url: url,
     filename: `gallery-export-${timestamp}.csv`,
     saveAs: true
+  }).then(() => {
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: 'icons/icon48.png',
+      title: 'StepFour CSV Export Complete',
+      message: `Exported ${images.length} images to CSV`
+    });
   });
 }

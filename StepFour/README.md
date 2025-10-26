@@ -145,9 +145,33 @@ StepFour/
 - Detects URL patterns like `?page=1`, `/page/2/`, `&p=3`
 - Automatically increments and navigates
 
-### 6. API-Based (Proof of Concept)
+### 6. API-Based
 - Monitors network requests for JSON responses
 - Extracts pagination tokens from API responses
+- Automatically makes subsequent API calls with incremented page parameters
+
+## Image Extraction Sources
+
+StepFour extracts images from multiple sources for comprehensive coverage:
+
+- **Standard img tags**: `<img src="...">`
+- **Srcset attributes**: High-resolution versions from `srcset`
+- **Lazy-loaded images**: `data-src`, `data-lazy-src`, `loading="lazy"`
+- **Background images**: CSS `background-image` properties
+- **Picture elements**: `<picture>` with multiple `<source>` elements
+- **Data attributes**: `data-full`, `data-original`, `data-fullSrc`
+- **Parent links**: Detects full-resolution links around thumbnails
+
+## Gallery Detection Methods
+
+The extension uses multiple detection strategies:
+
+1. **Image Density Analysis**: Pages with high image-to-text ratio
+2. **Grid Layout Detection**: CSS grid or flexbox containers with images
+3. **URL Pattern Matching**: Paths containing `/gallery`, `/photos`, `/images`, etc.
+4. **HTML Structure**: Common gallery classes like `.gallery`, `.image-grid`
+5. **Lightbox Detection**: Presence of lightbox/modal viewers
+6. **Lazy Loading**: Detection of lazy-loading attributes
 
 ## Technical Details
 
