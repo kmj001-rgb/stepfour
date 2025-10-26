@@ -66,11 +66,13 @@ This is a professional Chrome Extension (Manifest V3) for scraping image galleri
 - All extension logic runs client-side in the browser
 - No backend API or database required
 
-## Recent Setup (October 19, 2025)
+## Recent Setup (October 25, 2025)
 - Installed Node.js 20
 - Configured workflow to run demo server on port 5000
 - Added .gitignore for Node.js projects
 - Verified server runs successfully with proper cache headers
+- Configured Replit deployment (autoscale) for the demo server
+- Successfully tested webview and confirmed all systems operational
 
 ## Bug Fixes (October 19, 2025)
 
